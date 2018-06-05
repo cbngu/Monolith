@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Monolith.iml" filepath="$PROJECT_DIR$/Monolith.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-api/monolith-api.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-api/monolith-api.iml" group="monolith-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-api/monolith-api_main.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-api/monolith-api_main.iml" group="monolith-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-api/monolith-api_test.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-api/monolith-api_test.iml" group="monolith-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-app/monolith-app.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-app/monolith-app.iml" group="monolith-app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-app/monolith-app_main.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-app/monolith-app_main.iml" group="monolith-app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-app/monolith-app_test.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-app/monolith-app_test.iml" group="monolith-app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-spigot/monolith-spigot.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-spigot/monolith-spigot.iml" group="monolith-spigot" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-spigot/monolith-spigot_main.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-spigot/monolith-spigot_main.iml" group="monolith-spigot" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/monolith-spigot/monolith-spigot_test.iml" filepath="$PROJECT_DIR$/.idea/modules/monolith-spigot/monolith-spigot_test.iml" group="monolith-spigot" />
+    </modules>
+  </component>
+</project>
