@@ -1,0 +1,12 @@
+dependencies {
+    compile 'com.amazonaws:aws-java-sdk-core:1.11.327'
+    compile 'com.amazonaws:aws-java-sdk-dynamodb:1.11.327'
+    compile 'com.amazonaws:aws-java-sdk-logs:1.11.327'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5'
+    compile 'com.google.guava:guava:24.1-jre'
+    compile 'org.kohsuke:github-api:1.93'
+    compile 'redis.clients:jedis:2.9.0'
+    compile project(':monolith-api')
+}

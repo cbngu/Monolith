@@ -2,12 +2,12 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="monolith-api_main" target="1.8" />
-      <module name="monolith-api_test" target="1.8" />
-      <module name="monolith-app_main" target="1.8" />
-      <module name="monolith-app_test" target="1.8" />
-      <module name="monolith-spigot_main" target="1.8" />
-      <module name="monolith-spigot_test" target="1.8" />
+      <module name="monolith-api_main" target="1.10" />
+      <module name="monolith-api_test" target="1.10" />
+      <module name="monolith-app_main" target="1.10" />
+      <module name="monolith-app_test" target="1.10" />
+      <module name="monolith-spigot_main" target="1.10" />
+      <module name="monolith-spigot_test" target="1.10" />
       <module name="Monolith_main" target="1.8" />
       <module name="Monolith_test" target="1.8" />
     </bytecodeTargetLevel>
