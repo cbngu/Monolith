@@ -8,8 +8,8 @@
       <module name="monolith-app_test" target="1.10" />
       <module name="monolith-spigot_main" target="1.10" />
       <module name="monolith-spigot_test" target="1.10" />
-      <module name="Monolith_main" target="1.8" />
-      <module name="Monolith_test" target="1.8" />
+      <module name="Monolith_main" target="1.10" />
+      <module name="Monolith_test" target="1.10" />
     </bytecodeTargetLevel>
   </component>
 </project>

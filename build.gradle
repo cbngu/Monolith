@@ -1,9 +1,22 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    dependencies {
+        classpath 'gradle.plugin.org.gradle.java:experimental-jigsaw:0.1.1'
+    }
+}
+
 subprojects {
     group = 'gg.warcraft'
     version = '1.0.0-SNAPSHOT'
 
-    apply plugin: 'java-library'
+    apply plugin: 'java'
     apply plugin: 'application'
+    apply plugin: 'org.gradle.java.experimental-jigsaw'
 
     sourceCompatibility = 10
 
@@ -12,12 +25,12 @@ subprojects {
     }
 
     dependencies {
-        api 'com.google.inject:guice:4.2.0'
-        api 'com.google.inject.extensions:guice-assistedinject:4.2.0'
-        api 'org.joml:joml:1.9.9'
+        compile 'com.google.inject:guice:4.2.0'
+        compile 'com.google.inject.extensions:guice-assistedinject:4.2.0'
+        compile 'org.joml:joml:1.9.9'
 
-        testImplementation 'junit:junit:4.12'
-        testImplementation 'org.mockito:mockito-core:2.18.3'
+        testCompile 'junit:junit:4.12'
+        testCompile 'org.mockito:mockito-core:2.18.3'
     }
 
     tasks.withType(JavaCompile) {

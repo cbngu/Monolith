@@ -1,3 +1,5 @@
+javaModule.name = 'gg.warcraft.monolith.spigot'
+
 dependencies {
     compile project(':monolith-app')
 }
