@@ -1,6 +1,7 @@
 module gg.warcraft.monolith.api {
-    requires com.google.guice;
-    requires com.google.guice.extensions.assistedinject;
+    requires transitive com.google.guice;
+    requires transitive com.google.guice.extensions.assistedinject;
+    requires transitive org.joml;
 
-    exports gg.warcraft.monolith.api;
+    exports gg.warcraft.monolith.api.util;
 }
