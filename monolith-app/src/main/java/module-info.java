@@ -1,5 +1,5 @@
 module gg.warcraft.monolith.app {
-    requires gg.warcraft.monolith.api;
+    requires transitive gg.warcraft.monolith.api;
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
