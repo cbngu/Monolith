@@ -1,7 +1,7 @@
 package gg.warcraft.monolith.api.util;
 
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.Vector3ic;
 
 /**
  * This utility is injectable.
@@ -22,7 +22,7 @@ public interface MathUtils {
      * @param maximumCorner The maximum corner of the bounding box.
      * @return A new {@code BoundingBlockBox} within the boundaries of the specified corners. Never null.
      */
-    BoundingBlockBox createBoundingBlockBox(Vector3fc minimumCorner, Vector3fc maximumCorner);
+    BoundingBlockBox createBoundingBlockBox(Vector3ic minimumCorner, Vector3ic maximumCorner);
 
     /**
      * Creates a random float vector in 3D space.
