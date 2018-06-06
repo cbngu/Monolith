@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.api.world.block;
 
-import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.BlockLocation;
 
 /**
  * A Block represents a block as found on the server.
@@ -19,7 +19,7 @@ public interface Block {
      *
      * @return The location of this block. Never null.
      */
-    Location getLocation();
+    BlockLocation getLocation();
 
     /**
      * Returns the block neighbouring this block at the given block face.
