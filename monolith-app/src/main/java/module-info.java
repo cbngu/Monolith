@@ -8,5 +8,9 @@ module gg.warcraft.monolith.app {
     requires github.api;
     requires jedis;
 
-    exports gg.warcraft.monolith.app;
+    exports gg.warcraft.monolith.app.command to junit;
+    exports gg.warcraft.monolith.app.command.service to junit;
+
+    opens gg.warcraft.monolith.app.command to org.mockito;
+    opens gg.warcraft.monolith.app.command.service to org.mockito;
 }
