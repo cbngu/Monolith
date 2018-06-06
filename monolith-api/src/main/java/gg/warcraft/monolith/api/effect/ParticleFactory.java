@@ -16,23 +16,12 @@ public interface ParticleFactory {
     /**
      * Creates a new color based particle.
      *
-     * @param type  The type of the particle.
-     * @param color The color of the particle.
+     * @param type  The particle type.
+     * @param color The color.
      * @return A new color based particle. Never null.
      */
     @Named("color")
     Particle createColorParticle(ParticleType type, ColorHue color);
-
-    /**
-     * Creates a new speed emitting based particle.
-     *
-     * @param type   The type of the particle.
-     * @param speed  The speed of the particle.
-     * @param amount The amount of particles the particle emits.
-     * @return A new speed emitting based particle. Never null.
-     */
-    @Named("speed")
-    Particle createSpeedParticle(ParticleType type, float speed, int amount);
 
     /**
      * Creates a new multi-particle.
@@ -60,4 +49,24 @@ public interface ParticleFactory {
      */
     @Named("queued")
     Particle createQueuedParticle(LinkedHashMap<Particle, Integer> particles);
+
+    /**
+     * Creates a new simple particle.
+     *
+     * @param type The particle type.
+     * @return A new simple particle.
+     */
+    @Named("simple")
+    Particle createSimpleParticle(ParticleType type);
+
+    /**
+     * Creates a new speed emitting based particle.
+     *
+     * @param type   The particle type.
+     * @param speed  The speed.
+     * @param amount The amount of emitted particles.
+     * @return A new speed emitting based particle. Never null.
+     */
+    @Named("speed")
+    Particle createSpeedParticle(ParticleType type, float speed, int amount);
 }
