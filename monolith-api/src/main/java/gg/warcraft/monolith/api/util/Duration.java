@@ -2,7 +2,7 @@ package gg.warcraft.monolith.api.util;
 
 /**
  * Duration is a utility class that allows consumers to simply ask for a duration without imposing a specific time unit
- * on the caller.
+ * on the caller. Duration objects can be instantiated using {@code TimeUtils#createDurationInX}.
  */
 public interface Duration {
     enum Type {

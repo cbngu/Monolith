@@ -3,7 +3,8 @@ package gg.warcraft.monolith.api.util;
 /**
  * This utility is injectable.
  * <p>
- * TimeUtils provides utility methods and exposes constants for time based operations.
+ * TimeUtils provides utility methods and exposes constants for time based operations. It also serves as a factory for
+ * {@code Duration} objects.
  */
 public interface TimeUtils {
     int SECONDS_PER_MINUTE = 60;
