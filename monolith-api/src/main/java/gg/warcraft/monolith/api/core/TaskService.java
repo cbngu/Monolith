@@ -14,7 +14,7 @@ public interface TaskService {
      *
      * @param runnable The runnable.
      * @param delay    The delay.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runLater(Runnable runnable, Duration delay);
 
@@ -23,7 +23,7 @@ public interface TaskService {
      *
      * @param runnable The runnable.
      * @param delay    The delay.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runLaterAsync(Runnable runnable, Duration delay);
 
@@ -31,7 +31,7 @@ public interface TaskService {
      * Schedules a task to run the runnable on the next tick.
      *
      * @param runnable The runnable.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runNextTick(Runnable runnable);
 
@@ -39,7 +39,7 @@ public interface TaskService {
      * Schedules a task to run the runnable asynchronously on the next tick.
      *
      * @param runnable The runnable.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runNextTickAsync(Runnable runnable);
 
@@ -49,7 +49,7 @@ public interface TaskService {
      * @param runnable The runnable.
      * @param delay    The delay.
      * @param period   The period.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runTask(Runnable runnable, Duration delay, Duration period);
 
@@ -59,7 +59,7 @@ public interface TaskService {
      * @param runnable The runnable.
      * @param delay    The delay.
      * @param period   The period.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runTaskAsync(Runnable runnable, Duration delay, Duration period);
 
@@ -67,7 +67,7 @@ public interface TaskService {
      * Schedules a task to run the runnable on the next tick and each tick thereafter.
      *
      * @param runnable The runnable.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runEachTick(Runnable runnable);
 
@@ -75,7 +75,7 @@ public interface TaskService {
      * Schedules a task to run the runnable asynchronously on the next tick and each tick thereafter.
      *
      * @param runnable The runnable.
-     * @return The scheduled task.
+     * @return The scheduled task. Never null.
      */
     Task runEachTickAsync(Runnable runnable);
 }
