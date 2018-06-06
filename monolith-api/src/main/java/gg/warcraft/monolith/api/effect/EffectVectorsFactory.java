@@ -15,7 +15,7 @@ public interface EffectVectorsFactory {
     /**
      * Creates a new {@code EffectVectors} in the shape of a circle.
      * <p>
-     * This method will return a filled circle. To create an empty ring use {@code createRingVectors} in stead.
+     * This method will return a filled circle. To create an empty ring use {@code createRingVectors} instead.
      *
      * @param radius The radius of the circle.
      * @param count  The amount of vectors used to construct the circle.
@@ -43,7 +43,8 @@ public interface EffectVectorsFactory {
      * @return A new {@code EffectVectors} in the shape of a line. Never null.
      */
     @Named("line")
-    EffectVectors createLineVectors(@Assisted("origin") Vector3fc origin, @Assisted("target") Vector3fc target, int count);
+    EffectVectors createLineVectors(@Assisted("origin") Vector3fc origin, @Assisted("target") Vector3fc target,
+                                    int count);
 
     /**
      * Creates a new {@code EffectVectors} consisting of one point.

@@ -13,8 +13,8 @@ public interface EffectRendererFactory {
     /**
      * Creates a new iterative effect renderer with the given particle and effect vectors.
      * <p>
-     * An iterative effect renderer will incrementally display its particle at one of the offset locations of the
-     * vectors every time it is asked to render at a location.
+     * An iterative effect renderer will incrementally display its particle at the next offset location of the vectors
+     * every time it is asked to render at a location.
      *
      * @param particle The particle.
      * @param vectors  The effect vectors.

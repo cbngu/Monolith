@@ -29,7 +29,7 @@ public interface EffectVectors extends Iterable<Vector3fc> {
      * Creates a new {@code EffectVectors} rotated by the given angle around the X axis.
      *
      * @param angle The angle in radians.
-     * @return A new {@code EffectVectors} rotated by the given angle around the X axis.Never null.
+     * @return A new {@code EffectVectors} rotated by the given angle around the X axis. Never null.
      */
     EffectVectors rotateAroundAxisX(float angle);
 
@@ -37,7 +37,7 @@ public interface EffectVectors extends Iterable<Vector3fc> {
      * Creates a new {@code EffectVectors} rotated by the given angle around the Y axis.
      *
      * @param angle The angle in radians.
-     * @return A new {@code EffectVectors} rotated by the given angle around the Y axis.Never null.
+     * @return A new {@code EffectVectors} rotated by the given angle around the Y axis. Never null.
      */
     EffectVectors rotateAroundAxisY(float angle);
 
@@ -45,7 +45,7 @@ public interface EffectVectors extends Iterable<Vector3fc> {
      * Creates a new {@code EffectVectors} rotated by the given angle around the Z axis.
      *
      * @param angle The angle in radians.
-     * @return A new {@code EffectVectors} rotated by the given angle around the Z axis.Never null.
+     * @return A new {@code EffectVectors} rotated by the given angle around the Z axis. Never null.
      */
     EffectVectors rotateAroundAxisZ(float angle);
 }

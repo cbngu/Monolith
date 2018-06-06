@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * {@code Effect} objects.
  * <p>
  * Effects start running the next tick after creation and will run each tick thereafter (or each period if created as a
- * delayed effect). To stop an effect call one of its cancel methods. To pause an effect cancel it and recreate it anew
+ * timed effect). To stop an effect call one of its cancel methods. To pause an effect cancel it and recreate it anew
  * when it is required again.
  */
 public interface EffectFactory {
@@ -42,15 +42,15 @@ public interface EffectFactory {
     Effect createEffect(Supplier<Location> location);
 
     /**
-     * Creates a new dynamic delayed {@code Effect}.
+     * Creates a new dynamic timed {@code Effect}.
      * <p>
-     * A dynamic delayed {@code Effect} will call all of its effect renderers to display their particles at the location
-     * currently provided by the supplier, but only once every period.
+     * A dynamic timed {@code Effect} will call all of its effect renderers to display their particles at the location
+     * currently provided by the supplier once every period.
      *
      * @param location The location supplier.
      * @param period   The period.
      * @return A new dynamic timed {@code Effect}. Never null.
      */
-    @Named("delay")
+    @Named("timed")
     Effect createEffect(Supplier<Location> location, Duration period);
 }

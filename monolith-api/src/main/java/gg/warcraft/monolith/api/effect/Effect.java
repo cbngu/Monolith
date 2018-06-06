@@ -16,7 +16,7 @@ public interface Effect extends Runnable, Cancellable {
     void addRenderer(EffectRenderer renderer);
 
     /**
-     * Clears all effect renderers of this effect.
+     * Clears all effect renderers from this effect.
      */
     void clearRenderers();
 
