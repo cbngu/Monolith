@@ -8,7 +8,7 @@ Monolith is an effort by WarCraft to open source its code and get involved with 
 We will at all times be striving to upgrade to the latest version of everything we use as quickly as possible. As such WarCraft: Monolith currently requires Java 10 and Minecraft 1.12 to run.
 
 ## Ask questions
-We open source our code for everyone's benefit. If you run into a concept or snippet that you don't understand do not hesitate to ask a question in the #dev channel on our Discord at [discord.warcraft.gg](http://discord.warcraft.gg) or in the development category on our forum at [community.warcraft.gg](http://community.warcraft.gg) and if time allows we will be happy to explain what it does, how it does it, and share our thoughts on why we felt that's how it should do it.
+We open source our code for everyone's benefit. If you run into a concept or snippet that you don't understand do not hesitate to ask a question in the #dev channel on our Discord at [discord.warcraft.gg](http://discord.warcraft.gg) or in the development category on our forum at [community.warcraft.gg](http://community.warcraft.gg) and we'll do our best to explain what it does, how it does it, and share our thoughts on why we felt that's how it should do it.
 
 ## Contributing
 If you run into a concept or snippet that you feel could be improved please do get in touch via the aforementioned channels, or through a pull request, and we can discuss potential changes. In addition you could pick up a task from our YouTrack board at [warcraft.myjetbrains.com](https://warcraft.myjetbrains.com/youtrack), but more on that in the future. To enable collaboration we impose a minimal set of house rules:
