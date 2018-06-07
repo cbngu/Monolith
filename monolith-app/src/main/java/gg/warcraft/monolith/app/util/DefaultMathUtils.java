@@ -1,7 +1,8 @@
 package gg.warcraft.monolith.app.util;
 
-import gg.warcraft.monolith.api.util.BoundingBlockBox;
 import gg.warcraft.monolith.api.util.MathUtils;
+import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
+import gg.warcraft.monolith.app.world.block.SimpleBoundingBlockBox;
 import org.joml.Vector3f;
 import org.joml.Vector3ic;
 

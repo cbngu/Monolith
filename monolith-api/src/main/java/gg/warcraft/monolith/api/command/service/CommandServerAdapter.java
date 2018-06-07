@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.command.adapter;
+package gg.warcraft.monolith.api.command.service;
 
 import gg.warcraft.monolith.api.command.Command;
 

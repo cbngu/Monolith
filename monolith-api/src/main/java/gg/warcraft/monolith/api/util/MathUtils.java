@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.api.util;
 
+import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
 import org.joml.Vector3f;
 import org.joml.Vector3ic;
 
@@ -17,6 +18,8 @@ public interface MathUtils {
      * {@code BoundingBlockBox} does some safety checks to make sure that the provided vectors are actually the minimum
      * and maximum corners and rearranges values where required. While this means that you do not have to make sure your
      * corners are correct you probably still should to avoid possible confusion.
+     *
+     * TODO: find better home for this factory method now that BBB is moved to world module
      *
      * @param minimumCorner The minimum corner of the bounding box.
      * @param maximumCorner The maximum corner of the bounding box.

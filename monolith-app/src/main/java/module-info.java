@@ -15,6 +15,7 @@ module gg.warcraft.monolith.app {
     exports gg.warcraft.monolith.app.effect.renderer to junit;
     exports gg.warcraft.monolith.app.effect.vectors to junit;
     exports gg.warcraft.monolith.app.util to junit;
+    exports gg.warcraft.monolith.app.world.block to junit;
 
     opens gg.warcraft.monolith.app.command to org.mockito;
     opens gg.warcraft.monolith.app.command.service to org.mockito;
@@ -23,4 +24,5 @@ module gg.warcraft.monolith.app {
     opens gg.warcraft.monolith.app.effect.renderer to org.mockito;
     opens gg.warcraft.monolith.app.effect.vectors to org.mockito;
     opens gg.warcraft.monolith.app.util to org.mockito;
+    opens gg.warcraft.monolith.app.world.block to org.mockito;
 }

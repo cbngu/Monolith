@@ -1,7 +1,7 @@
-package gg.warcraft.monolith.app.util;
+package gg.warcraft.monolith.app.world.block;
 
-import gg.warcraft.monolith.api.util.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
 import org.joml.Vector3ic;
 
 public class SimpleBoundingBlockBox implements BoundingBlockBox {
@@ -11,7 +11,6 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     private final int maxY;
     private final int minZ;
     private final int maxZ;
-
 
     public SimpleBoundingBlockBox(Vector3ic minimumCorner, Vector3ic maximumCorner) {
         this.minX = Math.min(minimumCorner.x(), maximumCorner.x());

@@ -1,6 +1,4 @@
-package gg.warcraft.monolith.api.util;
-
-import gg.warcraft.monolith.api.world.block.Block;
+package gg.warcraft.monolith.api.world.block;
 
 import java.util.function.Predicate;
 
