@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class DefaultCommandCommandService implements CommandCommandService {
     private static final String NAME_NULL_OR_EMPTY = "Failed to create command with null or empty name.";
@@ -33,32 +34,43 @@ public class DefaultCommandCommandService implements CommandCommandService {
         this.adapter = adapter;
     }
 
-    @Override
-    public void createCommand(String name, List<String> aliases, CommandHandler handler) {
+    boolean validateName(String name, Predicate<String> isAvailable) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException(NAME_NULL_OR_EMPTY);
         }
-
-        if (queryService.getCommand(name) != null || !adapter.isCommandAvailable(name)) {
+        if (!isAvailable.test(name)) {
             var nameAlreadyExists = String.format(NAME_ALREADY_EXISTS, name);
             throw new IllegalArgumentException(nameAlreadyExists);
         }
+        return true;
+    }
 
-        aliases.forEach(alias -> {
-            if (alias == null || alias.isEmpty()) {
-                var aliasNullOrEmpty = String.format(ALIAS_NULL_OR_EMPTY, name);
-                throw new IllegalArgumentException(aliasNullOrEmpty);
-            }
+    boolean validateAlias(String command, String alias, Predicate<String> isAvailable) {
+        if (alias == null || alias.isEmpty()) {
+            var aliasNullOrEmpty = String.format(ALIAS_NULL_OR_EMPTY, command);
+            throw new IllegalArgumentException(aliasNullOrEmpty);
+        }
+        if (!isAvailable.test(alias)) {
+            var aliasAlreadyExists = String.format(ALIAS_ALREADY_EXISTS, command, alias);
+            throw new IllegalArgumentException(aliasAlreadyExists);
+        }
+        return true;
+    }
 
-            if (queryService.getCommand(alias) != null || !adapter.isCommandAvailable(alias)) {
-                var aliasAlreadyExists = String.format(ALIAS_ALREADY_EXISTS, name, alias);
-                throw new IllegalArgumentException(aliasAlreadyExists);
-            }
-        });
-
+    boolean validateHandler(CommandHandler handler) {
         if (handler == null) {
             throw new IllegalArgumentException(HANDLER_NULL);
         }
+        return true;
+    }
+
+    @Override
+    public void createCommand(String name, List<String> aliases, CommandHandler handler) {
+        Predicate<String> isAvailable = command ->
+                queryService.getCommand(command) == null && adapter.isCommandAvailable(command);
+        validateName(name, isAvailable);
+        aliases.forEach(alias -> validateAlias(name, alias, isAvailable));
+        validateHandler(handler);
 
         var command = new SimpleCommand(name, aliases, handler);
         adapter.registerCommand(command);

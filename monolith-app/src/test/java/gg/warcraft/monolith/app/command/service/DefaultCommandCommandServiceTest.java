@@ -12,13 +12,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static gg.warcraft.monolith.app.command.CommandTestUtils.randomAliases;
+import java.util.function.Predicate;
+
 import static gg.warcraft.monolith.app.command.CommandTestUtils.randomArgument;
 import static gg.warcraft.monolith.app.command.CommandTestUtils.randomName;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,116 +44,106 @@ public class DefaultCommandCommandServiceTest {
     }
 
     @Test
-    public void createCommand_shouldRegisterAndSave() {
+    public void validateName_shouldReturnTrue() {
         // Given
         var name = randomName();
-        var aliases = randomAliases();
-
-        when(mockCommandQueryService.getCommand(name)).thenReturn(null);
-        when(mockCommandServerAdapter.isCommandAvailable(name)).thenReturn(true);
-        aliases.forEach(alias -> when(mockCommandQueryService.getCommand(alias)).thenReturn(null));
-        aliases.forEach(alias -> when(mockCommandServerAdapter.isCommandAvailable(alias)).thenReturn(true));
+        Predicate<String> isAvailable = command -> true;
 
         // When
-        defaultCommandCommandService.createCommand(name, aliases, mockCommandHandler);
+        var result = defaultCommandCommandService.validateName(name, isAvailable);
 
         // Then
-        verify(mockCommandServerAdapter).registerCommand(any());
-        verify(mockCommandRepository).save(any());
+        assertTrue(result);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnNullName() {
+    public void validateName_shouldThrowOnNull() {
         // Given
-        var aliases = randomAliases();
+        Predicate<String> isAvailable = command -> true;
 
         // When
-        defaultCommandCommandService.createCommand(null, aliases, mockCommandHandler);
+        defaultCommandCommandService.validateName(null, isAvailable);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnEmptyName() {
+    public void validateName_shouldThrowOnEmpty() {
         // Given
         var name = "";
-        var aliases = randomAliases();
+        Predicate<String> isAvailable = command -> true;
 
         // When
-        defaultCommandCommandService.createCommand(name, aliases, mockCommandHandler);
+        defaultCommandCommandService.validateName(name, isAvailable);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnUnavailableName() {
+    public void validateName_shouldThrowOnUnavailable() {
         // Given
         var name = randomName();
-        var aliases = randomAliases();
-
-        when(mockCommandQueryService.getCommand(name)).thenReturn(mockCommand);
+        Predicate<String> isAvailable = command -> false;
 
         // When
-        defaultCommandCommandService.createCommand(name, aliases, mockCommandHandler);
+        defaultCommandCommandService.validateName(name, isAvailable);
+    }
+
+    @Test
+    public void validateAlias_shouldReturnTrue() {
+        // Given
+        var name = randomName();
+        var alias = randomName();
+        Predicate<String> isAvailable = command -> true;
+
+        // When
+        var result = defaultCommandCommandService.validateAlias(name, alias, isAvailable);
+
+        // Then
+        assertTrue(result);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnUnavailableNameCommand() {
+    public void validateAlias_shouldThrowOnNull() {
         // Given
         var name = randomName();
-        var aliases = randomAliases();
-
-        when(mockCommandQueryService.getCommand(name)).thenReturn(null);
-        when(mockCommandServerAdapter.isCommandAvailable(name)).thenReturn(false);
+        Predicate<String> isAvailable = command -> true;
 
         // When
-        defaultCommandCommandService.createCommand(name, aliases, mockCommandHandler);
+        defaultCommandCommandService.validateAlias(name, null, isAvailable);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnNullAlias() {
+    public void validateAlias_shouldThrowOnEmpty() {
         // Given
         var name = randomName();
-        var aliases = randomAliases();
-        aliases.add(null);
+        var alias = "";
+        Predicate<String> isAvailable = command -> true;
 
         // When
-        defaultCommandCommandService.createCommand(name, aliases, mockCommandHandler);
+        defaultCommandCommandService.validateAlias(name, alias, isAvailable);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnUnavailableAlias() {
+    public void validateAlias_shouldThrowOnUnavailable() {
         // Given
         var name = randomName();
-        var aliases = randomAliases();
-
-        when(mockCommandQueryService.getCommand(name)).thenReturn(null);
-        when(mockCommandServerAdapter.isCommandAvailable(name)).thenReturn(true);
-        when(mockCommandQueryService.getCommand(aliases.get(0))).thenReturn(mockCommand);
+        var alias = randomName();
+        Predicate<String> isAvailable = command -> false;
 
         // When
-        defaultCommandCommandService.createCommand(name, aliases, mockCommandHandler);
+        defaultCommandCommandService.validateAlias(name, alias, isAvailable);
+    }
+
+    @Test
+    public void validateHandler_shouldReturnTrue() {
+        // When
+        var result = defaultCommandCommandService.validateHandler(mockCommandHandler);
+
+        // Then
+        assertTrue(result);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnUnavailableAliasCommand() {
-        // Given
-        var name = randomName();
-        var aliases = randomAliases();
-
-        when(mockCommandQueryService.getCommand(name)).thenReturn(null);
-        when(mockCommandServerAdapter.isCommandAvailable(name)).thenReturn(true);
-        when(mockCommandQueryService.getCommand(aliases.get(0))).thenReturn(null);
-        when(mockCommandServerAdapter.isCommandAvailable(aliases.get(0))).thenReturn(false);
-
+    public void validateHandler_shouldThrowOnNull() {
         // When
-        defaultCommandCommandService.createCommand(name, aliases, mockCommandHandler);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createCommand_shouldThrowOnNullHandler() {
-        // Given
-        var name = randomName();
-        var aliases = randomAliases();
-
-        // When
-        defaultCommandCommandService.createCommand(name, aliases, null);
+        defaultCommandCommandService.validateHandler(null);
     }
 
     @Test
