@@ -28,6 +28,6 @@ public interface ConfigurationService {
      * @throws IOException Thrown if either the retrieval of the configuration file or the mapping to the configuration
      *                     object failed.
      */
-    <T extends Configuration> void reloadConfiguration(String configurationFileName, Class<T> configurationClass)
-            throws IOException;
+    <T extends Configuration> void reloadConfiguration(String configurationFileName,
+                                                       Class<T> configurationClass) throws IOException;
 }
