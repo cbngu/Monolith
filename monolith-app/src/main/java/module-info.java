@@ -10,7 +10,17 @@ module gg.warcraft.monolith.app {
 
     exports gg.warcraft.monolith.app.command to junit;
     exports gg.warcraft.monolith.app.command.service to junit;
+    exports gg.warcraft.monolith.app.effect to junit;
+    exports gg.warcraft.monolith.app.effect.particle to junit;
+    exports gg.warcraft.monolith.app.effect.renderer to junit;
+    exports gg.warcraft.monolith.app.effect.vectors to junit;
+    exports gg.warcraft.monolith.app.util to junit;
 
     opens gg.warcraft.monolith.app.command to org.mockito;
     opens gg.warcraft.monolith.app.command.service to org.mockito;
+    opens gg.warcraft.monolith.app.effect to org.mockito;
+    opens gg.warcraft.monolith.app.effect.particle to org.mockito;
+    opens gg.warcraft.monolith.app.effect.renderer to org.mockito;
+    opens gg.warcraft.monolith.app.effect.vectors to org.mockito;
+    opens gg.warcraft.monolith.app.util to org.mockito;
 }
