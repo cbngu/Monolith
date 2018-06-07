@@ -51,7 +51,7 @@ public interface Location {
      * @param z The Z scalar.
      * @return A new location that is the result of adding the given scalars to this location. Never null.
      */
-    BlockLocation add(float x, float y, float z);
+    Location add(float x, float y, float z);
 
     /**
      * Creates a new location that is the result of subtracting the given scalars to this location.
@@ -61,7 +61,7 @@ public interface Location {
      * @param z The Z scalar.
      * @return A new location that is the result of subtracting the given scalars to this location. Never null.
      */
-    BlockLocation sub(float x, float y, float z);
+    Location sub(float x, float y, float z);
 
     /**
      * Creates a new location that is the result of adding the given vector to this location.
@@ -69,7 +69,7 @@ public interface Location {
      * @param vector The vector.
      * @return A new location that is the result of adding the given vector to this location. Never null.
      */
-    BlockLocation add(Vector3fc vector);
+    Location add(Vector3fc vector);
 
     /**
      * Creates a new location that is the result of subtracting the given vector to this location.
@@ -77,7 +77,7 @@ public interface Location {
      * @param vector The vector.
      * @return A new location that is the result of subtracting the given vector to this location. Never null.
      */
-    BlockLocation sub(Vector3fc vector);
+    Location sub(Vector3fc vector);
 
     /**
      * Creates a new location with the X scalar as its X coordinate.
@@ -85,7 +85,7 @@ public interface Location {
      * @param x The X scalar.
      * @return A new location with the X scalar as its X coordinate. Never null.
      */
-    BlockLocation withX(float x);
+    Location withX(float x);
 
     /**
      * Creates a new location with the Y scalar as its Y coordinate.
@@ -93,7 +93,7 @@ public interface Location {
      * @param y The Y scalar.
      * @return A new location with the Y scalar as its Y coordinate. Never null.
      */
-    BlockLocation withY(float y);
+    Location withY(float y);
 
     /**
      * Creates a new location with the Z scalar as its Z coordinate.
@@ -101,7 +101,7 @@ public interface Location {
      * @param z The Z scalar.
      * @return A new location with the Z scalar as its Z coordinate. Never null.
      */
-    BlockLocation withZ(float z);
+    Location withZ(float z);
 
     /**
      * Creates a new location with the given scalars as its coordinates.
@@ -111,5 +111,5 @@ public interface Location {
      * @param z The Z scalar.
      * @return A new location with the given scalars as its coordinates. Never null.
      */
-    BlockLocation with(float x, float y, float z);
+    Location with(float x, float y, float z);
 }
