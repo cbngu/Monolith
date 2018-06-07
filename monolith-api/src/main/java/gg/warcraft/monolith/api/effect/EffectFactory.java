@@ -19,37 +19,26 @@ import java.util.function.Supplier;
 public interface EffectFactory {
 
     /**
-     * Creates a new static {@code Effect}.
+     * Creates a new {@code Effect}.
      * <p>
-     * A static {@code Effect} will call all of its effect renderers to display their particles at the given location.
-     *
-     * @param location The location.
-     * @return A new static {@code Effect}. Never null.
-     */
-    @Named("static")
-    Effect createEffect(Location location);
-
-    /**
-     * Creates a new dynamic {@code Effect}.
-     * <p>
-     * A dynamic {@code Effect} will call all of its effect renderers to display their particles at the location
+     * An {@code Effect} will call all of its effect renderers to display their particles at the location
      * currently provided by the supplier.
      *
      * @param location The location supplier.
-     * @return A new dynamic {@code Effect}. Never null.
+     * @return A new {@code Effect}. Never null.
      */
-    @Named("dynamic")
+    @Named("simple")
     Effect createEffect(Supplier<Location> location);
 
     /**
-     * Creates a new dynamic timed {@code Effect}.
+     * Creates a new timed {@code Effect}.
      * <p>
-     * A dynamic timed {@code Effect} will call all of its effect renderers to display their particles at the location
+     * A timed {@code Effect} will call all of its effect renderers to display their particles at the location
      * currently provided by the supplier once every period.
      *
      * @param location The location supplier.
      * @param period   The period.
-     * @return A new dynamic timed {@code Effect}. Never null.
+     * @return A new timed {@code Effect}. Never null.
      */
     @Named("timed")
     Effect createEffect(Supplier<Location> location, Duration period);

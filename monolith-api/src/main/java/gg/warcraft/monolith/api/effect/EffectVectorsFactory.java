@@ -47,6 +47,14 @@ public interface EffectVectorsFactory {
                                     int count);
 
     /**
+     * Creates a new {@code EffectVectors} consisting of one point at the origin.
+     *
+     * @return A new {@code EffectVectors} consisting of one point at the origin. Never null.
+     */
+    @Named("origin")
+    EffectVectors createOriginVector();
+
+    /**
      * Creates a new {@code EffectVectors} consisting of one point.
      *
      * @param point The point vector.
