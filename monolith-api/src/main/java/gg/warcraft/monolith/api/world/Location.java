@@ -9,6 +9,13 @@ import org.joml.Vector3fc;
 public interface Location {
 
     /**
+     * Returns the world this location belongs to.
+     *
+     * @return The world this location belongs to. Never null.
+     */
+    World getWorld();
+
+    /**
      * Returns the X coordinate of this location.
      *
      * @return The X coordinate of this location.
@@ -28,13 +35,6 @@ public interface Location {
      * @return The Z coordinate of this location.
      */
     float getZ();
-
-    /**
-     * Returns the world this location belongs to.
-     *
-     * @return The world this location belongs to. Never null.
-     */
-    World getWorld();
 
     /**
      * Returns this location as a 3D int vector.

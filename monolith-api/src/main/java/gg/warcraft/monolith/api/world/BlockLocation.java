@@ -10,6 +10,13 @@ import org.joml.Vector3ic;
 public interface BlockLocation {
 
     /**
+     * Returns the world this location belongs to.
+     *
+     * @return The world this location belongs to. Never null.
+     */
+    World getWorld();
+
+    /**
      * Returns the X coordinate of this location.
      *
      * @return The X coordinate of this location.
@@ -29,13 +36,6 @@ public interface BlockLocation {
      * @return The Z coordinate of this location.
      */
     int getZ();
-
-    /**
-     * Returns the world this location belongs to.
-     *
-     * @return The world this location belongs to. Never null.
-     */
-    World getWorld();
 
     /**
      * Returns this location as a 3D int vector.
