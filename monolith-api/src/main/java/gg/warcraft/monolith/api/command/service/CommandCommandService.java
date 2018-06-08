@@ -18,14 +18,11 @@ import java.util.UUID;
 public interface CommandCommandService {
 
     /**
-     * Creates a new {@code Command}, registers it with the server, and saves it to the Monolith domain.
-     * <p>
-     * In addition to the constraints defined in the parameter list this method will throw an {@code
-     * IllegalArgumentException} if the name or any of the aliases is already in use by another command.
-     *
      * @param name    The name of the new command. Can not be null or empty.
      * @param aliases An optional list of aliases. Can not be null, but can be empty. Items can not be null or empty.
      * @param handler The command handler. Can not be null.
+     * @throws IllegalArgumentException Thrown when any of the parameter constraints are not met and if the name or any
+     *                                  of the aliases is already in use by another command.
      */
     void createCommand(String name, List<String> aliases, CommandHandler handler) throws IllegalArgumentException;
 
