@@ -12,8 +12,8 @@ import java.util.UUID;
  * The CommandCommandService serves as a point of entry into the command module implementation. It provides methods to
  * create a new {@code Command} at run time and to dispatch a {@code Command} as if a player or the console executed it.
  * <p>
- * A {@code Command} created at run time only last for as long as the server is running and need to created again when
- * the server restarts.
+ * A {@code Command} created at run time only lasts for as long as the server is running and needs to be created again
+ * when the server restarts.
  */
 public interface CommandCommandService {
 
