@@ -19,14 +19,14 @@ import java.util.UUID;
 public interface EntityCommandService {
 
     /**
-     * @param entityId The id of the entity.
-     * @param velocity The new velocity of the entity.
+     * @param entityId The id of the entity. Can not be null.
+     * @param velocity The new velocity of the entity. Can not be null.
      */
     void setVelocity(UUID entityId, Vector3fc velocity);
 
     /**
-     * @param entityId The id of the entity.
-     * @param faction  The new faction of the entity.
+     * @param entityId The id of the entity. Can not be null.
+     * @param faction  The new faction of the entity. Can not be null.
      */
     void setFaction(UUID entityId, Faction faction);
 
