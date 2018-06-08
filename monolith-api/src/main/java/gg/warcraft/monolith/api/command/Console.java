@@ -11,8 +11,8 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Console is a convenience annotation that allows you to ask for the console command sender by annotating an injected
- * {@code CommandSender} parameter with it.
+ * Console is an injection annotation that allows you to ask for the console by annotating an injected {@code
+ * CommandSender} parameter with it.
  */
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})

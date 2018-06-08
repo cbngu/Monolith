@@ -1,44 +1,42 @@
 package gg.warcraft.monolith.api.command.service;
 
-import gg.warcraft.monolith.api.command.Command;
-
+import java.util.List;
 import java.util.UUID;
 
 /**
  * This adapter is injectable, however you generally have no need for it. Use the command and query services instead.
  * <p>
  * The CommandServerAdapter abstracts command related server implementations from the Monolith domain. It can be used to
- * query the server, but also to directly inject commands into the command map of the server implementation.
+ * query whether a command is currently in use on the server, to directly inject a new command into the command map of
+ * the server, and to dispatch a command as if a player or the console executed it.
  */
 public interface CommandServerAdapter {
 
     /**
-     * Checks whether the command is already used by a command on the server.
-     *
-     * @param command The command.
-     * @return True if the command is not currently in use by a command on the server, false otherwise.
+     * @param alias The alias. Can not be null or empty.
+     * @return True if the alias is not currently in use by another command, false otherwise.
      */
-    boolean isCommandAvailable(String command);
+    boolean isAliasAvailable(String alias);
 
     /**
-     * Dispatches the command as the specified player.
-     *
-     * @param command  The command to execute. This should include all of the arguments space separated.
-     * @param playerId The id of the player.
+     * @param command  The command and all arguments space separated to execute. Can not be null or empty.
+     * @param playerId The id of the player to execute the command as. Can not be null.
      */
     void dispatchCommandFor(String command, UUID playerId);
 
     /**
-     * Dispatches the command as the console.
-     *
-     * @param command The command to execute. This should include all of the arguments space separated.
+     * @param command The command and all arguments space separated to execute as the console. Can not be null or empty.
      */
     void dispatchConsoleCommand(String command);
 
     /**
-     * Registers the command with the server.
+     * Registers a new command with the server.
+     * <p>
+     * In addition to the constraints defined in the parameter list this method will throw an {@code
+     * IllegalArgumentException} if the name or any of the aliases is already in use by another command.
      *
-     * @param command The command.
+     * @param name    The name of the new command. Can not be null or empty.
+     * @param aliases An optional list of aliases. Can not be null, but can be empty. Items can not be null or empty.
      */
-    void registerCommand(Command command);
+    void registerCommand(String name, List<String> aliases) throws IllegalArgumentException;
 }
