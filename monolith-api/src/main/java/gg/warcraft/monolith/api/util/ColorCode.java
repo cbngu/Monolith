@@ -30,8 +30,6 @@ public enum ColorCode {
     }
 
     /**
-     * Returns the string representation of this color code as accepted by Minecraft.
-     *
      * @return The string representation of this color code as accepted by Minecraft. Never null, but can be empty.
      */
     @Override

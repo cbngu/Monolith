@@ -20,8 +20,6 @@ public enum FormatCode {
     }
 
     /**
-     * Returns the string representation of this formatting code as accepted by Minecraft.
-     *
      * @return The string representation of this formatting code as accepted by Minecraft. Never null, but can be empty.
      */
     @Override

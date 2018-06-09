@@ -31,8 +31,6 @@ public enum ColorHue {
     }
 
     /**
-     * Returns the RGB value as integer of this color.
-     *
      * @return The RGB value as integer of this color.
      */
     public int getRgb() {

@@ -12,8 +12,6 @@ public interface Duration {
     }
 
     /**
-     * Returns the value of this duration in milliseconds.
-     *
      * @return The value of this duration in milliseconds.
      */
     int inMillis();

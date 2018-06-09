@@ -23,54 +23,40 @@ public interface TimeUtils {
     int MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR;
 
     /**
-     * Returns the time elapsed since the unix timestamp in a human readable format.
-     *
      * @param unixTimestamp The unix timestamp in milliseconds.
      * @return The time elapsed since the unix timestamp in a human readable format. Never null, but can be empty.
      */
     String getTimeElapsedSince(long unixTimestamp);
 
     /**
-     * Creates a new {@code Duration} for the specified milliseconds.
-     *
      * @param millis The duration in milliseconds.
      * @return A new {@code Duration} for the specified milliseconds. Never null.
      */
     Duration createDurationInMillis(int millis);
 
     /**
-     * Creates a new {@code Duration} for the specified ticks.
-     *
      * @param millis The duration in ticks.
      * @return A new {@code Duration} for the specified ticks. Never null.
      */
     Duration createDurationInTicks(int ticks);
 
     /**
-     * Creates a new {@code Duration} for the specified seconds.
-     *
      * @param millis The duration in seconds.
      * @return A new {@code Duration} for the specified seconds. Never null.
      */
     Duration createDurationInSeconds(int seconds);
 
     /**
-     * Returns a {@code Duration} for one millisecond.
-     *
      * @return A {@code Duration} for one millisecond. Never null.
      */
     Duration oneMilli();
 
     /**
-     * Returns a {@code Duration} for one tick.
-     *
      * @return A {@code Duration} for one tick. Never null.
      */
     Duration oneTick();
 
     /**
-     * Returns a {@code Duration} for one second.
-     *
      * @return A {@code Duration} for one second. Never null.
      */
     Duration oneSecond();

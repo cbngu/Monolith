@@ -28,22 +28,16 @@ public interface MathUtils {
     BoundingBlockBox createBoundingBlockBox(Vector3ic minimumCorner, Vector3ic maximumCorner);
 
     /**
-     * Creates a random float vector in 3D space.
-     *
      * @return A random float vector in 3D space of length unit. Never null.
      */
     Vector3f randomVector();
 
     /**
-     * Creates a random float vector in 2D space on the XZ plane.
-     *
      * @return A random float vector in 2D space on the XZ plane of length unit. Never null.
      */
     Vector3f randomCircleVector();
 
     /**
-     * Creates a random angle in radians.
-     *
      * @return A random angle in radians.
      */
     float randomAngle();

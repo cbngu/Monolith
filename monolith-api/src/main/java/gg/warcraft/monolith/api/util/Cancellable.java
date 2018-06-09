@@ -6,9 +6,7 @@ package gg.warcraft.monolith.api.util;
 public interface Cancellable {
 
     /**
-     * Cancels this cancellable.
-     * <p>
-     * Cancelling an already cancelled cancellable should silently fail.
+     * Cancels this cancellable if not already cancelled, should silently fail otherwise.
      */
     void cancel();
 }

@@ -24,8 +24,6 @@ public enum ConsoleColor {
     }
 
     /**
-     * Returns the string representation of this color code as accepted by most consoles.
-     *
      * @return The string representation of this color code as accepted by most consoles. Never null, but can be empty.
      */
     @Override

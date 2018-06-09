@@ -8,9 +8,7 @@ package gg.warcraft.monolith.api.util;
 public interface StringUtils {
 
     /**
-     * Returns whether or not the char is a vowel.
-     *
-     * @return True if the char is a vowel, false otherwise.
+     * @return True if the character is a vowel, false otherwise.
      */
     boolean isVowel(char c);
 }
