@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.api.entity;
 
+import gg.warcraft.monolith.api.entity.attribute.Attributes;
+import gg.warcraft.monolith.api.entity.status.Status;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import org.joml.Vector3f;
 
@@ -39,4 +41,8 @@ public interface Entity {
      * @return The faction of this entity. Can be null.
      */
     Faction getFaction();
+
+    Attributes getAttributes();
+
+    Status getStatus();
 }

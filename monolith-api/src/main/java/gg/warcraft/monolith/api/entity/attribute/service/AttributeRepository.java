@@ -1,10 +1,7 @@
 package gg.warcraft.monolith.api.entity.attribute.service;
 
-import gg.warcraft.monolith.api.entity.attribute.Attribute;
-import gg.warcraft.monolith.api.entity.attribute.AttributeModifier;
+import gg.warcraft.monolith.api.entity.attribute.Attributes;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -19,11 +16,10 @@ public interface AttributeRepository {
      * @param entityId The id of the entity. Can not be null.
      * @return The attributes of the entity. Never null.
      */
-    Map<Attribute, Set<AttributeModifier>> getModifiers(UUID entityId);
+    Attributes getAttributes(UUID entityId);
 
     /**
-     * @param modifiers The attribute modifiers to save. Can not be null.
-     * @param entityId  The id of the entity. Can not be null.
+     * @param attributes The attributes to save. Can not be null.
      */
-    void save(Map<Attribute, Set<AttributeModifier>> modifiers, UUID entityId);
+    void save(Attributes attributes);
 }
