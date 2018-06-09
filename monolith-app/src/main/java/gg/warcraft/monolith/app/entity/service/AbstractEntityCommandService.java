@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+// TODO: this class is severely lacking tests
 public abstract class AbstractEntityCommandService implements EntityCommandService {
     private final EntityQueryService entityQueryService;
     private final EntityServerAdapter entityServerAdapter;
