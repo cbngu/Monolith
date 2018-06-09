@@ -14,7 +14,7 @@ public class JacksonYamlMapper implements YamlMapper {
     }
 
     @Override
-    public <T> T from(String yaml, Class<T> to) {
+    public <T> T parse(String yaml, Class<T> to) {
         try {
             return mapper.readValue(yaml, to);
         } catch (Exception ex) {
@@ -23,7 +23,7 @@ public class JacksonYamlMapper implements YamlMapper {
     }
 
     @Override
-    public <T> T from(Reader yaml, Class<T> to) {
+    public <T> T parse(Reader yaml, Class<T> to) {
         try {
             return mapper.readValue(yaml, to);
         } catch (Exception ex) {
@@ -32,7 +32,7 @@ public class JacksonYamlMapper implements YamlMapper {
     }
 
     @Override
-    public String to(Object object) {
+    public String stringify(Object object) {
         try {
             return mapper.writeValueAsString(object);
         } catch (Exception ex) {

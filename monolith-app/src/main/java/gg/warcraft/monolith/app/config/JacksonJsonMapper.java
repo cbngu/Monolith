@@ -14,7 +14,7 @@ public class JacksonJsonMapper implements JsonMapper {
     }
 
     @Override
-    public <T> T from(String json, Class<T> to) {
+    public <T> T parse(String json, Class<T> to) {
         try {
             return mapper.readValue(json, to);
         } catch (Exception ex) {
@@ -23,7 +23,7 @@ public class JacksonJsonMapper implements JsonMapper {
     }
 
     @Override
-    public <T> T from(Reader json, Class<T> to) {
+    public <T> T parse(Reader json, Class<T> to) {
         try {
             return mapper.readValue(json, to);
         } catch (Exception ex) {
@@ -32,7 +32,7 @@ public class JacksonJsonMapper implements JsonMapper {
     }
 
     @Override
-    public String to(Object object) {
+    public String stringify(Object object) {
         try {
             return mapper.writeValueAsString(object);
         } catch (Exception ex) {
