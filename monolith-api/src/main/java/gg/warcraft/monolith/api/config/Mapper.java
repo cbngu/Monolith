@@ -3,35 +3,29 @@ package gg.warcraft.monolith.api.config;
 import java.io.Reader;
 
 /**
- * A Mapper maps from a text source to a destination object or vice versa.
+ * A Mapper maps from a text source to a class and vice versa.
  */
 public interface Mapper {
 
     /**
-     * Parses the text source to an object of the specified class.
-     *
-     * @param source The text source.
-     * @param to     The class of the destination object.
-     * @param <T>    The type of the destination class.
-     * @return The object.
+     * @param source The string to parse.
+     * @param to     The class to map to.
+     * @param <T>    The type of the class.
+     * @return The result of mapping the source to the class. Can be null.
      */
-    <T> T from(String source, Class<T> to);
+    <T> T parse(String source, Class<T> to);
 
     /**
-     * Parses the reader source to an object of the specified class.
-     *
-     * @param source The reader source.
-     * @param to     The class of the destination object.
-     * @param <T>    The type of the destination class.
-     * @return The object.
+     * @param source The source to parse.
+     * @param to     The class to map to.
+     * @param <T>    The type of the class.
+     * @return The result of mapping the source to the class. Can be null.
      */
-    <T> T from(Reader source, Class<T> to);
+    <T> T parse(Reader source, Class<T> to);
 
     /**
-     * Stringifies the given object according to the implementation.
-     *
-     * @param object The object to map.
+     * @param object The object.
      * @return The stringified object.
      */
-    String to(Object object);
+    String stringify(Object object);
 }

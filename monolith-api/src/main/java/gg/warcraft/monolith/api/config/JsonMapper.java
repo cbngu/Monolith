@@ -5,13 +5,13 @@ import java.io.Reader;
 /**
  * This mapper is injectable.
  * <p>
- * A JsonMapper maps from a JSON source to a destination object or vice versa.
+ * JsonMapper maps from a JSON source to a class and vice versa.
  */
 public interface JsonMapper extends Mapper {
 
     @Override
-    <T> T from(String json, Class<T> to);
+    <T> T parse(String json, Class<T> to);
 
     @Override
-    <T> T from(Reader json, Class<T> to);
+    <T> T parse(Reader json, Class<T> to);
 }
