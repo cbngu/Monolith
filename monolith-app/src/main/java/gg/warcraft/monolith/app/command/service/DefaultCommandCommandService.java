@@ -67,13 +67,13 @@ public class DefaultCommandCommandService implements CommandCommandService {
     @Override
     public void createCommand(String name, List<String> aliases, CommandHandler handler) {
         Predicate<String> isAvailable = command ->
-                queryService.getCommand(command) == null && adapter.isCommandAvailable(command);
+                queryService.getCommand(command) == null && adapter.isAliasAvailable(command);
         validateName(name, isAvailable);
         aliases.forEach(alias -> validateAlias(name, alias, isAvailable));
         validateHandler(handler);
 
         var command = new SimpleCommand(name, aliases, handler);
-        adapter.registerCommand(command);
+        adapter.registerCommand(name, aliases);
         repository.save(command);
     }
 

@@ -17,4 +17,9 @@ public class DefaultCommandQueryService implements CommandQueryService {
     public Command getCommand(String alias) {
         return repository.getCommand(alias);
     }
+
+    @Override
+    public boolean isAliasAvailable(String alias) {
+        return repository.getCommand(alias) == null;
+    }
 }
