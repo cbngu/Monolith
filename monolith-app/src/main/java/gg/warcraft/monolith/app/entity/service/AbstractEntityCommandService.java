@@ -71,33 +71,33 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
 
     @Override
     public void heavy(UUID entityId, Duration duration) {
-        Entity entity = entityQueryService.getEntity(entityId);
+        var entity = entityQueryService.getEntity(entityId);
         if (entity == null) {
             throw new IllegalArgumentException("Failed to apply heavy to null entity with id " + entityId);
         }
 
-        Block targetBlock = findBlockUnderFeet(entity);
-        float safeY = targetBlock.getLocation().getY() + 1f;
-        Location safeLocation = entity.getLocation().withY(safeY);
+        var targetBlock = findBlockUnderFeet(entity);
+        var safeY = targetBlock.getLocation().getY() + 1f;
+        var safeLocation = entity.getLocation().withY(safeY);
         this.setVelocity(entityId, new Vector3f());
         this.teleport(entityId, safeLocation);
 
         this.removePotionEffect(entityId, PotionType.JUMP);
-        PotionEffect effect = new SimplePotionEffect(PotionType.JUMP, 128, duration);
+        var effect = new SimplePotionEffect(PotionType.JUMP, 128, duration);
         this.addPotionEffect(entityId, effect);
     }
 
     @Override
     public void freeze(UUID entityId, Duration duration) {
         this.removePotionEffect(entityId, PotionType.SLOW);
-        PotionEffect effect = new SimplePotionEffect(PotionType.SLOW, 7, duration);
+        var effect = new SimplePotionEffect(PotionType.SLOW, 7, duration);
         this.addPotionEffect(entityId, effect);
 
         this.heavy(entityId, duration);
     }
 
     private Block findBlockUnderFeet(Entity entity) {
-        Block current = worldQueryService.getBlockAt(entity.getLocation());
+        var current = worldQueryService.getBlockAt(entity.getLocation());
         while (BlockType.NON_SOLIDS.contains(current.getType())
                 && current.getLocation().getY() >= 0) {
             current = current.getRelative(BlockFace.DOWN);
@@ -134,24 +134,24 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
 
     @Override
     public void knockback(UUID entityId, Vector3fc direction, float distance) {
-        float strength = knockbackStrength.computeIfAbsent(distance, this::calculateKnockbackStrength);
-        Vector3f knockback = new Vector3f(direction);
+        var strength = knockbackStrength.computeIfAbsent(distance, this::calculateKnockbackStrength);
+        var knockback = new Vector3f(direction);
         knockback.y = 0;
         knockback.normalize();
         knockback.y = 0.1f;
         knockback.normalize();
-        Vector3f velocity = knockback.mul(strength);
+        var velocity = knockback.mul(strength);
         this.setVelocity(entityId, velocity);
     }
 
     @Override
     public void knockback(UUID entityId, Location source, float distance) {
-        Entity entity = entityQueryService.getEntity(entityId);
+        var entity = entityQueryService.getEntity(entityId);
         if (entity == null) {
             throw new IllegalArgumentException("Failed to apply knockback to null entity with id " + entityId);
         }
 
-        Vector3f direction = source.sub(entity.getLocation().toVector()).toVector();
+        var direction = source.sub(entity.getLocation().toVector()).toVector();
         this.knockback(entityId, direction, distance);
     }
 
@@ -182,14 +182,14 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
 
     @Override
     public void knockup(UUID entityId, float distance) {
-        Entity entity = entityQueryService.getEntity(entityId);
+        var entity = entityQueryService.getEntity(entityId);
         if (entity == null) {
             throw new IllegalArgumentException("Failed to apply knockup to null entity with id " + entityId);
         }
 
-        float strength = knockupStrength.computeIfAbsent(distance, this::calculateKnockupStrength);
-        Vector3f knockup = new Vector3f(0, strength, 0);
-        Vector3f newVelocity = entity.getVelocity().add(knockup);
+        var strength = knockupStrength.computeIfAbsent(distance, this::calculateKnockupStrength);
+        var knockup = new Vector3f(0, strength, 0);
+        var newVelocity = entity.getVelocity().add(knockup);
         this.setVelocity(entityId, newVelocity);
     }
 
@@ -217,33 +217,33 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
 
     @Override
     public void leap(UUID entityId, Vector3fc direction, float distance) {
-        Entity entity = entityQueryService.getEntity(entityId);
+        var entity = entityQueryService.getEntity(entityId);
         if (entity == null) {
             throw new IllegalArgumentException("Failed to apply leap to null entity with id " + entityId);
         }
 
-        float strength = leapStrength.computeIfAbsent(distance, this::calculateLeapStrength);
-        Vector3f leap = new Vector3f(direction);
+        var strength = leapStrength.computeIfAbsent(distance, this::calculateLeapStrength);
+        var leap = new Vector3f(direction);
         leap.y = 0;
         leap.normalize();
         leap.y = distance <= 10f ? 0.4f : 0.25f;
         leap.normalize();
-        Vector3f velocity = leap.mul(strength);
-        Vector3f newVelocity = entity.getVelocity().add(velocity);
+        var velocity = leap.mul(strength);
+        var newVelocity = entity.getVelocity().add(velocity);
         this.setVelocity(entityId, newVelocity);
     }
 
     @Override
     public void vacuum(UUID entityId, Location source, float strength) {
-        Entity entity = entityQueryService.getEntity(entityId);
+        var entity = entityQueryService.getEntity(entityId);
         if (entity == null) {
             throw new IllegalArgumentException("Failed to apply vacuum to null entity with id " + entityId);
         }
 
         this.heavy(entityId, timeUtils.oneSecond());
-        Vector3f direction = source.toVector().sub(entity.getLocation().toVector());
+        var direction = source.toVector().sub(entity.getLocation().toVector());
         direction.normalize().mul(0.05f * strength);
-        Vector3f newVelocity = entity.getVelocity();
+        var newVelocity = entity.getVelocity();
         newVelocity.x = direction.x;
         newVelocity.z = direction.z;
         this.setVelocity(entityId, newVelocity);
