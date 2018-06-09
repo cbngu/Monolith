@@ -10,6 +10,7 @@ module gg.warcraft.monolith.api {
 
     // configuration module
     exports gg.warcraft.monolith.api.config;
+    exports gg.warcraft.monolith.api.config.service;
 
     // core module
     exports gg.warcraft.monolith.api.core;

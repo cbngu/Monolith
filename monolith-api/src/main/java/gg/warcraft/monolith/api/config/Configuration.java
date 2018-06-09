@@ -14,5 +14,5 @@ public interface Configuration {
     /**
      * @return The class this configuration can be mapped to. Never null.
      */
-    Class getConfigurationClass();
+    Class<?> getConfigurationClass();
 }
