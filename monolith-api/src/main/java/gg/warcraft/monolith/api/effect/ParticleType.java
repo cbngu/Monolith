@@ -64,9 +64,9 @@ public enum ParticleType {
     }
 
     /**
-     * Returns the Minecraft type of this particle.
+     * Returns the Minecraft type of this particle type.
      *
-     * @return The Minecraft type of this particle. Never null or empty.
+     * @return The Minecraft type of this particle type. Never null or empty.
      */
     public String getType() {
         return type;
