@@ -11,23 +11,17 @@ package gg.warcraft.monolith.api.core;
 public interface EventService {
 
     /**
-     * Publishes the event to subscribed listeners.
-     *
-     * @param event The event.
+     * @param event The event to publish. Can not be null.
      */
     void publish(Event event);
 
     /**
-     * Subscribes the listener.
-     *
-     * @param listener The listener.
+     * @param listener The listener to subscribe. Can not be null.
      */
     void subscribe(Object listener);
 
     /**
-     * Unsubscribes the listener.
-     *
-     * @param listener The listener.
+     * @param listener The listener to unsubscribe. Can not be null.
      */
     void unsubscribe(Object listener);
 }
