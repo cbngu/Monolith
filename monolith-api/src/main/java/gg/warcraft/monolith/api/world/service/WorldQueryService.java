@@ -16,8 +16,6 @@ import org.joml.Vector3ic;
 public interface WorldQueryService {
 
     /**
-     * Returns the location in the given world at the specified coordinates.
-     *
      * @param world The world.
      * @param x     The X coordinate.
      * @param y     The Y coordinate.
@@ -27,8 +25,6 @@ public interface WorldQueryService {
     Location getLocation(WorldType world, float x, float y, float z);
 
     /**
-     * Returns the location in the given world at the specified coordinates with the given orientation.
-     *
      * @param world The world.
      * @param x     The X coordinate.
      * @param y     The Y coordinate.
@@ -40,8 +36,6 @@ public interface WorldQueryService {
     OrientedLocation getOrientedLocation(WorldType world, float x, float y, float z, float pitch, float yaw);
 
     /**
-     * Returns the location in the given world at the specified coordinates.
-     *
      * @param world The world.
      * @param x     The X coordinate.
      * @param y     The Y coordinate.
@@ -51,8 +45,6 @@ public interface WorldQueryService {
     BlockLocation getBlockLocation(WorldType world, int x, int y, int z);
 
     /**
-     * Returns the block in the given world at the specified coordinates.
-     *
      * @param world The world.
      * @param x     The X coordinate.
      * @param y     The Y coordinate.
@@ -62,8 +54,6 @@ public interface WorldQueryService {
     Block getBlockAt(WorldType world, int x, int y, int z);
 
     /**
-     * Returns the block in the given world at the given vector.
-     *
      * @param world  The world.
      * @param vector The vector.
      * @return The block at the given vector.
@@ -71,10 +61,14 @@ public interface WorldQueryService {
     Block getBlockAt(WorldType world, Vector3ic vector);
 
     /**
-     * Returns the block at the given location.
-     *
      * @param location The location.
-     * @return The block at the given location.
+     * @return The block at the location.
      */
     Block getBlockAt(BlockLocation location);
+
+    /**
+     * @param location The location.
+     * @return The block at the location.
+     */
+    Block getBlockAt(Location location);
 }

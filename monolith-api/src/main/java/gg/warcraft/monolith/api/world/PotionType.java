@@ -43,8 +43,6 @@ public enum PotionType {
     }
 
     /**
-     * Returns the Minecraft type of the potion type.
-     *
      * @return The Minecraft type of the potion type. Never null or empty.
      */
     public String getType() {
@@ -52,8 +50,6 @@ public enum PotionType {
     }
 
     /**
-     * Returns the Minecraft id of the potion type.
-     *
      * @return The Minecraft id of the potion type.
      */
     public int getId() {

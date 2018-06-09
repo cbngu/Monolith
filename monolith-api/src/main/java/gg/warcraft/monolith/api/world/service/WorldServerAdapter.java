@@ -17,8 +17,6 @@ import java.util.List;
 public interface WorldServerAdapter {
 
     /**
-     * Returns the block in the given world at the specified coordinates.
-     *
      * @param world The world.
      * @param x     The X coordinate.
      * @param y     The Y coordinate.
@@ -28,18 +26,14 @@ public interface WorldServerAdapter {
     Block getBlockAt(WorldType world, int x, int y, int z);
 
     /**
-     * Updates the block to the block type.
-     *
-     * @param block The block.
-     * @param type  The block type.
+     * @param block The block to update.
+     * @param type  The type to update to.
      */
     void setBlockType(Block block, BlockType type);
 
     /**
-     * Drops the items at the location.
-     *
-     * @param items    The items.
-     * @param location The location.
+     * @param items    The items to drop.
+     * @param location The location to drop at.
      */
     void dropItemsAt(List<ItemType> items, Location location);
 }

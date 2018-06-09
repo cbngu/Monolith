@@ -16,18 +16,14 @@ import java.util.List;
 public interface WorldCommandService {
 
     /**
-     * Updates the block to the block type.
-     *
-     * @param block The block.
-     * @param type  The block type.
+     * @param block The block to update.
+     * @param type  The type to update to.
      */
     void setBlockType(Block block, BlockType type);
 
     /**
-     * Drops the items at the location.
-     *
-     * @param items    The items.
-     * @param location The location.
+     * @param items    The items to drop.
+     * @param location The location to drop at.
      */
     void dropItemsAt(List<ItemType> items, Location location);
 }

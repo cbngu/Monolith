@@ -7,8 +7,6 @@ package gg.warcraft.monolith.api.world;
 public interface World {
 
     /**
-     * Returns the type of this world.
-     *
      * @return The type of this world.
      */
     WorldType getType();

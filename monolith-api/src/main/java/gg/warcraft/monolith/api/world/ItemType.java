@@ -768,8 +768,6 @@ public enum ItemType {
     }
 
     /**
-     * Returns the Minecraft type of the item type.
-     *
      * @return The Minecraft type of the item type.
      */
     public String getType() {
@@ -777,8 +775,6 @@ public enum ItemType {
     }
 
     /**
-     * Returns the Minecraft id of the item type.
-     *
      * @return The Minecraft id of the item type.
      */
     public int getId() {
@@ -786,8 +782,6 @@ public enum ItemType {
     }
 
     /**
-     * Returns the Minecraft data of the item type.
-     *
      * @return The Minecraft data of the item type.
      */
     public int getData() {

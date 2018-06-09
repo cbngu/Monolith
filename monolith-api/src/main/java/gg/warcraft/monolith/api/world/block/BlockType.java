@@ -519,8 +519,6 @@ public enum BlockType {
     }
 
     /**
-     * Returns the Minecraft type of the block type.
-     *
      * @return The Minecraft type of the block type.
      */
     public String getType() {
@@ -528,8 +526,6 @@ public enum BlockType {
     }
 
     /**
-     * Returns the Minecraft id of the block type.
-     *
      * @return The Minecraft id of the block type.
      */
     public int getId() {
@@ -537,8 +533,6 @@ public enum BlockType {
     }
 
     /**
-     * Returns the Minecraft data of the block type.
-     *
      * @return The Minecraft data of the block type.
      */
     public int getData() {

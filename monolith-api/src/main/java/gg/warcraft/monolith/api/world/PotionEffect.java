@@ -8,8 +8,6 @@ import gg.warcraft.monolith.api.util.Duration;
 public interface PotionEffect {
 
     /**
-     * Returns the type of this potion effect.
-     *
      * @return The type of this potion effect.
      */
     PotionType getType();
@@ -25,8 +23,6 @@ public interface PotionEffect {
     int getStrength();
 
     /**
-     * Returns the duration of this potion effect.
-     *
      * @return The duration of this potion effect.
      */
     Duration getDuration();
