@@ -1,8 +1,6 @@
 buildscript {
     repositories {
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
 
     dependencies {
@@ -15,9 +13,12 @@ subprojects {
     version = '1.0.0-SNAPSHOT'
 
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'application'
+    apply plugin: 'maven-publish'
     apply plugin: 'org.gradle.java.experimental-jigsaw'
 
+    mainClassName = "gg.warcraft.monolith.Monolith"
     sourceCompatibility = 10
 
     repositories {
@@ -26,17 +27,19 @@ subprojects {
     }
 
     dependencies {
-        compile 'com.google.inject:guice:4.2.0'
-        compile 'com.google.inject.extensions:guice-assistedinject:4.2.0'
-        compile 'org.joml:joml:1.9.9'
-
-        testCompile 'junit:junit:4.12'
-        testCompile 'org.mockito:mockito-core:2.18.3'
-        testCompile 'org.apache.commons:commons-lang3:3.3.1'
+        testImplementation 'junit:junit:4.12'
+        testImplementation 'org.mockito:mockito-core:2.18.3'
+        testImplementation 'org.apache.commons:commons-lang3:3.3.1'
     }
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
         options.compilerArgs << '-parameters'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) { from components.java }
+        }
     }
 }

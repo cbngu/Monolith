@@ -4,7 +4,6 @@ module gg.warcraft.monolith.app {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.dataformat.yaml;
-    requires com.google.common;
     requires github.api;
     requires jedis;
 
