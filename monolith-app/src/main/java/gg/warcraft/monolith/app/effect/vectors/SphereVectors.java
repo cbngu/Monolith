@@ -3,6 +3,7 @@ package gg.warcraft.monolith.app.effect.vectors;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.util.MathUtils;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class SphereVectors extends AbstractEffectVectors {
     public SphereVectors(MathUtils mathUtils, @Assisted float radius, @Assisted int count) {
         this.vectors = new ArrayList<>(count);
         for (int i = 0; i < count; ++i) {
-            var vector = mathUtils.randomVector().mul(radius);
+            Vector3f vector = mathUtils.randomVector().mul(radius);
             vectors.add(vector);
         }
     }

@@ -5,6 +5,7 @@ import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.PotionEffect;
 import gg.warcraft.monolith.api.world.PotionType;
 import gg.warcraft.monolith.app.entity.SimpleEntityServerData;
@@ -37,13 +38,13 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     EntityServerData createEntityData(LivingEntity entity) {
-        var type = entityTypeMapper.map(entity.getType());
-        var location = locationMapper.map(entity);
-        var eyeLocation = locationMapper.mapEye(entity);
-        var velocity = entity.getVelocity();
-        var x = (float) velocity.getX();
-        var y = (float) velocity.getY();
-        var z = (float) velocity.getZ();
+        EntityType type = entityTypeMapper.map(entity.getType());
+        OrientedLocation location = locationMapper.map(entity);
+        OrientedLocation eyeLocation = locationMapper.mapEye(entity);
+        Vector velocity = entity.getVelocity();
+        float x = (float) velocity.getX();
+        float y = (float) velocity.getY();
+        float z = (float) velocity.getZ();
         return new SimpleEntityServerData(entity.getUniqueId(), type, location, eyeLocation, new Vector3f(x, y, z));
     }
 

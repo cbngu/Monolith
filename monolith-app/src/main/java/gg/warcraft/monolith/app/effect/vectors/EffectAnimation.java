@@ -7,12 +7,18 @@ import org.joml.Vector3fc;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class EffectAnimation extends AbstractEffectVectors {
-    private static final Iterator<Vector3fc> EMPTY_ITERATOR = List.<Vector3fc>of().iterator();
+    private static final Iterator<Vector3fc> EMPTY_ITERATOR;
+
+    static {
+        List<Vector3fc> emptyList = Collections.emptyList();
+        EMPTY_ITERATOR = emptyList.iterator();
+    }
 
     private final List<EffectVectors> vectors;
 

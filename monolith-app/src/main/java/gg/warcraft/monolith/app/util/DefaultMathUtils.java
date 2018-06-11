@@ -24,18 +24,18 @@ public class DefaultMathUtils implements MathUtils {
 
     @Override
     public Vector3f randomVector() {
-        var x = random.nextFloat() * 2f - 1f;
-        var y = random.nextFloat() * 2f - 1f;
-        var z = random.nextFloat() * 2f - 1f;
-        var vector = new Vector3f(x, y, z);
+        float x = random.nextFloat() * 2f - 1f;
+        float y = random.nextFloat() * 2f - 1f;
+        float z = random.nextFloat() * 2f - 1f;
+        Vector3f vector = new Vector3f(x, y, z);
         return vector.normalize();
     }
 
     @Override
     public Vector3f randomCircleVector() {
-        var radian = randomAngle();
-        var x = (float) Math.cos(radian);
-        var z = (float) Math.sin(radian);
+        float radian = randomAngle();
+        float x = (float) Math.cos(radian);
+        float z = (float) Math.sin(radian);
         return new Vector3f(x, 0f, z);
     }
 

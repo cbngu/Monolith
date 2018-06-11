@@ -1,7 +1,6 @@
-javaModule.name = 'gg.warcraft.monolith.spigot'
-
 dependencies {
-    implementation project(':monolith-app')
-    implementation('org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT') { exclude group: '*' }
-    implementation 'de.slikey:EffectLib:5.10-SNAPSHOT'
+    api project(':monolith-app')
+
+    shadow('org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT') { exclude group: '*' }
+    shadow 'de.slikey:EffectLib:5.10-SNAPSHOT'
 }

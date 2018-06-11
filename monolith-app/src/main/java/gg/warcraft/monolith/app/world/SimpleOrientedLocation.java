@@ -30,7 +30,7 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        var other = (OrientedLocation) object;
+        OrientedLocation other = (OrientedLocation) object;
         return Objects.equals(getWorld(), other.getWorld())
                 && Objects.equals(getX(), other.getX())
                 && Objects.equals(getY(), other.getY())
@@ -41,7 +41,7 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
 
     @Override
     public int hashCode() {
-        var id = getWorld().getType() + ":" +
+        String id = getWorld().getType() + ":" +
                 getX() + "," +
                 getY() + "," +
                 getZ() + "," +

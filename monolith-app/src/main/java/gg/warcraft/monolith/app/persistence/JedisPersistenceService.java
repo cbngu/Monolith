@@ -5,6 +5,7 @@ import gg.warcraft.monolith.api.persistence.PersistenceService;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +48,10 @@ public class JedisPersistenceService implements PersistenceService {
     public List<String> getAllKeys(String keyPrefix) {
         List<String> keys = new ArrayList<>();
 
-        var scanParams = new ScanParams().match(keyPrefix + "*");
-        var cur = ScanParams.SCAN_POINTER_START;
+        ScanParams scanParams = new ScanParams().match(keyPrefix + "*");
+        String cur = ScanParams.SCAN_POINTER_START;
         do {
-            var scanResult = jedis.scan(cur, scanParams);
+            ScanResult<String> scanResult = jedis.scan(cur, scanParams);
 
             keys.addAll(scanResult.getResult());
             cur = scanResult.getStringCursor();

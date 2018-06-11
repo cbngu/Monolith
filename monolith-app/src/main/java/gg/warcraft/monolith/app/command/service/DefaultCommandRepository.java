@@ -22,7 +22,7 @@ public class DefaultCommandRepository implements CommandRepository {
 
     @Override
     public void save(Command command) {
-        var name = command.getName();
+        String name = command.getName();
         if (name != null && !name.isEmpty()) {
             commands.put(name, command);
         }

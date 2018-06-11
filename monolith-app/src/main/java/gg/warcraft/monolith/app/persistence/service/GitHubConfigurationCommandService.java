@@ -8,6 +8,8 @@ import gg.warcraft.monolith.api.persistence.Mapper;
 import gg.warcraft.monolith.api.persistence.YamlMapper;
 import gg.warcraft.monolith.api.persistence.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.persistence.service.ConfigurationRepository;
+import org.kohsuke.github.GHContent;
+import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 
@@ -39,28 +41,28 @@ public class GitHubConfigurationCommandService implements ConfigurationCommandSe
         } else if (fileName.endsWith(".json")) {
             return jsonMapper;
         } else {
-            var dotIndex = fileName.lastIndexOf('.');
+            int dotIndex = fileName.lastIndexOf('.');
             throw new IllegalArgumentException(
                     "Unsupported configuration file extension: " + fileName.substring(dotIndex));
         }
     }
 
     GHRepository connectToRepository() throws IOException {
-        var github = GitHub.connectAnonymously();
-        var account = github.getOrganization(accountName);
+        GitHub github = GitHub.connectAnonymously();
+        GHOrganization account = github.getOrganization(accountName);
         return account.getRepository(repositoryName);
     }
 
     @Override
     public void reloadConfiguration(Configuration configuration) throws IOException {
-        var fileName = configuration.getFileName();
-        var mapper = getMapperFor(fileName);
-        var gitHubRepository = connectToRepository();
-        var content = gitHubRepository.getFileContent(fileName);
+        String fileName = configuration.getFileName();
+        Mapper mapper = getMapperFor(fileName);
+        GHRepository gitHubRepository = connectToRepository();
+        GHContent content = gitHubRepository.getFileContent(fileName);
 
-        var configurationClass = configuration.getConfigurationClass();
+        Class<?> configurationClass = configuration.getConfigurationClass();
         try (InputStreamReader reader = new InputStreamReader(content.read())) {
-            var configurationObject = mapper.parse(reader, configurationClass);
+            Object configurationObject = mapper.parse(reader, configurationClass);
             configurationRepository.save(configurationObject);
         }
     }

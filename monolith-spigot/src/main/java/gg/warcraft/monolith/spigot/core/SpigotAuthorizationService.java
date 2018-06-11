@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.core.AuthorizationService;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -22,35 +23,35 @@ public class SpigotAuthorizationService implements AuthorizationService {
 
     @Override
     public boolean isDev(final UUID playerId) {
-        var player = server.getPlayer(playerId);
+        Player player = server.getPlayer(playerId);
         return player != null && player.hasPermission(DEV_PERMISSION_STRING);
     }
 
     @Override
     public boolean isStaff(final UUID playerId) {
-        var player = server.getPlayer(playerId);
+        Player player = server.getPlayer(playerId);
         return player != null && player.hasPermission(STAFF_PERMISSION_STRING);
     }
 
     @Override
     public boolean isAdmin(final UUID playerId) {
-        var player = server.getPlayer(playerId);
+        Player player = server.getPlayer(playerId);
         return player != null && player.hasPermission(ADMIN_PERMISSION_STRING);
     }
 
     @Override
     public boolean isMod(final UUID playerId) {
-        var player = server.getPlayer(playerId);
+        Player player = server.getPlayer(playerId);
         return player != null && player.hasPermission(MOD_PERMISSION_STRING);
     }
 
     @Override
     public boolean isModerating(final UUID playerId) {
-        var player = server.getPlayer(playerId);
+        Player player = server.getPlayer(playerId);
         if (player == null) {
             return false;
         }
-        var offhandMaterial = player.getInventory().getItemInOffHand().getType();
+        Material offhandMaterial = player.getInventory().getItemInOffHand().getType();
         return player.hasPermission(MOD_PERMISSION_STRING) && offhandMaterial == Material.FLINT;
     }
 }

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.OrientedLocation;
+import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.app.world.SimpleBlockLocation;
 import gg.warcraft.monolith.app.world.SimpleLocation;
 import gg.warcraft.monolith.app.world.SimpleOrientedLocation;
@@ -18,56 +19,56 @@ public class SpigotLocationMapper {
     }
 
     public org.bukkit.Location map(Location location) {
-        var world = worldMapper.map(location.getWorld());
-        var x = location.getX();
-        var y = location.getY();
-        var z = location.getZ();
+        org.bukkit.World world = worldMapper.map(location.getWorld());
+        float x = location.getX();
+        float y = location.getY();
+        float z = location.getZ();
         return new org.bukkit.Location(world, x, y, z);
     }
 
     public org.bukkit.Location map(BlockLocation location) {
-        var world = worldMapper.map(location.getWorld());
-        var x = location.getX();
-        var y = location.getY();
-        var z = location.getZ();
+        org.bukkit.World world = worldMapper.map(location.getWorld());
+        float x = location.getX();
+        float y = location.getY();
+        float z = location.getZ();
         return new org.bukkit.Location(world, x, y, z);
     }
 
     public Location map(org.bukkit.Location location) {
-        var world = worldMapper.map(location.getWorld());
-        var x = (float) location.getX();
-        var y = (float) location.getY();
-        var z = (float) location.getZ();
+        World world = worldMapper.map(location.getWorld());
+        float x = (float) location.getX();
+        float y = (float) location.getY();
+        float z = (float) location.getZ();
         return new SimpleLocation(world, x, y, z);
     }
 
     public BlockLocation map(org.bukkit.block.Block block) {
-        var world = worldMapper.map(block.getLocation().getWorld());
-        var x = block.getX();
-        var y = block.getY();
-        var z = block.getZ();
+        World world = worldMapper.map(block.getLocation().getWorld());
+        int x = block.getX();
+        int y = block.getY();
+        int z = block.getZ();
         return new SimpleBlockLocation(world, x, y, z);
     }
 
     public OrientedLocation map(LivingEntity entity) {
-        var location = entity.getLocation();
-        var world = worldMapper.map(location.getWorld());
-        var x = (float) location.getX();
-        var y = (float) location.getY();
-        var z = (float) location.getZ();
-        var pitch = location.getPitch();
-        var yaw = location.getYaw();
+        org.bukkit.Location location = entity.getLocation();
+        World world = worldMapper.map(location.getWorld());
+        float x = (float) location.getX();
+        float y = (float) location.getY();
+        float z = (float) location.getZ();
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
         return new SimpleOrientedLocation(world, x, y, z, pitch, yaw);
     }
 
     public OrientedLocation mapEye(LivingEntity entity) {
-        var location = entity.getEyeLocation();
-        var world = worldMapper.map(location.getWorld());
-        var x = (float) location.getX();
-        var y = (float) location.getY();
-        var z = (float) location.getZ();
-        var pitch = location.getPitch();
-        var yaw = location.getYaw();
+        org.bukkit.Location location = entity.getEyeLocation();
+        World world = worldMapper.map(location.getWorld());
+        float x = (float) location.getX();
+        float y = (float) location.getY();
+        float z = (float) location.getZ();
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
         return new SimpleOrientedLocation(world, x, y, z, pitch, yaw);
     }
 }

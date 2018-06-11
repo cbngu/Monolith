@@ -7,6 +7,7 @@ import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 public class SpigotTaskService implements TaskService {
     private final Plugin plugin;
@@ -29,43 +30,43 @@ public class SpigotTaskService implements TaskService {
 
     @Override
     public Task runLater(Runnable runnable, Duration delay) {
-        var bukkitRunnable = wrapBukkitRunnable(runnable);
-        var bukkitTask = bukkitRunnable.runTaskLater(plugin, delay.inTicks());
+        BukkitRunnable bukkitRunnable = wrapBukkitRunnable(runnable);
+        BukkitTask bukkitTask = bukkitRunnable.runTaskLater(plugin, delay.inTicks());
         return new SpigotTask(bukkitTask);
     }
 
     @Override
     public Task runLaterAsync(Runnable runnable, Duration delay) {
-        var bukkitRunnable = wrapBukkitRunnable(runnable);
-        var bukkitTask = bukkitRunnable.runTaskLaterAsynchronously(plugin, delay.inTicks());
+        BukkitRunnable bukkitRunnable = wrapBukkitRunnable(runnable);
+        BukkitTask bukkitTask = bukkitRunnable.runTaskLaterAsynchronously(plugin, delay.inTicks());
         return new SpigotTask(bukkitTask);
     }
 
     @Override
     public Task runNextTick(Runnable runnable) {
-        var bukkitRunnable = wrapBukkitRunnable(runnable);
-        var bukkitTask = bukkitRunnable.runTask(plugin);
+        BukkitRunnable bukkitRunnable = wrapBukkitRunnable(runnable);
+        BukkitTask bukkitTask = bukkitRunnable.runTask(plugin);
         return new SpigotTask(bukkitTask);
     }
 
     @Override
     public Task runNextTickAsync(Runnable runnable) {
-        var bukkitRunnable = wrapBukkitRunnable(runnable);
-        var bukkitTask = bukkitRunnable.runTaskAsynchronously(plugin);
+        BukkitRunnable bukkitRunnable = wrapBukkitRunnable(runnable);
+        BukkitTask bukkitTask = bukkitRunnable.runTaskAsynchronously(plugin);
         return new SpigotTask(bukkitTask);
     }
 
     @Override
     public Task runTask(Runnable runnable, Duration delay, Duration period) {
-        var bukkitRunnable = wrapBukkitRunnable(runnable);
-        var bukkitTask = bukkitRunnable.runTaskTimer(plugin, delay.inTicks(), period.inTicks());
+        BukkitRunnable bukkitRunnable = wrapBukkitRunnable(runnable);
+        BukkitTask bukkitTask = bukkitRunnable.runTaskTimer(plugin, delay.inTicks(), period.inTicks());
         return new SpigotTask(bukkitTask);
     }
 
     @Override
     public Task runTaskAsync(Runnable runnable, Duration delay, Duration period) {
-        var bukkitRunnable = wrapBukkitRunnable(runnable);
-        var bukkitTask = bukkitRunnable.runTaskTimerAsynchronously(plugin, delay.inTicks(), period.inTicks());
+        BukkitRunnable bukkitRunnable = wrapBukkitRunnable(runnable);
+        BukkitTask bukkitTask = bukkitRunnable.runTaskTimerAsynchronously(plugin, delay.inTicks(), period.inTicks());
         return new SpigotTask(bukkitTask);
     }
 

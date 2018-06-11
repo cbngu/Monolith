@@ -46,11 +46,11 @@ public class DefaultCommandCommandServiceTest {
     @Test
     public void validateName_shouldReturnTrue() {
         // Given
-        var name = randomName();
+        String name = randomName();
         Predicate<String> isAvailable = command -> true;
 
         // When
-        var result = defaultCommandCommandService.validateName(name, isAvailable);
+        boolean result = defaultCommandCommandService.validateName(name, isAvailable);
 
         // Then
         assertTrue(result);
@@ -68,7 +68,7 @@ public class DefaultCommandCommandServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void validateName_shouldThrowOnEmpty() {
         // Given
-        var name = "";
+        String name = "";
         Predicate<String> isAvailable = command -> true;
 
         // When
@@ -78,7 +78,7 @@ public class DefaultCommandCommandServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void validateName_shouldThrowOnUnavailable() {
         // Given
-        var name = randomName();
+        String name = randomName();
         Predicate<String> isAvailable = command -> false;
 
         // When
@@ -88,12 +88,12 @@ public class DefaultCommandCommandServiceTest {
     @Test
     public void validateAlias_shouldReturnTrue() {
         // Given
-        var name = randomName();
-        var alias = randomName();
+        String name = randomName();
+        String alias = randomName();
         Predicate<String> isAvailable = command -> true;
 
         // When
-        var result = defaultCommandCommandService.validateAlias(name, alias, isAvailable);
+        boolean result = defaultCommandCommandService.validateAlias(name, alias, isAvailable);
 
         // Then
         assertTrue(result);
@@ -102,7 +102,7 @@ public class DefaultCommandCommandServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void validateAlias_shouldThrowOnNull() {
         // Given
-        var name = randomName();
+        String name = randomName();
         Predicate<String> isAvailable = command -> true;
 
         // When
@@ -112,8 +112,8 @@ public class DefaultCommandCommandServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void validateAlias_shouldThrowOnEmpty() {
         // Given
-        var name = randomName();
-        var alias = "";
+        String name = randomName();
+        String alias = "";
         Predicate<String> isAvailable = command -> true;
 
         // When
@@ -123,8 +123,8 @@ public class DefaultCommandCommandServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void validateAlias_shouldThrowOnUnavailable() {
         // Given
-        var name = randomName();
-        var alias = randomName();
+        String name = randomName();
+        String alias = randomName();
         Predicate<String> isAvailable = command -> false;
 
         // When
@@ -134,7 +134,7 @@ public class DefaultCommandCommandServiceTest {
     @Test
     public void validateHandler_shouldReturnTrue() {
         // When
-        var result = defaultCommandCommandService.validateHandler(mockCommandHandler);
+        boolean result = defaultCommandCommandService.validateHandler(mockCommandHandler);
 
         // Then
         assertTrue(result);
@@ -149,9 +149,9 @@ public class DefaultCommandCommandServiceTest {
     @Test
     public void formatCommand_shouldJoinArguments() {
         // Given
-        var name = randomName();
-        var argument1 = randomArgument();
-        var argument2 = randomArgument();
+        String name = randomName();
+        String argument1 = randomArgument();
+        String argument2 = randomArgument();
 
         when(mockCommand.getName()).thenReturn(name);
 

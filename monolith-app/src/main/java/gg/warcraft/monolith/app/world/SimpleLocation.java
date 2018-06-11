@@ -47,33 +47,33 @@ public class SimpleLocation implements Location {
 
     @Override
     public Location add(float x, float y, float z) {
-        var newX = this.x + x;
-        var newY = this.y + y;
-        var newZ = this.z + z;
+        float newX = this.x + x;
+        float newY = this.y + y;
+        float newZ = this.z + z;
         return new SimpleLocation(world, newX, newY, newZ);
     }
 
     @Override
     public Location sub(float x, float y, float z) {
-        var newX = this.x - x;
-        var newY = this.y - y;
-        var newZ = this.z - z;
+        float newX = this.x - x;
+        float newY = this.y - y;
+        float newZ = this.z - z;
         return new SimpleLocation(world, newX, newY, newZ);
     }
 
     @Override
     public Location add(Vector3fc vector) {
-        var newX = x + vector.x();
-        var newY = y + vector.y();
-        var newZ = z + vector.z();
+        float newX = x + vector.x();
+        float newY = y + vector.y();
+        float newZ = z + vector.z();
         return new SimpleLocation(world, newX, newY, newZ);
     }
 
     @Override
     public Location sub(Vector3fc vector) {
-        var newX = x - vector.x();
-        var newY = y - vector.y();
-        var newZ = z - vector.z();
+        float newX = x - vector.x();
+        float newY = y - vector.y();
+        float newZ = z - vector.z();
         return new SimpleLocation(world, newX, newY, newZ);
     }
 
@@ -102,7 +102,7 @@ public class SimpleLocation implements Location {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        var other = (Location) object;
+        Location other = (Location) object;
         return Objects.equals(getWorld(), other.getWorld())
                 && Objects.equals(getX(), other.getX())
                 && Objects.equals(getY(), other.getY())
@@ -111,7 +111,7 @@ public class SimpleLocation implements Location {
 
     @Override
     public int hashCode() {
-        var id = getWorld().getType() + ":" +
+        String id = getWorld().getType() + ":" +
                 getX() + "," +
                 getY() + "," +
                 getZ();

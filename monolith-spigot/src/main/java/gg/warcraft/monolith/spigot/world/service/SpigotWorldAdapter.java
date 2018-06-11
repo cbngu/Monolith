@@ -7,10 +7,12 @@ import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
+import gg.warcraft.monolith.spigot.world.MaterialData;
 import gg.warcraft.monolith.spigot.world.SpigotBlockMapper;
 import gg.warcraft.monolith.spigot.world.SpigotItemTypeMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
 import gg.warcraft.monolith.spigot.world.SpigotWorldMapper;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -32,24 +34,24 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
 
     @Override
     public Block getBlockAt(WorldType world, int x, int y, int z) {
-        var spigotWorld = worldMapper.map(world);
-        var spigotBlock = spigotWorld.getBlockAt(x, y, z);
+        World spigotWorld = worldMapper.map(world);
+        org.bukkit.block.Block spigotBlock = spigotWorld.getBlockAt(x, y, z);
         return blockMapper.map(spigotBlock);
     }
 
     @Override
     public void setBlockType(Block block, BlockType type) {
-        var spigotBlock = blockMapper.map(block);
+        org.bukkit.block.Block spigotBlock = blockMapper.map(block);
         spigotBlock.setTypeIdAndData(type.getId(), (byte) type.getData(), false);
     }
 
     @Override
     public void dropItemsAt(List<ItemType> items, Location location) {
-        var spigotLocation = locationMapper.map(location);
-        var world = spigotLocation.getWorld();
+        org.bukkit.Location spigotLocation = locationMapper.map(location);
+        World world = spigotLocation.getWorld();
         items.forEach(item -> {
-            var materialData = itemTypeMapper.map(item);
-            var itemStack = new ItemStack(materialData.getMaterial(), 1, (short) 0, materialData.getData());
+            MaterialData materialData = itemTypeMapper.map(item);
+            ItemStack itemStack = new ItemStack(materialData.getMaterial(), 1, (short) 0, materialData.getData());
             world.dropItem(spigotLocation, itemStack);
         });
     }

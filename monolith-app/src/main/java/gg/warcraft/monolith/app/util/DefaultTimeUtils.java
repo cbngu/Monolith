@@ -16,17 +16,17 @@ public class DefaultTimeUtils implements TimeUtils {
 
     @Override
     public String getTimeElapsedSince(long unixTimestamp) {
-        var age = System.currentTimeMillis() - unixTimestamp;
+        long age = System.currentTimeMillis() - unixTimestamp;
         if (age < MILLIS_PER_MINUTE) {
             return "less than a minute";
         } else if (age < MILLIS_PER_HOUR) {
-            var count = age / MILLIS_PER_MINUTE;
+            long count = age / MILLIS_PER_MINUTE;
             return count + (count != 1 ? " minutes" : " minute");
         } else if (age < MILLIS_PER_DAY) {
-            var count = age / MILLIS_PER_HOUR;
+            long count = age / MILLIS_PER_HOUR;
             return count + (count != 1 ? " hours" : " hour");
         } else {
-            var count = age / MILLIS_PER_DAY;
+            long count = age / MILLIS_PER_DAY;
             return count + (count != 1 ? " days" : " day");
         }
     }

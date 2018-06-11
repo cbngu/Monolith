@@ -25,8 +25,8 @@ public class IterativeEffectRenderer implements EffectRenderer {
         if (!iterator.hasNext()) {
             iterator = vectors.iterator();
         }
-        var vector = iterator.next();
-        var displayLocation = location.add(vector);
+        Vector3fc vector = iterator.next();
+        Location displayLocation = location.add(vector);
         particle.display(displayLocation);
     }
 }

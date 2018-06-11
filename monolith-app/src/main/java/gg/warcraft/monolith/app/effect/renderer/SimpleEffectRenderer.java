@@ -17,7 +17,7 @@ public class SimpleEffectRenderer implements EffectRenderer {
     @Override
     public void renderAt(Location location) {
         vectors.iterator().forEachRemaining(vector -> {
-            var displayLocation = location.add(vector);
+            Location displayLocation = location.add(vector);
             particle.display(displayLocation);
         });
     }

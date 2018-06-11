@@ -1,7 +1,6 @@
 package gg.warcraft.monolith.app.world;
 
 import gg.warcraft.monolith.api.world.BlockLocation;
-import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.World;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -48,33 +47,33 @@ public class SimpleBlockLocation implements BlockLocation {
 
     @Override
     public BlockLocation add(int x, int y, int z) {
-        var newX = this.x + x;
-        var newY = this.y + y;
-        var newZ = this.z + z;
+        int newX = this.x + x;
+        int newY = this.y + y;
+        int newZ = this.z + z;
         return new SimpleBlockLocation(world, newX, newY, newZ);
     }
 
     @Override
     public BlockLocation sub(int x, int y, int z) {
-        var newX = this.x - x;
-        var newY = this.y - y;
-        var newZ = this.z - z;
+        int newX = this.x - x;
+        int newY = this.y - y;
+        int newZ = this.z - z;
         return new SimpleBlockLocation(world, newX, newY, newZ);
     }
 
     @Override
     public BlockLocation add(Vector3ic vector) {
-        var newX = x + vector.x();
-        var newY = y + vector.y();
-        var newZ = z + vector.z();
+        int newX = x + vector.x();
+        int newY = y + vector.y();
+        int newZ = z + vector.z();
         return new SimpleBlockLocation(world, newX, newY, newZ);
     }
 
     @Override
     public BlockLocation sub(Vector3ic vector) {
-        var newX = x - vector.x();
-        var newY = y - vector.y();
-        var newZ = z - vector.z();
+        int newX = x - vector.x();
+        int newY = y - vector.y();
+        int newZ = z - vector.z();
         return new SimpleBlockLocation(world, newX, newY, newZ);
     }
 
@@ -103,7 +102,7 @@ public class SimpleBlockLocation implements BlockLocation {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        var other = (Location) object;
+        BlockLocation other = (BlockLocation) object;
         return Objects.equals(getWorld(), other.getWorld())
                 && Objects.equals(getX(), other.getX())
                 && Objects.equals(getY(), other.getY())
@@ -112,7 +111,7 @@ public class SimpleBlockLocation implements BlockLocation {
 
     @Override
     public int hashCode() {
-        var id = getWorld().getType() + ":" +
+        String id = getWorld().getType() + ":" +
                 getX() + "," +
                 getY() + "," +
                 getZ();

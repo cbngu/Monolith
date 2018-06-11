@@ -22,7 +22,7 @@ public class SimpleWorld implements World {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        var other = (World) object;
+        World other = (World) object;
         return Objects.equals(getType(), other.getType());
     }
 }

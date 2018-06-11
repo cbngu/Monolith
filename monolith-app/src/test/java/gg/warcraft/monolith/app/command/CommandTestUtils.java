@@ -17,10 +17,10 @@ public class CommandTestUtils {
     }
 
     public static List<String> randomAliases() {
-        var aliases = new ArrayList<String>();
-        var count = RandomUtils.nextInt(1, 5);
-        for (var i = 0; i <= count; i += 1) {
-            var alias = randomString();
+        List<String> aliases = new ArrayList<>();
+        int count = RandomUtils.nextInt(1, 5);
+        for (int i = 0; i <= count; i += 1) {
+            String alias = randomString();
             aliases.add(alias);
         }
         return aliases;

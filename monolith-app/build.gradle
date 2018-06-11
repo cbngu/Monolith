@@ -1,5 +1,3 @@
-javaModule.name = 'gg.warcraft.monolith.app'
-
 dependencies {
     api project(':monolith-api')
 

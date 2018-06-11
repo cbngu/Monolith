@@ -28,7 +28,7 @@ public class SpeedParticle implements Particle {
 
     @Override
     public void display(Location location) {
-        var spigotLocation = locationMapper.map(location);
+        org.bukkit.Location spigotLocation = locationMapper.map(location);
         particle.display(ZERO_OFFSET, ZERO_OFFSET, ZERO_OFFSET, speed, amount, spigotLocation, DEFAULT_RANGE);
     }
 }

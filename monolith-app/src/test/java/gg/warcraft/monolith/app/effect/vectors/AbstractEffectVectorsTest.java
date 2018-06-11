@@ -1,9 +1,12 @@
 package gg.warcraft.monolith.app.effect.vectors;
 
+import gg.warcraft.monolith.api.effect.EffectVectors;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,13 +15,13 @@ public class AbstractEffectVectorsTest {
     @Test
     public void addOffset_shouldReturnOffsetVectors() {
         // Given
-        var origin = new Vector3f(0, 0, 0);
-        var target = new Vector3f(10, 0, 0);
-        var count = 10;
-        var offset = new Vector3f(2, 2, 2);
+        Vector3f origin = new Vector3f(0, 0, 0);
+        Vector3f target = new Vector3f(10, 0, 0);
+        int count = 10;
+        Vector3f offset = new Vector3f(2, 2, 2);
 
-        var vectors = new LineVectors(origin, target, count);
-        var expectedVectors = new Vector3f[]{
+        EffectVectors vectors = new LineVectors(origin, target, count);
+        Vector3f[] expectedVectors = new Vector3f[]{
                 new Vector3f(2, 2, 2),
                 new Vector3f(3, 2, 2),
                 new Vector3f(4, 2, 2),
@@ -33,11 +36,11 @@ public class AbstractEffectVectorsTest {
         };
 
         // When
-        var result = vectors.addOffset(offset);
-        var resultVectors = new ArrayList<>(result.getVectors());
+        EffectVectors result = vectors.addOffset(offset);
+        List<Vector3fc> resultVectors = new ArrayList<>(result.getVectors());
 
         // Then
-        for (var i = 0; i < expectedVectors.length; i += 1) {
+        for (int i = 0; i < expectedVectors.length; i += 1) {
             assertEquals(expectedVectors[i], resultVectors.get(i));
         }
     }
@@ -45,13 +48,13 @@ public class AbstractEffectVectorsTest {
     @Test
     public void rotateAroundAxisX_shouldReturnRotatedVectors() {
         // Given
-        var origin = new Vector3f(0, 0, 0);
-        var target = new Vector3f(0, 10, 0);
-        var count = 10;
-        var rotation = -0.5f * (float) Math.PI;
+        Vector3f origin = new Vector3f(0, 0, 0);
+        Vector3f target = new Vector3f(0, 10, 0);
+        int count = 10;
+        float rotation = -0.5f * (float) Math.PI;
 
-        var vectors = new LineVectors(origin, target, count);
-        var expectedVectors = new Vector3f[]{
+        EffectVectors vectors = new LineVectors(origin, target, count);
+        Vector3f[] expectedVectors = new Vector3f[]{
                 new Vector3f(0, 0, -0f),
                 new Vector3f(0, 0, -1),
                 new Vector3f(0, 0, -2),
@@ -66,11 +69,11 @@ public class AbstractEffectVectorsTest {
         };
 
         // When
-        var result = vectors.rotateAroundAxisX(rotation);
-        var resultVectors = new ArrayList<>(result.getVectors());
+        EffectVectors result = vectors.rotateAroundAxisX(rotation);
+        List<Vector3fc> resultVectors = new ArrayList<>(result.getVectors());
 
         // Then
-        for (var i = 0; i < expectedVectors.length; i += 1) {
+        for (int i = 0; i < expectedVectors.length; i += 1) {
             assertEquals(expectedVectors[i], resultVectors.get(i));
         }
     }
@@ -78,13 +81,13 @@ public class AbstractEffectVectorsTest {
     @Test
     public void rotateAroundAxisY_shouldReturnRotatedVectors() {
         // Given
-        var origin = new Vector3f(0, 0, 0);
-        var target = new Vector3f(0, 0, 10);
-        var count = 10;
-        var rotation = -0.5f * (float) Math.PI;
+        Vector3f origin = new Vector3f(0, 0, 0);
+        Vector3f target = new Vector3f(0, 0, 10);
+        int count = 10;
+        float rotation = -0.5f * (float) Math.PI;
 
-        var vectors = new LineVectors(origin, target, count);
-        var expectedVectors = new Vector3f[]{
+        EffectVectors vectors = new LineVectors(origin, target, count);
+        Vector3f[] expectedVectors = new Vector3f[]{
                 new Vector3f(-0f, 0, 0),
                 new Vector3f(-1, 0, 0),
                 new Vector3f(-2, 0, 0),
@@ -99,11 +102,11 @@ public class AbstractEffectVectorsTest {
         };
 
         // When
-        var result = vectors.rotateAroundAxisY(rotation);
-        var resultVectors = new ArrayList<>(result.getVectors());
+        EffectVectors result = vectors.rotateAroundAxisY(rotation);
+        List<Vector3fc> resultVectors = new ArrayList<>(result.getVectors());
 
         // Then
-        for (var i = 0; i < expectedVectors.length; i += 1) {
+        for (int i = 0; i < expectedVectors.length; i += 1) {
             assertEquals(expectedVectors[i], resultVectors.get(i));
         }
     }
@@ -111,13 +114,13 @@ public class AbstractEffectVectorsTest {
     @Test
     public void rotateAroundAxisZ_shouldReturnRotatedVectors() {
         // Given
-        var origin = new Vector3f(0, 0, 0);
-        var target = new Vector3f(-10, 0, 0);
-        var count = 10;
-        var rotation = -0.5f * (float) Math.PI;
+        Vector3f origin = new Vector3f(0, 0, 0);
+        Vector3f target = new Vector3f(-10, 0, 0);
+        int count = 10;
+        float rotation = -0.5f * (float) Math.PI;
 
-        var vectors = new LineVectors(origin, target, count);
-        var expectedVectors = new Vector3f[]{
+        EffectVectors vectors = new LineVectors(origin, target, count);
+        Vector3f[] expectedVectors = new Vector3f[]{
                 new Vector3f(0, -0f, 0),
                 new Vector3f(0, 1, 0),
                 new Vector3f(0, 2, 0),
@@ -132,11 +135,11 @@ public class AbstractEffectVectorsTest {
         };
 
         // When
-        var result = vectors.rotateAroundAxisZ(rotation);
-        var resultVectors = new ArrayList<>(result.getVectors());
+        EffectVectors result = vectors.rotateAroundAxisZ(rotation);
+        List<Vector3fc> resultVectors = new ArrayList<>(result.getVectors());
 
         // Then
-        for (var i = 0; i < expectedVectors.length; i += 1) {
+        for (int i = 0; i < expectedVectors.length; i += 1) {
             assertEquals(expectedVectors[i], resultVectors.get(i));
         }
     }

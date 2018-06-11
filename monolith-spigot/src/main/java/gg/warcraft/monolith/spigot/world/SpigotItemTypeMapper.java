@@ -6,7 +6,7 @@ import org.bukkit.Material;
 public class SpigotItemTypeMapper {
 
     public MaterialData map(ItemType type) {
-        var material = Material.getMaterial(type.getId());
+        Material material = Material.getMaterial(type.getId());
         return new MaterialData(material, type.getData());
     }
 

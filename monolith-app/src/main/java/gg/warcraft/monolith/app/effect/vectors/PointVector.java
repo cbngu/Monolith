@@ -4,16 +4,17 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import org.joml.Vector3fc;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 public class PointVector extends AbstractEffectVectors {
     private final Collection<Vector3fc> vectors;
 
     @Inject
     public PointVector(@Assisted Vector3fc point) {
-        this.vectors = List.of(point);
+        this.vectors = new ArrayList<>();
+        this.vectors.add(point);
     }
 
     @Override

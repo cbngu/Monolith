@@ -5,6 +5,7 @@ import gg.warcraft.monolith.api.entity.attribute.AttributeModifier;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -34,8 +35,8 @@ public class SimpleAttributes implements Attributes {
 
     @Override
     public Set<AttributeModifier> getModifiers(Attribute attribute) {
-        var attributeModifiers = modifiers.computeIfAbsent(attribute, key -> Set.of());
-        return Set.copyOf(attributeModifiers);
+        Set<AttributeModifier> attributeModifiers = modifiers.computeIfAbsent(attribute, key -> new HashSet<>());
+        return new HashSet<>(attributeModifiers);
     }
 
     @Override

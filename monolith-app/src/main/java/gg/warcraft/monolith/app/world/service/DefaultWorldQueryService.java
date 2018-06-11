@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.OrientedLocation;
+import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
@@ -24,19 +25,19 @@ public class DefaultWorldQueryService implements WorldQueryService {
 
     @Override
     public Location getLocation(WorldType world, float x, float y, float z) {
-        var actualWorld = new SimpleWorld(world);
+        World actualWorld = new SimpleWorld(world);
         return new SimpleLocation(actualWorld, x, y, z);
     }
 
     @Override
     public OrientedLocation getOrientedLocation(WorldType world, float x, float y, float z, float pitch, float yaw) {
-        var actualWorld = new SimpleWorld(world);
+        World actualWorld = new SimpleWorld(world);
         return new SimpleOrientedLocation(actualWorld, x, y, z, pitch, yaw);
     }
 
     @Override
     public BlockLocation getBlockLocation(WorldType world, int x, int y, int z) {
-        var actualWorld = new SimpleWorld(world);
+        World actualWorld = new SimpleWorld(world);
         return new SimpleBlockLocation(actualWorld, x, y, z);
     }
 

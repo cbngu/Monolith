@@ -16,34 +16,34 @@ public class DefaultTimeUtilsTest {
 
     @Test
     public void shouldCalculateElapsedTime() {
-        var currentTimeMillis = System.currentTimeMillis();
+        long currentTimeMillis = System.currentTimeMillis();
 
-        var threeSecondsAgoTimestamp = currentTimeMillis - 3 * TimeUtils.MILLIS_PER_SECOND;
-        var lessThanAMinute = defaultTimeUtils.getTimeElapsedSince(threeSecondsAgoTimestamp);
+        long threeSecondsAgoTimestamp = currentTimeMillis - 3 * TimeUtils.MILLIS_PER_SECOND;
+        String lessThanAMinute = defaultTimeUtils.getTimeElapsedSince(threeSecondsAgoTimestamp);
         assertEquals("less than a minute", lessThanAMinute);
 
-        var sixtyFiveSecondsAgoTimestamp = currentTimeMillis - 65 * TimeUtils.MILLIS_PER_SECOND;
-        var oneMinute = defaultTimeUtils.getTimeElapsedSince(sixtyFiveSecondsAgoTimestamp);
+        long sixtyFiveSecondsAgoTimestamp = currentTimeMillis - 65 * TimeUtils.MILLIS_PER_SECOND;
+        String oneMinute = defaultTimeUtils.getTimeElapsedSince(sixtyFiveSecondsAgoTimestamp);
         assertEquals("1 minute", oneMinute);
 
-        var oneHundredThirtySecondsAgoTimestamp = currentTimeMillis - 130 * TimeUtils.MILLIS_PER_SECOND;
-        var twoMinutes = defaultTimeUtils.getTimeElapsedSince(oneHundredThirtySecondsAgoTimestamp);
+        long oneHundredThirtySecondsAgoTimestamp = currentTimeMillis - 130 * TimeUtils.MILLIS_PER_SECOND;
+        String twoMinutes = defaultTimeUtils.getTimeElapsedSince(oneHundredThirtySecondsAgoTimestamp);
         assertEquals("2 minutes", twoMinutes);
 
-        var sixtyFiveMinutesAgoTimestamp = currentTimeMillis - 65 * TimeUtils.MILLIS_PER_MINUTE;
-        var oneHour = defaultTimeUtils.getTimeElapsedSince(sixtyFiveMinutesAgoTimestamp);
+        long sixtyFiveMinutesAgoTimestamp = currentTimeMillis - 65 * TimeUtils.MILLIS_PER_MINUTE;
+        String oneHour = defaultTimeUtils.getTimeElapsedSince(sixtyFiveMinutesAgoTimestamp);
         assertEquals("1 hour", oneHour);
 
-        var oneHundredThirtyMinutesAgoTimestamp = currentTimeMillis - 130 * TimeUtils.MILLIS_PER_MINUTE;
-        var twoHours = defaultTimeUtils.getTimeElapsedSince(oneHundredThirtyMinutesAgoTimestamp);
+        long oneHundredThirtyMinutesAgoTimestamp = currentTimeMillis - 130 * TimeUtils.MILLIS_PER_MINUTE;
+        String twoHours = defaultTimeUtils.getTimeElapsedSince(oneHundredThirtyMinutesAgoTimestamp);
         assertEquals("2 hours", twoHours);
 
-        var thirtyHoursAgoTimestamp = currentTimeMillis - 30 * TimeUtils.MILLIS_PER_HOUR;
-        var oneDay = defaultTimeUtils.getTimeElapsedSince(thirtyHoursAgoTimestamp);
+        long thirtyHoursAgoTimestamp = currentTimeMillis - 30 * TimeUtils.MILLIS_PER_HOUR;
+        String oneDay = defaultTimeUtils.getTimeElapsedSince(thirtyHoursAgoTimestamp);
         assertEquals("1 day", oneDay);
 
-        var oneHundredTwentyEightHoursAgoTimestamp = currentTimeMillis - 128 * TimeUtils.MILLIS_PER_HOUR;
-        var fiveDays = defaultTimeUtils.getTimeElapsedSince(oneHundredTwentyEightHoursAgoTimestamp);
+        long oneHundredTwentyEightHoursAgoTimestamp = currentTimeMillis - 128 * TimeUtils.MILLIS_PER_HOUR;
+        String fiveDays = defaultTimeUtils.getTimeElapsedSince(oneHundredTwentyEightHoursAgoTimestamp);
         assertEquals("5 days", fiveDays);
     }
 }

@@ -16,9 +16,9 @@ public class LineVectors extends AbstractEffectVectors {
     public LineVectors(@Assisted("origin") Vector3fc origin, @Assisted("target") Vector3fc target,
                        @Assisted int count) {
         this.vectors = new ArrayList<>();
-        var delta = new Vector3f(target).sub(origin).mul(1f / count);
-        for (var i = 0; i <= count; i += 1) {
-            var multipliedDelta = new Vector3f(delta).mul(i);
+        Vector3f delta = new Vector3f(target).sub(origin).mul(1f / count);
+        for (int i = 0; i <= count; i += 1) {
+            Vector3f multipliedDelta = new Vector3f(delta).mul(i);
             vectors.add(new Vector3f(origin).add(multipliedDelta));
         }
     }

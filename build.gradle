@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'gradle.plugin.org.gradle.java:experimental-jigsaw:0.1.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
     }
 }
 
@@ -14,12 +14,10 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'java-library'
-    apply plugin: 'application'
     apply plugin: 'maven-publish'
-    apply plugin: 'org.gradle.java.experimental-jigsaw'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
-    mainClassName = "gg.warcraft.monolith.Monolith"
-    sourceCompatibility = 10
+    sourceCompatibility = 1.8
 
     repositories {
         mavenLocal()
@@ -40,6 +38,14 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) { from components.java }
+        }
+    }
+
+    publishing {
+        publications {
+            shadow(MavenPublication) {
+                project.shadow.component(it)
+            }
         }
     }
 }

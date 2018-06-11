@@ -17,11 +17,11 @@ public class RingVectors extends AbstractEffectVectors {
     @Inject
     public RingVectors(@Assisted float radius, @Assisted int count) {
         this.vectors = new ArrayList<>(count);
-        var angle = 0;
-        var delta = TWO_PI / count;
+        float angle = 0;
+        float delta = TWO_PI / count;
         for (int i = 0; i < count; ++i) {
-            var x = (float) Math.cos(angle) * radius;
-            var z = (float) Math.sin(angle) * radius;
+            float x = (float) Math.cos(angle) * radius;
+            float z = (float) Math.sin(angle) * radius;
             vectors.add(new Vector3f(x, 0, z));
             angle += delta;
         }

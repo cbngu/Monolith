@@ -49,7 +49,7 @@ public class SimpleEffect implements Effect {
 
     @Override
     public void run() {
-        var currentLocation = getLocation();
+        Location currentLocation = getLocation();
         renderers.forEach(renderer -> renderer.renderAt(currentLocation));
     }
 

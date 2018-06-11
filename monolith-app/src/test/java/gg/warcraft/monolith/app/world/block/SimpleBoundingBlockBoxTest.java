@@ -24,8 +24,8 @@ public class SimpleBoundingBlockBoxTest {
 
     @Before
     public void beforeEach() {
-        var minimumCorner = new Vector3i(0, 0, 0);
-        var maximumCorner = new Vector3i(10, 10, 10);
+        Vector3i minimumCorner = new Vector3i(0, 0, 0);
+        Vector3i maximumCorner = new Vector3i(10, 10, 10);
         simpleBoundingBlockBox = new SimpleBoundingBlockBox(minimumCorner, maximumCorner);
     }
 
@@ -43,7 +43,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
-        var result = simpleBoundingBlockBox.test(mockBlock);
+        boolean result = simpleBoundingBlockBox.test(mockBlock);
 
         // Then
         assertTrue(result);
@@ -58,7 +58,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
-        var result = simpleBoundingBlockBox.test(mockBlock);
+        boolean result = simpleBoundingBlockBox.test(mockBlock);
 
         // Then
         assertTrue(result);
@@ -73,7 +73,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
-        var result = simpleBoundingBlockBox.test(mockBlock);
+        boolean result = simpleBoundingBlockBox.test(mockBlock);
 
         // Then
         assertFalse(result);

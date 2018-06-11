@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.world.block;
 
+import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
 import org.joml.Vector3ic;
@@ -23,10 +24,10 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
 
     @Override
     public boolean test(Block block) {
-        var location = block.getLocation();
-        var x = location.getX();
-        var y = location.getY();
-        var z = location.getZ();
+        BlockLocation location = block.getLocation();
+        int x = location.getX();
+        int y = location.getY();
+        int z = location.getZ();
         return x >= minX && x <= maxX &&
                 y >= minY && y <= maxY &&
                 z >= minZ && z <= maxZ;

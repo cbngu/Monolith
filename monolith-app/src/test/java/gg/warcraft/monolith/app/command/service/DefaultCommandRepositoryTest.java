@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
+
 import static gg.warcraft.monolith.app.command.CommandTestUtils.randomAliases;
 import static gg.warcraft.monolith.app.command.CommandTestUtils.randomName;
 import static org.junit.Assert.assertEquals;
@@ -36,8 +38,8 @@ public class DefaultCommandRepositoryTest {
     @Test
     public void save_shouldPutCommandInMap() {
         // Given
-        var name = randomName();
-        var aliases = randomAliases();
+        String name = randomName();
+        List<String> aliases = randomAliases();
 
         when(mockCommand.getName()).thenReturn(name);
         when(mockCommand.getAliases()).thenReturn(aliases);
@@ -54,8 +56,8 @@ public class DefaultCommandRepositoryTest {
     @Test
     public void save_shouldSilentlyIgnoreNull() {
         // Given
-        var name = randomName();
-        var aliases = randomAliases();
+        String name = randomName();
+        List<String> aliases = randomAliases();
         aliases.add(null);
 
         when(mockCommand.getName()).thenReturn(name);
@@ -73,8 +75,8 @@ public class DefaultCommandRepositoryTest {
     @Test
     public void save_shouldSilentlyIgnoreEmpty() {
         // Given
-        var name = "";
-        var aliases = randomAliases();
+        String name = "";
+        List<String> aliases = randomAliases();
 
         when(mockCommand.getName()).thenReturn(name);
         when(mockCommand.getAliases()).thenReturn(aliases);

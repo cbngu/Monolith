@@ -39,7 +39,7 @@ public class DefaultCommandCommandService implements CommandCommandService {
             throw new IllegalArgumentException(NAME_NULL_OR_EMPTY);
         }
         if (!isAvailable.test(name)) {
-            var nameAlreadyExists = String.format(NAME_ALREADY_EXISTS, name);
+            String nameAlreadyExists = String.format(NAME_ALREADY_EXISTS, name);
             throw new IllegalArgumentException(nameAlreadyExists);
         }
         return true;
@@ -47,11 +47,11 @@ public class DefaultCommandCommandService implements CommandCommandService {
 
     boolean validateAlias(String command, String alias, Predicate<String> isAvailable) {
         if (alias == null || alias.isEmpty()) {
-            var aliasNullOrEmpty = String.format(ALIAS_NULL_OR_EMPTY, command);
+            String aliasNullOrEmpty = String.format(ALIAS_NULL_OR_EMPTY, command);
             throw new IllegalArgumentException(aliasNullOrEmpty);
         }
         if (!isAvailable.test(alias)) {
-            var aliasAlreadyExists = String.format(ALIAS_ALREADY_EXISTS, command, alias);
+            String aliasAlreadyExists = String.format(ALIAS_ALREADY_EXISTS, command, alias);
             throw new IllegalArgumentException(aliasAlreadyExists);
         }
         return true;
@@ -72,13 +72,13 @@ public class DefaultCommandCommandService implements CommandCommandService {
         aliases.forEach(alias -> validateAlias(name, alias, isAvailable));
         validateHandler(handler);
 
-        var command = new SimpleCommand(name, aliases, handler);
+        Command command = new SimpleCommand(name, aliases, handler);
         adapter.registerCommand(name, aliases);
         repository.save(command);
     }
 
     String formatCommand(Command command, String... arguments) {
-        var joiner = new StringJoiner(" ");
+        StringJoiner joiner = new StringJoiner(" ");
         joiner.add(command.getName());
         Arrays.stream(arguments).forEach(joiner::add);
         return joiner.toString();
@@ -86,13 +86,13 @@ public class DefaultCommandCommandService implements CommandCommandService {
 
     @Override
     public void dispatchCommandFor(Command command, UUID playerId, String... arguments) {
-        var formattedCommand = formatCommand(command, arguments);
+        String formattedCommand = formatCommand(command, arguments);
         adapter.dispatchCommandFor(formattedCommand, playerId);
     }
 
     @Override
     public void dispatchConsoleCommand(Command command, String... arguments) {
-        var formattedCommand = formatCommand(command, arguments);
+        String formattedCommand = formatCommand(command, arguments);
         adapter.dispatchConsoleCommand(formattedCommand);
     }
 }
