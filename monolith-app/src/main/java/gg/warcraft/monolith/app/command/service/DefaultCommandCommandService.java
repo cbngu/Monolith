@@ -77,21 +77,21 @@ public class DefaultCommandCommandService implements CommandCommandService {
         repository.save(command);
     }
 
-    String formatCommand(Command command, String... arguments) {
+    String formatCommand(String command, String... arguments) {
         StringJoiner joiner = new StringJoiner(" ");
-        joiner.add(command.getName());
+        joiner.add(command);
         Arrays.stream(arguments).forEach(joiner::add);
         return joiner.toString();
     }
 
     @Override
-    public void dispatchCommandFor(Command command, UUID playerId, String... arguments) {
+    public void dispatchCommandFor(String command, UUID playerId, String... arguments) {
         String formattedCommand = formatCommand(command, arguments);
         adapter.dispatchCommandFor(formattedCommand, playerId);
     }
 
     @Override
-    public void dispatchConsoleCommand(Command command, String... arguments) {
+    public void dispatchConsoleCommand(String command, String... arguments) {
         String formattedCommand = formatCommand(command, arguments);
         adapter.dispatchConsoleCommand(formattedCommand);
     }

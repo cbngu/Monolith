@@ -19,7 +19,6 @@ import static gg.warcraft.monolith.app.command.CommandTestUtils.randomName;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultCommandCommandServiceTest {
@@ -153,10 +152,8 @@ public class DefaultCommandCommandServiceTest {
         String argument1 = randomArgument();
         String argument2 = randomArgument();
 
-        when(mockCommand.getName()).thenReturn(name);
-
         // When
-        String formattedCommand = defaultCommandCommandService.formatCommand(mockCommand, argument1, argument2);
+        String formattedCommand = defaultCommandCommandService.formatCommand(name, argument1, argument2);
 
         // Then
         assertEquals(name + " " + argument1 + " " + argument2, formattedCommand);
