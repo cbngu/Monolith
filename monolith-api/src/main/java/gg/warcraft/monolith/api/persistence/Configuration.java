@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.config;
+package gg.warcraft.monolith.api.persistence;
 
 /**
  * A Configuration holds metadata about a configuration file hosted elsewhere, whether on the file system of

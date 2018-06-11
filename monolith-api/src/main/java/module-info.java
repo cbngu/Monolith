@@ -9,10 +9,6 @@ module gg.warcraft.monolith.api {
     exports gg.warcraft.monolith.api.command.event;
     exports gg.warcraft.monolith.api.command.service;
 
-    // configuration module
-    exports gg.warcraft.monolith.api.config;
-    exports gg.warcraft.monolith.api.config.service;
-
     // core module
     exports gg.warcraft.monolith.api.core;
     exports gg.warcraft.monolith.api.core.event;
@@ -34,6 +30,10 @@ module gg.warcraft.monolith.api {
 
     exports gg.warcraft.monolith.api.entity.status;
     exports gg.warcraft.monolith.api.entity.status.service;
+
+    // persistence module
+    exports gg.warcraft.monolith.api.persistence;
+    exports gg.warcraft.monolith.api.persistence.service;
 
     // utility module
     exports gg.warcraft.monolith.api.util;

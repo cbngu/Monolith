@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.config;
+package gg.warcraft.monolith.api.persistence;
 
 import java.io.Reader;
 

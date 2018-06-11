@@ -1,8 +1,8 @@
-package gg.warcraft.monolith.app.config.service;
+package gg.warcraft.monolith.app.persistence.service;
 
 import com.google.inject.Inject;
-import gg.warcraft.monolith.api.config.service.ConfigurationQueryService;
-import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
+import gg.warcraft.monolith.api.persistence.service.ConfigurationQueryService;
+import gg.warcraft.monolith.api.persistence.service.ConfigurationRepository;
 
 public class DefaultConfigurationQueryService implements ConfigurationQueryService {
     private final ConfigurationRepository repository;

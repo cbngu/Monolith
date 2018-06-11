@@ -1,8 +1,8 @@
-package gg.warcraft.monolith.app.config;
+package gg.warcraft.monolith.app.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import gg.warcraft.monolith.api.config.YamlMapper;
+import gg.warcraft.monolith.api.persistence.YamlMapper;
 
 import java.io.Reader;
 

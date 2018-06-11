@@ -9,8 +9,6 @@ import gg.warcraft.monolith.api.command.Console;
 import gg.warcraft.monolith.api.command.service.CommandCommandService;
 import gg.warcraft.monolith.api.command.service.CommandQueryService;
 import gg.warcraft.monolith.api.command.service.CommandRepository;
-import gg.warcraft.monolith.api.config.JsonMapper;
-import gg.warcraft.monolith.api.config.YamlMapper;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.EffectVectorsFactory;
@@ -20,6 +18,8 @@ import gg.warcraft.monolith.api.entity.attribute.service.AttributeRepository;
 import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusRepository;
+import gg.warcraft.monolith.api.persistence.JsonMapper;
+import gg.warcraft.monolith.api.persistence.YamlMapper;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
@@ -28,8 +28,6 @@ import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.service.DefaultCommandCommandService;
 import gg.warcraft.monolith.app.command.service.DefaultCommandQueryService;
 import gg.warcraft.monolith.app.command.service.DefaultCommandRepository;
-import gg.warcraft.monolith.app.config.JacksonJsonMapper;
-import gg.warcraft.monolith.app.config.JacksonYamlMapper;
 import gg.warcraft.monolith.app.core.GuavaEventService;
 import gg.warcraft.monolith.app.effect.vectors.CircleVectors;
 import gg.warcraft.monolith.app.effect.vectors.DomeVectors;
@@ -44,6 +42,8 @@ import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeReposit
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusCommandService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
+import gg.warcraft.monolith.app.persistence.JacksonJsonMapper;
+import gg.warcraft.monolith.app.persistence.JacksonYamlMapper;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
@@ -54,10 +54,10 @@ public class AbstractMonolithModule extends AbstractModule {
     @Override
     protected void configure() {
         configureCommand();
-        configureConfig();
         configureCore();
         configureEffect();
         configureEntity();
+        configurePersistence();
         configureUtil();
         configureWorld();
     }
@@ -68,11 +68,6 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(CommandRepository.class).to(DefaultCommandRepository.class);
 
         bind(CommandSender.class).annotatedWith(Console.class).to(ConsoleCommandSender.class);
-    }
-
-    private void configureConfig() {
-        bind(JsonMapper.class).to(JacksonJsonMapper.class);
-        bind(YamlMapper.class).to(JacksonYamlMapper.class);
     }
 
     private void configureCore() {
@@ -99,6 +94,11 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(StatusCommandService.class).to(DefaultStatusCommandService.class);
         bind(StatusQueryService.class).to(DefaultStatusQueryService.class);
         bind(StatusRepository.class).to(DefaultStatusRepository.class);
+    }
+
+    private void configurePersistence() {
+        bind(JsonMapper.class).to(JacksonJsonMapper.class);
+        bind(YamlMapper.class).to(JacksonYamlMapper.class);
     }
 
     private void configureUtil() {

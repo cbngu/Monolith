@@ -1,6 +1,6 @@
-package gg.warcraft.monolith.app.config.service;
+package gg.warcraft.monolith.app.persistence.service;
 
-import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
+import gg.warcraft.monolith.api.persistence.service.ConfigurationRepository;
 
 import java.util.HashMap;
 import java.util.Map;

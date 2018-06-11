@@ -1,10 +1,10 @@
-package gg.warcraft.monolith.api.config.service;
+package gg.warcraft.monolith.api.persistence.service;
 
 /**
  * This service is injectable.
  * <p>
- * The ConfigurationQueryService serves as a point of entry into the configuration implementation. It provides a method
- * to query a currently loaded {@code Configuration} by mapped class to retrieve it as that class.
+ * The ConfigurationQueryService serves as a point of entry into the persistence implementation. It provides a method to
+ * query a currently loaded {@code Configuration} by mapped class to retrieve it as that class.
  */
 public interface ConfigurationQueryService {
 
