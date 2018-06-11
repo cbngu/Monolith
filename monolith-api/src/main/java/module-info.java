@@ -4,6 +4,9 @@ module gg.warcraft.monolith.api {
     requires transitive com.google.guice.extensions.assistedinject;
     requires transitive org.joml;
 
+    // monolith
+    exports gg.warcraft.monolith.api;
+
     // command module
     exports gg.warcraft.monolith.api.command;
     exports gg.warcraft.monolith.api.command.event;
