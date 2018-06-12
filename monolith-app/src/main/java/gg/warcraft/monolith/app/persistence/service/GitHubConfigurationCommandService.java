@@ -16,7 +16,6 @@ import org.kohsuke.github.GitHub;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-// TODO: save configuration files locally as github can time-out anon requests over 10 per hour
 public class GitHubConfigurationCommandService implements ConfigurationCommandService {
     private final ConfigurationRepository configurationRepository;
     private final YamlMapper yamlMapper;
