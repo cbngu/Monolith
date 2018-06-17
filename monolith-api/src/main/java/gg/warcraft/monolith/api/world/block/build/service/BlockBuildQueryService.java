@@ -1,6 +1,6 @@
-package gg.warcraft.monolith.api.world.block.service;
+package gg.warcraft.monolith.api.world.block.build.service;
 
-import gg.warcraft.monolith.api.world.block.BlockBuild;
+import gg.warcraft.monolith.api.world.block.build.BlockBuild;
 
 import java.util.List;
 

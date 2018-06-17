@@ -1,4 +1,6 @@
-package gg.warcraft.monolith.api.world.block;
+package gg.warcraft.monolith.api.world.block.build;
+
+import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
 
 /**
  * A BlockBuild represents a specifically arranged collection of blocks on the server. It is basically a {@code

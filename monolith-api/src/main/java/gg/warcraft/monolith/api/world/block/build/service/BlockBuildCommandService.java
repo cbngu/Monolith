@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.world.block.service;
+package gg.warcraft.monolith.api.world.block.build.service;
 
 /**
  * This service is injectable.
