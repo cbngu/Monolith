@@ -13,12 +13,20 @@ import java.util.List;
 public interface BlockBuildRepository {
 
     /**
+     * @param type The type. Can not be null or empty.
      * @return All builds of the given type. Never null, but can be empty. Items are never null.
      */
     List<BlockBuild> getBuilds(String type);
 
     /**
+     * @param type  The type. Can not be null or empty.
+     * @param model The model. Can not be null or empty.
      * @return The build of the given type and model. Can be null.
      */
     BlockBuild getBuild(String type, String model);
+
+    /**
+     * @param build The build to save. Can not be null.
+     */
+    void save(BlockBuild build);
 }
