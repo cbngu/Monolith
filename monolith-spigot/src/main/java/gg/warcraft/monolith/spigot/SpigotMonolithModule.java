@@ -30,11 +30,11 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
 public class SpigotMonolithModule extends AbstractMonolithModule {
-    private final String pluginName;
+    private final static String PLUGIN_NAME = "WarCraft: Monolith";
+
     private final String worldName;
 
-    public SpigotMonolithModule(String pluginName, String worldName) {
-        this.pluginName = pluginName;
+    public SpigotMonolithModule(String worldName) {
         this.worldName = worldName;
     }
 
@@ -50,7 +50,7 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
 
     private void configureBukkit() {
         bind(Server.class).toProvider(Bukkit::getServer);
-        bind(Plugin.class).toProvider(() -> Bukkit.getPluginManager().getPlugin(pluginName));
+        bind(Plugin.class).toProvider(() -> Bukkit.getPluginManager().getPlugin(PLUGIN_NAME));
         bind(World.class).annotatedWith(Overworld.class).toProvider(() -> Bukkit.getWorld(worldName));
         bind(World.class).annotatedWith(TheNether.class).toProvider(() -> Bukkit.getWorld(worldName + "_nether"));
         bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> Bukkit.getWorld(worldName + "_the_end"));
