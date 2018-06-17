@@ -11,12 +11,12 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Gradle: de.slikey:EffectLib:5.10-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.kohsuke:github-api:1.93" level="project" />
     <orderEntry type="library" name="Gradle: com.google.inject.extensions:guice-assistedinject:4.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.kohsuke:github-api:1.93" level="project" />
     <orderEntry type="library" name="Gradle: com.google.inject:guice:4.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.9.5" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:guava:24.1-jre" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:24.1-jre" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.5" level="project" />
     <orderEntry type="library" name="Gradle: org.joml:joml:1.9.9" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: redis.clients:jedis:2.9.0" level="project" />
