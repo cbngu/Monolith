@@ -11,6 +11,13 @@
 # signal that the plugin can start.
 firstTimeSetup: true
 
+# AUTHORIZATION SERVICE
+# ------------------------------------------------------------
+# If true your server is launched in maintenance mode, meaning
+# only those with the maintenance permission are able to join.
+maintenance: false
+maintenancePermission: monolith.staff
+
 # CONFIGURATION SERVICE
 # Options: [LOCAL, GITHUB]
 # ------------------------------------------------------------
@@ -68,13 +75,6 @@ maximumCorner:
   x: 0
   y: 0
   z: 0
-
-# AUTHORIZATION SERVICE
-# ------------------------------------------------------------
-# If true your server is launched in maintenance mode, meaning
-# only those with the maintenance permission are able to join.
-maintenance: false
-maintenancePermission: monolith.staff
 
 # MISCELLANEOUS
 # ------------------------------------------------------------
