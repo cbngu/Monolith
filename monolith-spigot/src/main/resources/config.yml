@@ -56,6 +56,19 @@ spawn:
   y: 0
   z: 0
 
+# BUILD REPOSITORY
+# ------------------------------------------------------------
+minimumCorner:
+  world: world
+  x: 0
+  y: 0
+  z: 0
+maximumCorner:
+  world: world
+  x: 0
+  y: 0
+  z: 0
+
 # AUTHORIZATION SERVICE
 # ------------------------------------------------------------
 # If true your server is launched in maintenance mode, meaning
