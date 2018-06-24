@@ -18,6 +18,10 @@ import gg.warcraft.monolith.api.entity.attribute.service.AttributeRepository;
 import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusRepository;
+import gg.warcraft.monolith.api.item.ItemBuilder;
+import gg.warcraft.monolith.api.item.ItemBuilderFactory;
+import gg.warcraft.monolith.api.item.ItemReader;
+import gg.warcraft.monolith.api.item.ItemReaderFactory;
 import gg.warcraft.monolith.api.persistence.JsonMapper;
 import gg.warcraft.monolith.api.persistence.YamlMapper;
 import gg.warcraft.monolith.api.util.MathUtils;
@@ -42,6 +46,8 @@ import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeReposit
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusCommandService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
+import gg.warcraft.monolith.app.item.SimpleItemBuilder;
+import gg.warcraft.monolith.app.item.SimpleItemReader;
 import gg.warcraft.monolith.app.persistence.JacksonJsonMapper;
 import gg.warcraft.monolith.app.persistence.JacksonYamlMapper;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
@@ -57,6 +63,7 @@ public class AbstractMonolithModule extends AbstractModule {
         configureCore();
         configureEffect();
         configureEntity();
+        configureItem();
         configurePersistence();
         configureUtil();
         configureWorld();
@@ -94,6 +101,15 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(StatusCommandService.class).to(DefaultStatusCommandService.class);
         bind(StatusQueryService.class).to(DefaultStatusQueryService.class);
         bind(StatusRepository.class).to(DefaultStatusRepository.class);
+    }
+
+    private void configureItem() {
+        install(new FactoryModuleBuilder()
+                .implement(ItemBuilder.class, SimpleItemBuilder.class)
+                .build(ItemBuilderFactory.class));
+        install(new FactoryModuleBuilder()
+                .implement(ItemReader.class, SimpleItemReader.class)
+                .build(ItemReaderFactory.class));
     }
 
     private void configurePersistence() {
