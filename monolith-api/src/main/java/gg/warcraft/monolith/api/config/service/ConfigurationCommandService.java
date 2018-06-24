@@ -1,7 +1,5 @@
 package gg.warcraft.monolith.api.config.service;
 
-import gg.warcraft.monolith.api.config.Configuration;
-
 import java.io.IOException;
 
 /**
@@ -13,9 +11,10 @@ import java.io.IOException;
 public interface ConfigurationCommandService {
 
     /**
-     * @param configuration The configuration to reload. Can not be null.
+     * @param configurationFileName The name of the configuration file to reload. Can not be null or empty.
+     * @param configurationClass    The class of the configuration object. Can not be null.
      * @throws IOException Thrown if either the retrieval of the configuration file or the mapping to the configuration
      *                     class failed.
      */
-    void reloadConfiguration(Configuration configuration) throws IOException;
+    void reloadConfiguration(String configurationFileName, Class<?> configurationClass) throws IOException;
 }

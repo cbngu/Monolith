@@ -2,7 +2,6 @@ package gg.warcraft.monolith.app.config.service;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import gg.warcraft.monolith.api.config.Configuration;
 import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
 import gg.warcraft.monolith.api.persistence.JsonMapper;
@@ -53,13 +52,11 @@ public class GitHubConfigurationCommandService implements ConfigurationCommandSe
     }
 
     @Override
-    public void reloadConfiguration(Configuration configuration) throws IOException {
-        String fileName = configuration.getFileName();
-        Mapper mapper = getMapperFor(fileName);
+    public void reloadConfiguration(String configurationFileName, Class<?> configurationClass) throws IOException {
+        Mapper mapper = getMapperFor(configurationFileName);
         GHRepository gitHubRepository = connectToRepository();
-        GHContent content = gitHubRepository.getFileContent(fileName);
+        GHContent content = gitHubRepository.getFileContent(configurationFileName);
 
-        Class<?> configurationClass = configuration.getConfigurationClass();
         try (InputStreamReader reader = new InputStreamReader(content.read())) {
             Object configurationObject = mapper.parse(reader, configurationClass);
             configurationRepository.save(configurationObject);
