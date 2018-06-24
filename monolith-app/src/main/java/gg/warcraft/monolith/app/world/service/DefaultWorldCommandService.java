@@ -1,7 +1,7 @@
 package gg.warcraft.monolith.app.world.service;
 
 import com.google.inject.Inject;
-import gg.warcraft.monolith.api.world.ItemType;
+import gg.warcraft.monolith.api.item.ItemType;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
