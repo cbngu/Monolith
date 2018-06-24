@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.api.world.service;
 
-import gg.warcraft.monolith.api.item.ItemType;
+import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
@@ -35,5 +35,5 @@ public interface WorldServerAdapter {
      * @param items    The items to drop.
      * @param location The location to drop at.
      */
-    void dropItemsAt(List<ItemType> items, Location location);
+    void dropItemsAt(List<Item> items, Location location);
 }

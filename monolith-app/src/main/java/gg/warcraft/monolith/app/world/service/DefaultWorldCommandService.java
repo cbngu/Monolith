@@ -1,7 +1,7 @@
 package gg.warcraft.monolith.app.world.service;
 
 import com.google.inject.Inject;
-import gg.warcraft.monolith.api.item.ItemType;
+import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
@@ -24,7 +24,7 @@ public class DefaultWorldCommandService implements WorldCommandService {
     }
 
     @Override
-    public void dropItemsAt(List<ItemType> items, Location location) {
+    public void dropItemsAt(List<Item> items, Location location) {
         worldServerAdapter.dropItemsAt(items, location);
     }
 }

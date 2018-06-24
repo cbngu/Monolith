@@ -1,6 +1,7 @@
-package gg.warcraft.monolith.spigot.world;
+package gg.warcraft.monolith.spigot.item;
 
 import gg.warcraft.monolith.api.item.ItemType;
+import gg.warcraft.monolith.spigot.world.MaterialData;
 import org.bukkit.Material;
 
 public class SpigotItemTypeMapper {

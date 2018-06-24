@@ -1,15 +1,14 @@
 package gg.warcraft.monolith.spigot.world.service;
 
 import com.google.inject.Inject;
-import gg.warcraft.monolith.api.item.ItemType;
+import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
-import gg.warcraft.monolith.spigot.world.MaterialData;
+import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotBlockMapper;
-import gg.warcraft.monolith.spigot.world.SpigotItemTypeMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
 import gg.warcraft.monolith.spigot.world.SpigotWorldMapper;
 import org.bukkit.World;
@@ -21,15 +20,15 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
     private final SpigotWorldMapper worldMapper;
     private final SpigotBlockMapper blockMapper;
     private final SpigotLocationMapper locationMapper;
-    private final SpigotItemTypeMapper itemTypeMapper;
+    private final SpigotItemMapper itemMapper;
 
     @Inject
     public SpigotWorldAdapter(SpigotWorldMapper worldMapper, SpigotBlockMapper blockMapper,
-                              SpigotLocationMapper locationMapper, SpigotItemTypeMapper itemTypeMapper) {
+                              SpigotLocationMapper locationMapper, SpigotItemMapper itemMapper) {
         this.worldMapper = worldMapper;
         this.blockMapper = blockMapper;
         this.locationMapper = locationMapper;
-        this.itemTypeMapper = itemTypeMapper;
+        this.itemMapper = itemMapper;
     }
 
     @Override
@@ -46,12 +45,11 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
     }
 
     @Override
-    public void dropItemsAt(List<ItemType> items, Location location) {
+    public void dropItemsAt(List<Item> items, Location location) {
         org.bukkit.Location spigotLocation = locationMapper.map(location);
         World world = spigotLocation.getWorld();
         items.forEach(item -> {
-            MaterialData materialData = itemTypeMapper.map(item);
-            ItemStack itemStack = new ItemStack(materialData.getMaterial(), 1, (short) 0, materialData.getData());
+            ItemStack itemStack = itemMapper.map(item);
             world.dropItem(spigotLocation, itemStack);
         });
     }
