@@ -1,10 +1,15 @@
 package gg.warcraft.monolith.spigot;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import gg.warcraft.monolith.api.Monolith;
+import gg.warcraft.monolith.api.MonolithModule;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
+import java.util.ServiceLoader;
 
 public class MonolithPlugin extends JavaPlugin {
 
@@ -20,11 +25,9 @@ public class MonolithPlugin extends JavaPlugin {
         boolean isFirstTimeSetup = config.getBoolean("firstTimeSetup");
         if (isFirstTimeSetup) {
             System.out.println("Monolith has not been configured yet, shutting down server.");
-            System.out.println("If you have configured Monolith make sure to set firstTimeSetup to false.");
+            System.out.println("If you have configured it make sure to set firstTimeSetup in the config to false.");
             getServer().shutdown();
         }
-
-        MonolithConfiguration configuration = null;
 
         boolean maintenance = config.getBoolean("maintenance");
         if (maintenance) {
@@ -38,7 +41,10 @@ public class MonolithPlugin extends JavaPlugin {
         String theNetherName = getConfig().getString("theNetherName");
         String theEndName = getConfig().getString("theEndName");
 
-        Injector injector = Guice.createInjector(new SpigotMonolithModule(overworldName));
+        ServiceLoader<MonolithModule> monolithModuleLoader = ServiceLoader.load(MonolithModule.class);
+        List<MonolithModule> monolithModules = Lists.newArrayList(monolithModuleLoader.iterator());
+        monolithModules.add(new SpigotMonolithModule(overworldName));
+        Injector injector = Guice.createInjector(monolithModules);
 
         // initialize injector for consumers
         new Monolith(injector);
