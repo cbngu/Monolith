@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.api.world.service;
 
-import gg.warcraft.monolith.api.world.ItemType;
+import gg.warcraft.monolith.api.item.ItemType;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;

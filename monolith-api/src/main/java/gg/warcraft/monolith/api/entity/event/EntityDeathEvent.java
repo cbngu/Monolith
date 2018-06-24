@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.api.entity.event;
 
-import gg.warcraft.monolith.api.world.ItemType;
+import gg.warcraft.monolith.api.item.ItemType;
 
 import java.util.List;
 

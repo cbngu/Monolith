@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.world;
+package gg.warcraft.monolith.api.item;
 
 import java.util.HashMap;
 import java.util.Map;
