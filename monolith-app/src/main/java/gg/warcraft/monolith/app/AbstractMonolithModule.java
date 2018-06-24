@@ -1,9 +1,9 @@
 package gg.warcraft.monolith.app;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
+import gg.warcraft.monolith.api.MonolithModule;
 import gg.warcraft.monolith.api.command.CommandSender;
 import gg.warcraft.monolith.api.command.Console;
 import gg.warcraft.monolith.api.command.service.CommandCommandService;
@@ -55,7 +55,7 @@ import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 
-public class AbstractMonolithModule extends AbstractModule {
+public class AbstractMonolithModule extends MonolithModule {
 
     @Override
     protected void configure() {
