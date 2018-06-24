@@ -1,6 +1,6 @@
-package gg.warcraft.monolith.api.persistence.service;
+package gg.warcraft.monolith.api.config.service;
 
-import gg.warcraft.monolith.api.persistence.Configuration;
+import gg.warcraft.monolith.api.config.Configuration;
 
 import java.io.IOException;
 

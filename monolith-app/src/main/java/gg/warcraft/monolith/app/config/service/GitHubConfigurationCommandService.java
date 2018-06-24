@@ -1,13 +1,13 @@
-package gg.warcraft.monolith.app.persistence.service;
+package gg.warcraft.monolith.app.config.service;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import gg.warcraft.monolith.api.persistence.Configuration;
+import gg.warcraft.monolith.api.config.Configuration;
+import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
+import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
 import gg.warcraft.monolith.api.persistence.JsonMapper;
 import gg.warcraft.monolith.api.persistence.Mapper;
 import gg.warcraft.monolith.api.persistence.YamlMapper;
-import gg.warcraft.monolith.api.persistence.service.ConfigurationCommandService;
-import gg.warcraft.monolith.api.persistence.service.ConfigurationRepository;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;

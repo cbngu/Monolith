@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.persistence.service;
+package gg.warcraft.monolith.api.config.service;
 
 /**
  * This service is injectable.

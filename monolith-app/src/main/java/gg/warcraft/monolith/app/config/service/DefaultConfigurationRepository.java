@@ -1,10 +1,10 @@
-package gg.warcraft.monolith.app.persistence.service;
+package gg.warcraft.monolith.app.config.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
 import gg.warcraft.monolith.api.persistence.JsonMapper;
 import gg.warcraft.monolith.api.persistence.PersistenceService;
-import gg.warcraft.monolith.api.persistence.service.ConfigurationRepository;
 
 import java.util.HashMap;
 import java.util.Map;

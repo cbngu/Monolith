@@ -1,7 +1,7 @@
-package gg.warcraft.monolith.app.persistence.service;
+package gg.warcraft.monolith.app.config.service;
 
-import gg.warcraft.monolith.api.persistence.Configuration;
-import gg.warcraft.monolith.api.persistence.service.ConfigurationCommandService;
+import gg.warcraft.monolith.api.config.Configuration;
+import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 
 public class LocalConfigurationCommandService implements ConfigurationCommandService {
 

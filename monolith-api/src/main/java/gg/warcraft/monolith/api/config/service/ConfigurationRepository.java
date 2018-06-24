@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.persistence.service;
+package gg.warcraft.monolith.api.config.service;
 
 /**
  * This repository is injectable, however you generally have no need for it. Use the command and query services instead.
