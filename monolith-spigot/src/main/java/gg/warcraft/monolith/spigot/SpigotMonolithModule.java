@@ -24,18 +24,30 @@ import gg.warcraft.monolith.spigot.world.Overworld;
 import gg.warcraft.monolith.spigot.world.TheEnd;
 import gg.warcraft.monolith.spigot.world.TheNether;
 import gg.warcraft.monolith.spigot.world.service.SpigotWorldAdapter;
-import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
 public class SpigotMonolithModule extends AbstractMonolithModule {
-    private final static String PLUGIN_NAME = "WarCraft: Monolith";
+    private static Plugin plugin;
+    private static String overworldName;
+    private static String theNetherName;
+    private static String theEndName;
 
-    private final String worldName;
+    public static void setPlugin(Plugin plugin) {
+        SpigotMonolithModule.plugin = plugin;
+    }
 
-    public SpigotMonolithModule(String worldName) {
-        this.worldName = worldName;
+    public static void setOverworldName(String overworldName) {
+        SpigotMonolithModule.overworldName = overworldName;
+    }
+
+    public static void setTheNetherName(String theNetherName) {
+        SpigotMonolithModule.theNetherName = theNetherName;
+    }
+
+    public static void setTheEndName(String theEndName) {
+        SpigotMonolithModule.theEndName = theEndName;
     }
 
     protected void configure() {
@@ -49,11 +61,11 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     }
 
     private void configureBukkit() {
-        bind(Server.class).toProvider(Bukkit::getServer);
-        bind(Plugin.class).toProvider(() -> Bukkit.getPluginManager().getPlugin(PLUGIN_NAME));
-        bind(World.class).annotatedWith(Overworld.class).toProvider(() -> Bukkit.getWorld(worldName));
-        bind(World.class).annotatedWith(TheNether.class).toProvider(() -> Bukkit.getWorld(worldName + "_nether"));
-        bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> Bukkit.getWorld(worldName + "_the_end"));
+        bind(Plugin.class).toInstance(plugin);
+        bind(Server.class).toProvider(plugin::getServer);
+        bind(World.class).annotatedWith(Overworld.class).toProvider(() -> plugin.getServer().getWorld(overworldName));
+        bind(World.class).annotatedWith(TheNether.class).toProvider(() -> plugin.getServer().getWorld(theNetherName));
+        bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> plugin.getServer().getWorld(theEndName));
     }
 
     private void configureCommand() {
