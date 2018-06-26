@@ -9,6 +9,11 @@ import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
 public interface BlockBuild {
 
     /**
+     * @return The id of this build, which is a combination of its type and model. Never null or empty.
+     */
+    String getId();
+
+    /**
      * @return The type of this build. Never null or empty.
      */
     String getType();

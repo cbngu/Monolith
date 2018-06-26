@@ -15,6 +15,11 @@ public class SimpleBlockBuild implements BlockBuild {
     }
 
     @Override
+    public String getId() {
+        return type + ":" + model;
+    }
+
+    @Override
     public String getType() {
         return type;
     }
