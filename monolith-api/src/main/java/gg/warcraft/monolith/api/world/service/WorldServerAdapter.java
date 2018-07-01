@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.world.service;
 
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
@@ -17,6 +18,12 @@ import java.util.List;
 public interface WorldServerAdapter {
 
     /**
+     * @param type The type of world.
+     * @return The world of this type.
+     */
+    World getWorld(WorldType type);
+
+    /**
      * @param world The world.
      * @param x     The X coordinate.
      * @param y     The Y coordinate.
@@ -24,6 +31,14 @@ public interface WorldServerAdapter {
      * @return The block in the given world at the specified coordinates.
      */
     Block getBlockAt(WorldType world, int x, int y, int z);
+
+    /**
+     * @param world The world.
+     * @param x     The X coordinate.
+     * @param z     The Y coordinate.
+     * @return The highest non-air block in the given world at the specified coordinates.
+     */
+    Block getHighestBlockAt(WorldType world, int x, int z);
 
     /**
      * @param block The block to update.

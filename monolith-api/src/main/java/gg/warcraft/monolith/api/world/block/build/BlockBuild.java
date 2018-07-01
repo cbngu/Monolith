@@ -24,6 +24,12 @@ public interface BlockBuild {
     String getModel();
 
     /**
+     * @return A copy of the sign text of this build. The first element will be the build type and model. All other
+     * lines are completely up to you. Never null or empty. Items are never null, but can be empty.
+     */
+    String[] getData();
+
+    /**
      * @return The bounding box of this build. Never null.
      */
     BoundingBlockBox getBoundingBox();

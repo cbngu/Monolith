@@ -32,9 +32,21 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
     }
 
     @Override
+    public gg.warcraft.monolith.api.world.World getWorld(WorldType type) {
+        return worldMapper.map(worldMapper.map(type));
+    }
+
+    @Override
     public Block getBlockAt(WorldType world, int x, int y, int z) {
         World spigotWorld = worldMapper.map(world);
         org.bukkit.block.Block spigotBlock = spigotWorld.getBlockAt(x, y, z);
+        return blockMapper.map(spigotBlock);
+    }
+
+    @Override
+    public Block getHighestBlockAt(WorldType world, int x, int z) {
+        World spigotWorld = worldMapper.map(world);
+        org.bukkit.block.Block spigotBlock = spigotWorld.getHighestBlockAt(x, z);
         return blockMapper.map(spigotBlock);
     }
 

@@ -24,6 +24,11 @@ public class DefaultWorldQueryService implements WorldQueryService {
     }
 
     @Override
+    public World getWorld(WorldType type) {
+        return serverAdapter.getWorld(type);
+    }
+
+    @Override
     public Location getLocation(WorldType world, float x, float y, float z) {
         World actualWorld = new SimpleWorld(world);
         return new SimpleLocation(actualWorld, x, y, z);
@@ -61,5 +66,16 @@ public class DefaultWorldQueryService implements WorldQueryService {
     public Block getBlockAt(Location location) {
         return serverAdapter.getBlockAt(location.getWorld().getType(),
                 (int) location.getX(), (int) location.getY(), (int) location.getZ());
+    }
+
+    @Override
+    public Block getHighestBlockAt(WorldType world, int x, int z) {
+        return serverAdapter.getHighestBlockAt(world, x, z);
+    }
+
+    @Override
+    public Block getHighestBlockAt(BlockLocation location) {
+        World world = location.getWorld();
+        return serverAdapter.getHighestBlockAt(world.getType(), location.getX(), location.getZ());
     }
 }

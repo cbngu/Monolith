@@ -16,10 +16,4 @@ public interface Block {
      * @return The location of this block. Never null.
      */
     BlockLocation getLocation();
-
-    /**
-     * @param face The block face.
-     * @return The block neighbouring this block at the given block face. Never null.
-     */
-    Block getRelative(BlockFace face);
 }

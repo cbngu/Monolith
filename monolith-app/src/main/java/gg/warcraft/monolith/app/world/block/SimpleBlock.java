@@ -2,7 +2,6 @@ package gg.warcraft.monolith.app.world.block;
 
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.block.Block;
-import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockType;
 
 import java.util.Objects;
@@ -24,11 +23,6 @@ public class SimpleBlock implements Block {
     @Override
     public BlockLocation getLocation() {
         return location;
-    }
-
-    @Override
-    public Block getRelative(BlockFace face) {
-        return null; // TODO: implement
     }
 
     @Override
