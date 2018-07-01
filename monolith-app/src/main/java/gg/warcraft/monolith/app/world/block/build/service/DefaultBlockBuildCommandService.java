@@ -3,13 +3,13 @@ package gg.warcraft.monolith.app.world.block.build.service;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
+import gg.warcraft.monolith.api.world.block.BoundingBlockBoxFactory;
 import gg.warcraft.monolith.api.world.block.Sign;
 import gg.warcraft.monolith.api.world.block.build.BlockBuild;
 import gg.warcraft.monolith.api.world.block.build.service.BlockBuildCommandService;
@@ -30,12 +30,12 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
     private final WorldQueryService worldQueryService;
     private final BlockBuildRepository buildRepository;
     private final BlockUtils blockUtils;
-    private final MathUtils mathUtils;
+    private final BoundingBlockBoxFactory blockBoxFactory;
     private final BoundingBlockBox buildRepositoryBoundingBox;
 
     @Inject
     public DefaultBlockBuildCommandService(WorldQueryService worldQueryService, BlockBuildRepository buildRepository,
-                                           BlockUtils blockUtils, MathUtils mathUtils,
+                                           BlockUtils blockUtils, BoundingBlockBoxFactory blockBoxFactory,
                                            @Named("BuildRepositoryMinimumCorner") BlockLocation minimumCorner,
                                            @Named("BuildRepositoryMaximumCorner") BlockLocation maximumCorner) {
         Preconditions.checkArgument(minimumCorner.getWorld().getType() == maximumCorner.getWorld().getType(),
@@ -43,8 +43,8 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
         this.worldQueryService = worldQueryService;
         this.buildRepository = buildRepository;
         this.blockUtils = blockUtils;
-        this.mathUtils = mathUtils;
-        this.buildRepositoryBoundingBox = mathUtils.createBoundingBlockBox(minimumCorner.getWorld().getType(),
+        this.blockBoxFactory = blockBoxFactory;
+        this.buildRepositoryBoundingBox = blockBoxFactory.createBoundingBlockBox(minimumCorner.getWorld().getType(),
                 minimumCorner.toVector(), maximumCorner.toVector());
     }
 
@@ -106,7 +106,7 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
 
         Vector3i minimumCorner = new Vector3i(minX, minY, minZ);
         Vector3i maximumCorner = new Vector3i(maxX, maxY, maxZ);
-        return mathUtils.createBoundingBlockBox(world.getType(), minimumCorner, maximumCorner);
+        return blockBoxFactory.createBoundingBlockBox(world.getType(), minimumCorner, maximumCorner);
     }
 
     BlockBuild initializeBuild(Sign sign) {

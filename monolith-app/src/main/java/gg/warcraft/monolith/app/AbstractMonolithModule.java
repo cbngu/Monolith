@@ -31,6 +31,8 @@ import gg.warcraft.monolith.api.persistence.YamlMapper;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
+import gg.warcraft.monolith.api.world.block.BoundingBlockBoxFactory;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.service.DefaultCommandCommandService;
@@ -62,6 +64,7 @@ import gg.warcraft.monolith.app.persistence.JedisPersistenceService;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
+import gg.warcraft.monolith.app.world.block.SimpleBoundingBlockBox;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -199,5 +202,9 @@ public class AbstractMonolithModule extends MonolithModule {
 
     private void configureWorld() {
         bind(WorldQueryService.class).to(DefaultWorldQueryService.class);
+
+        install(new FactoryModuleBuilder()
+                .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)
+                .build(BoundingBlockBoxFactory.class));
     }
 }

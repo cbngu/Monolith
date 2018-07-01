@@ -13,6 +13,7 @@ import gg.warcraft.monolith.api.world.PotionType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.world.SimplePotionEffect;
 import org.joml.Vector3f;
@@ -27,6 +28,7 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     private final EntityQueryService entityQueryService;
     private final EntityServerAdapter entityServerAdapter;
     private final WorldQueryService worldQueryService;
+    private final BlockUtils blockUtils;
     private final TimeUtils timeUtils;
 
     final Map<Float, Float> knockbackStrength;
@@ -34,10 +36,11 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     final Map<Float, Float> leapStrength;
 
     public AbstractEntityCommandService(EntityQueryService entityQueryService, EntityServerAdapter entityServerAdapter,
-                                        WorldQueryService worldQueryService, TimeUtils timeUtils) {
+                                        WorldQueryService worldQueryService, BlockUtils blockUtils, TimeUtils timeUtils) {
         this.entityQueryService = entityQueryService;
         this.entityServerAdapter = entityServerAdapter;
         this.worldQueryService = worldQueryService;
+        this.blockUtils = blockUtils;
         this.timeUtils = timeUtils;
         this.knockbackStrength = new HashMap<>();
         this.knockupStrength = new HashMap<>();
@@ -100,7 +103,7 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
         Block current = worldQueryService.getBlockAt(entity.getLocation());
         while (BlockType.NON_SOLIDS.contains(current.getType())
                 && current.getLocation().getY() >= 0) {
-            current = current.getRelative(BlockFace.DOWN);
+            current = blockUtils.getRelative(current, BlockFace.DOWN);
         }
         return current;
     }

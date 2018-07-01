@@ -1,7 +1,9 @@
 package gg.warcraft.monolith.app.world.block;
 
 import gg.warcraft.monolith.api.world.BlockLocation;
+import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import org.joml.Vector3i;
 import org.junit.After;
 import org.junit.Before;
@@ -19,19 +21,21 @@ import static org.mockito.Mockito.when;
 public class SimpleBoundingBlockBoxTest {
     private SimpleBoundingBlockBox simpleBoundingBlockBox;
 
+    @Mock private WorldQueryService mockWorldQueryService;
     @Mock private Block mockBlock;
     @Mock private BlockLocation mockBlockLocation;
 
     @Before
     public void beforeEach() {
+        WorldType world = WorldType.OVERWORLD;
         Vector3i minimumCorner = new Vector3i(0, 0, 0);
         Vector3i maximumCorner = new Vector3i(10, 10, 10);
-        simpleBoundingBlockBox = new SimpleBoundingBlockBox(minimumCorner, maximumCorner);
+        simpleBoundingBlockBox = new SimpleBoundingBlockBox(mockWorldQueryService, world, minimumCorner, maximumCorner);
     }
 
     @After
     public void afterEach() {
-        reset(mockBlock, mockBlockLocation);
+        reset(mockWorldQueryService, mockBlock, mockBlockLocation);
     }
 
     @Test

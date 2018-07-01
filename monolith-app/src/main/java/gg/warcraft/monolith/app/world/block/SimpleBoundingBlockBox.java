@@ -1,16 +1,19 @@
 package gg.warcraft.monolith.app.world.block;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.World;
+import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import org.joml.Vector3ic;
 
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class SimpleBoundingBlockBox implements BoundingBlockBox {
+    private final WorldQueryService worldQueryService;
     private final World world;
     private final int minX;
     private final int maxX;
@@ -19,8 +22,12 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     private final int minZ;
     private final int maxZ;
 
-    public SimpleBoundingBlockBox(World world, Vector3ic minimumCorner, Vector3ic maximumCorner) {
-        this.world = world;
+    @Inject
+    public SimpleBoundingBlockBox(WorldQueryService worldQueryService, @Assisted WorldType world,
+                                  @Assisted("minimum") Vector3ic minimumCorner,
+                                  @Assisted("maximum") Vector3ic maximumCorner) {
+        this.worldQueryService = worldQueryService;
+        this.world = worldQueryService.getWorld(world);
         this.minX = Math.min(minimumCorner.x(), maximumCorner.x());
         this.maxX = Math.max(minimumCorner.x(), maximumCorner.x());
         this.minY = Math.min(minimumCorner.y(), maximumCorner.y());
@@ -77,37 +84,34 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
 
     @Override
     public Stream<Block> sliceX(int x) {
-        WorldQueryService test;
-        return IntStream
+        return Stream
                 .iterate(minY, currentY -> currentY + 1)
                 .limit(maxY - minY)
-                .flatMap(y -> IntStream
+                .flatMap(y -> Stream
                         .iterate(minZ, currentZ -> currentZ + 1)
-                        .limit(maxZ - minZ)
-                        .map(z -> test.getBlockAt(getWorld(), x, y, z)));
+                        .limit(maxZ - minZ + 1)
+                        .map(z -> worldQueryService.getBlockAt(getWorld().getType(), x, y, z)));
     }
 
     @Override
     public Stream<Block> sliceY(int y) {
-        WorldQueryService test;
-        return IntStream
+        return Stream
                 .iterate(minX, currentX -> currentX + 1)
                 .limit(maxX - minX)
-                .flatMap(x -> IntStream
+                .flatMap(x -> Stream
                         .iterate(minZ, currentZ -> currentZ + 1)
-                        .limit(maxZ - minZ)
-                        .map(z -> test.getBlockAt(getWorld(), x, y, z)));
+                        .limit(maxZ - minZ + 1)
+                        .map(z -> worldQueryService.getBlockAt(getWorld().getType(), x, y, z)));
     }
 
     @Override
     public Stream<Block> sliceZ(int z) {
-        WorldQueryService test;
-        return IntStream
+        return Stream
                 .iterate(minX, currentX -> currentX + 1)
                 .limit(maxX - minX)
-                .flatMap(x -> IntStream
+                .flatMap(x -> Stream
                         .iterate(minY, currentY -> currentY + 1)
-                        .limit(maxY - minY)
-                        .map(y -> test.getBlockAt(getWorld(), x, y, z)));
+                        .limit(maxY - minY + 1)
+                        .map(y -> worldQueryService.getBlockAt(getWorld().getType(), x, y, z)));
     }
 }
