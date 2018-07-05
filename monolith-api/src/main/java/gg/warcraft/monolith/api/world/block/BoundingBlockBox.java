@@ -1,7 +1,10 @@
 package gg.warcraft.monolith.api.world.block;
 
+import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.World;
+import org.joml.Vector3i;
 
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -45,6 +48,31 @@ public interface BoundingBlockBox extends Predicate<Block> {
      * @return The lower boundary of this bounding box.
      */
     int getLowerBoundary();
+
+    /**
+     * @param type The block types.
+     * @return All blocks of the given types within this bounding box.
+     */
+    List<Block> getBlocksOfType(BlockType... type);
+
+    /**
+     * @return A reader for this bounding box orientated towards the given direction.
+     */
+    BoundingBlockBoxReader getReader(Direction readDirection);
+
+    /**
+     * @param pivot   The block to rotate around. Can not be null.
+     * @param degrees The degrees of the rotation. Can be any multiple of 90. Positive degrees rotate clockwise,
+     *                negative degrees rotate counterclockwise.
+     * @return A copy of this bounding box rotated around the Y axis at the pivot by the specified degrees.
+     */
+    BoundingBlockBox rotateY(Block pivot, int degrees);
+
+    /**
+     * @param vector The translation.
+     * @return A copy of this bounding box translated by the specified vector.
+     */
+    BoundingBlockBox translate(Vector3i vector);
 
     /**
      * @return A lazy stream of all blocks within this bounding box.

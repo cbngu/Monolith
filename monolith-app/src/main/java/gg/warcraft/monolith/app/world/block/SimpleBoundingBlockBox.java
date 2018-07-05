@@ -3,18 +3,29 @@ package gg.warcraft.monolith.app.world.block;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.world.BlockLocation;
+import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
+import gg.warcraft.monolith.api.world.block.BoundingBlockBoxReader;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SimpleBoundingBlockBox implements BoundingBlockBox {
     private final WorldQueryService worldQueryService;
     private final World world;
+    private final Vector3ic minimumCorner;
+    private final Vector3ic maximumCorner;
     private final int minX;
     private final int maxX;
     private final int minY;
@@ -27,6 +38,8 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
                                   @Assisted("minimum") Vector3ic minimumCorner,
                                   @Assisted("maximum") Vector3ic maximumCorner) {
         this.worldQueryService = worldQueryService;
+        this.minimumCorner = minimumCorner;
+        this.maximumCorner = maximumCorner;
         this.world = worldQueryService.getWorld(world);
         this.minX = Math.min(minimumCorner.x(), maximumCorner.x());
         this.maxX = Math.max(minimumCorner.x(), maximumCorner.x());
@@ -80,6 +93,90 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     @Override
     public int getLowerBoundary() {
         return minY;
+    }
+
+    @Override
+    public List<Block> getBlocksOfType(BlockType... type) {
+        Set<BlockType> types = new HashSet<>(Arrays.asList(type));
+        return stream()
+                .filter(block -> types.contains(block.getType()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public BoundingBlockBoxReader getReader(Direction readDirection) {
+        return new SimpleBoundingBlockBoxReader(worldQueryService, this, readDirection);
+    }
+
+    @Override
+    public BoundingBlockBox rotateY(Block pivot, int degrees) {
+        int pivotX = pivot.getLocation().getX();
+        int pivotZ = pivot.getLocation().getZ();
+        int deltaNorthBoundary = pivotZ - getNorthBoundary();
+        int deltaEastBoundary = getEastBoundary() - pivotX;
+        int deltaSouthBoundary = getSouthBoundary() - pivotZ;
+        int deltaWestBoundary = pivotX - getWestBoundary();
+
+        // translate negative rotation to positive rotation
+        while (degrees < 0) {
+            degrees += 360;
+        }
+
+        // translate large rotation to predictable rotation
+        while (degrees >= 360) {
+            degrees -= 360;
+        }
+
+        if (degrees % 90 != 0) {
+            throw new IllegalArgumentException("Failed to rotate bounding block box for illegal rotation of " + degrees);
+        }
+
+        switch (degrees / 90) {
+            case 0:
+                return this;
+            case 1:
+                Vector3i newMinimumCorner90 = new Vector3i(
+                        pivotX - deltaSouthBoundary,
+                        getLowerBoundary(),
+                        pivotZ - deltaWestBoundary);
+                Vector3i newMaximumCorner90 = new Vector3i(
+                        pivotX + deltaNorthBoundary,
+                        getUpperBoundary(),
+                        pivotZ + deltaEastBoundary);
+                return new SimpleBoundingBlockBox(worldQueryService, world.getType(), newMinimumCorner90,
+                        newMaximumCorner90);
+            case 2:
+                Vector3i newMinimumCorner180 = new Vector3i(
+                        pivotX - deltaEastBoundary,
+                        getLowerBoundary(),
+                        pivotZ - deltaSouthBoundary);
+                Vector3i newMaximumCorner180 = new Vector3i(
+                        pivotX + deltaWestBoundary,
+                        getUpperBoundary(),
+                        pivotZ + deltaNorthBoundary);
+                return new SimpleBoundingBlockBox(worldQueryService, world.getType(), newMinimumCorner180,
+                        newMaximumCorner180);
+            case 3:
+                Vector3i newMinimumCorner270 = new Vector3i(
+                        pivotX - deltaNorthBoundary,
+                        getLowerBoundary(),
+                        pivotZ - deltaEastBoundary);
+                Vector3i newMaximumCorner270 = new Vector3i(
+                        pivotX + deltaSouthBoundary,
+                        getUpperBoundary(),
+                        pivotZ + deltaWestBoundary);
+                return new SimpleBoundingBlockBox(worldQueryService, world.getType(), newMinimumCorner270,
+                        newMaximumCorner270);
+            default:
+                throw new IllegalArgumentException("Failed to rotate bounding block box for illegal rotation of " + degrees);
+        }
+    }
+
+    @Override
+    public BoundingBlockBox translate(Vector3i vector) {
+        Vector3i newMinimumCorner = new Vector3i(minimumCorner).add(vector);
+        Vector3i newMaximumCorner = new Vector3i(maximumCorner).add(vector);
+        return new SimpleBoundingBlockBox(worldQueryService, world.getType(), newMinimumCorner, newMaximumCorner);
     }
 
     @Override
