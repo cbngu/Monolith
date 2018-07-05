@@ -47,6 +47,11 @@ public interface BoundingBlockBox extends Predicate<Block> {
     int getLowerBoundary();
 
     /**
+     * @return A lazy stream of all blocks within this bounding box.
+     */
+    Stream<Block> stream();
+
+    /**
      * @param x The x coordinate.
      * @return A lazy stream of all blocks within this bounding box with coordinate x.
      */

@@ -12,6 +12,13 @@ public interface BlockUtils {
 
     /**
      * @param block The block. Can not be null.
+     * @param type  The type. Can not be null.
+     * @return All blocks adjacent to the block of the specified type. Never null or empty.
+     */
+    Set<Block> getAdjacentBlocks(Block block, BlockType type);
+
+    /**
+     * @param block The block. Can not be null.
      * @return All blocks adjacent to the block along the X axis. Never null or empty.
      */
     Set<Block> getAdjacentBlocksX(Block block);

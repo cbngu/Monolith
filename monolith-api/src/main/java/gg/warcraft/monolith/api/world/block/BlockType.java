@@ -504,6 +504,25 @@ public enum BlockType {
         return types.get(id + ":" + adjustedData);
     }
 
+    /**
+     * @param type The type.
+     * @return True if the type is a door, false otherwise.
+     */
+    public static boolean isDoor(BlockType type) {
+        switch (type) {
+            case ACACIA_DOOR_BLOCK:
+            case BIRCH_DOOR_BLOCK:
+            case DARK_OAK_DOOR_BLOCK:
+            case IRON_DOOR_BLOCK:
+            case JUNGLE_DOOR_BLOCK:
+            case OAK_DOOR_BLOCK:
+            case SPRUCE_DOOR_BLOCK:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private final String type;
     private final int id;
     private final byte data;

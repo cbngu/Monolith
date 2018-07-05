@@ -83,6 +83,20 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     }
 
     @Override
+    public Stream<Block> stream() {
+        return Stream
+                .iterate(minX, currentX -> currentX + 1)
+                .limit(maxX - minX)
+                .flatMap(x -> Stream
+                        .iterate(minY, currentY -> currentY + 1)
+                        .limit(maxY - minY + 1)
+                        .flatMap(y -> Stream
+                                .iterate(minZ, currentZ -> currentZ + 1)
+                                .limit(maxZ - minZ + 1)
+                                .map(z -> worldQueryService.getBlockAt(getWorld().getType(), x, y, z))));
+    }
+
+    @Override
     public Stream<Block> sliceX(int x) {
         return Stream
                 .iterate(minY, currentY -> currentY + 1)

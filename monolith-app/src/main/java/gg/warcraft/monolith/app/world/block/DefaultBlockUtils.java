@@ -4,11 +4,13 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
+import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DefaultBlockUtils implements BlockUtils {
     private final WorldQueryService worldQueryService;
@@ -25,6 +27,13 @@ public class DefaultBlockUtils implements BlockUtils {
         adjacentBlocks.addAll(getAdjacentBlocksY(block));
         adjacentBlocks.addAll(getAdjacentBlocksZ(block));
         return adjacentBlocks;
+    }
+
+    @Override
+    public Set<Block> getAdjacentBlocks(Block block, BlockType type) {
+        return getAdjacentBlocks(block).stream()
+                .filter(adjacentBlock -> adjacentBlock.getType() == type)
+                .collect(Collectors.toSet());
     }
 
     @Override
