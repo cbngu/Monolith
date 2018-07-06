@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 public class SimpleBoundingBlockBox implements BoundingBlockBox {
     private final WorldQueryService worldQueryService;
     private final World world;
-    private final Vector3ic minimumCorner;
-    private final Vector3ic maximumCorner;
+    private final BlockLocation minimumCorner;
+    private final BlockLocation maximumCorner;
     private final int minX;
     private final int maxX;
     private final int minY;
@@ -38,9 +38,11 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
                                   @Assisted("minimum") Vector3ic minimumCorner,
                                   @Assisted("maximum") Vector3ic maximumCorner) {
         this.worldQueryService = worldQueryService;
-        this.minimumCorner = minimumCorner;
-        this.maximumCorner = maximumCorner;
         this.world = worldQueryService.getWorld(world);
+        this.minimumCorner = worldQueryService.getBlockLocation(world, minimumCorner.x(), minimumCorner.y(),
+                minimumCorner.z());
+        this.maximumCorner = worldQueryService.getBlockLocation(world, maximumCorner.x(), maximumCorner.y(),
+                maximumCorner.z());
         this.minX = Math.min(minimumCorner.x(), maximumCorner.x());
         this.maxX = Math.max(minimumCorner.x(), maximumCorner.x());
         this.minY = Math.min(minimumCorner.y(), maximumCorner.y());
@@ -52,6 +54,10 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     @Override
     public boolean test(Block block) {
         BlockLocation location = block.getLocation();
+        if (location.getWorld().getType() != world.getType()) {
+            return false;
+        }
+
         int x = location.getX();
         int y = location.getY();
         int z = location.getZ();
@@ -63,6 +69,16 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     @Override
     public World getWorld() {
         return world;
+    }
+
+    @Override
+    public BlockLocation getMinimumCorner() {
+        return minimumCorner;
+    }
+
+    @Override
+    public BlockLocation getMaximumCorner() {
+        return maximumCorner;
     }
 
     @Override
@@ -174,8 +190,8 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
 
     @Override
     public BoundingBlockBox translate(Vector3i vector) {
-        Vector3i newMinimumCorner = new Vector3i(minimumCorner).add(vector);
-        Vector3i newMaximumCorner = new Vector3i(maximumCorner).add(vector);
+        Vector3i newMinimumCorner = new Vector3i(minimumCorner.toVector()).add(vector);
+        Vector3i newMaximumCorner = new Vector3i(maximumCorner.toVector()).add(vector);
         return new SimpleBoundingBlockBox(worldQueryService, world.getType(), newMinimumCorner, newMaximumCorner);
     }
 
@@ -183,7 +199,7 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     public Stream<Block> stream() {
         return Stream
                 .iterate(minX, currentX -> currentX + 1)
-                .limit(maxX - minX)
+                .limit(maxX - minX + 1)
                 .flatMap(x -> Stream
                         .iterate(minY, currentY -> currentY + 1)
                         .limit(maxY - minY + 1)
@@ -197,7 +213,7 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     public Stream<Block> sliceX(int x) {
         return Stream
                 .iterate(minY, currentY -> currentY + 1)
-                .limit(maxY - minY)
+                .limit(maxY - minY + 1)
                 .flatMap(y -> Stream
                         .iterate(minZ, currentZ -> currentZ + 1)
                         .limit(maxZ - minZ + 1)
@@ -208,7 +224,7 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     public Stream<Block> sliceY(int y) {
         return Stream
                 .iterate(minX, currentX -> currentX + 1)
-                .limit(maxX - minX)
+                .limit(maxX - minX + 1)
                 .flatMap(x -> Stream
                         .iterate(minZ, currentZ -> currentZ + 1)
                         .limit(maxZ - minZ + 1)
@@ -219,7 +235,7 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     public Stream<Block> sliceZ(int z) {
         return Stream
                 .iterate(minX, currentX -> currentX + 1)
-                .limit(maxX - minX)
+                .limit(maxX - minX + 1)
                 .flatMap(x -> Stream
                         .iterate(minY, currentY -> currentY + 1)
                         .limit(maxY - minY + 1)

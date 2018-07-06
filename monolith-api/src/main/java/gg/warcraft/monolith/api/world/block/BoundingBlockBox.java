@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.api.world.block;
 
+import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.World;
 import org.joml.Vector3i;
@@ -18,6 +19,16 @@ public interface BoundingBlockBox extends Predicate<Block> {
      * @return The world this bounding box is in.
      */
     World getWorld();
+
+    /**
+     * @return The minimum corner of this bounding box.
+     */
+    BlockLocation getMinimumCorner();
+
+    /**
+     * @return The maximum corner of this bounding box.
+     */
+    BlockLocation getMaximumCorner();
 
     /**
      * @return The north boundary of this bounding box.
