@@ -6,6 +6,7 @@ import gg.warcraft.monolith.api.world.OrientedLocation;
 import org.joml.Vector3f;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 public class SimpleEntityServerData implements EntityServerData {
     private final UUID entityId;
@@ -13,14 +14,17 @@ public class SimpleEntityServerData implements EntityServerData {
     private final OrientedLocation location;
     private final OrientedLocation eyeLocation;
     private final Vector3f velocity;
+    private final Function<String, Boolean> hasPermission;
 
     public SimpleEntityServerData(UUID entityId, EntityType type, OrientedLocation location,
-                                  OrientedLocation eyeLocation, Vector3f velocity) {
+                                  OrientedLocation eyeLocation, Vector3f velocity,
+                                  Function<String, Boolean> hasPermission) {
         this.entityId = entityId;
         this.type = type;
         this.location = location;
         this.eyeLocation = eyeLocation;
         this.velocity = velocity;
+        this.hasPermission = hasPermission;
     }
 
     @Override
@@ -46,5 +50,10 @@ public class SimpleEntityServerData implements EntityServerData {
     @Override
     public Vector3f getVelocity() {
         return velocity;
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return hasPermission.apply(permission);
     }
 }

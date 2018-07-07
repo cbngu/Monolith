@@ -45,7 +45,8 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
         float x = (float) velocity.getX();
         float y = (float) velocity.getY();
         float z = (float) velocity.getZ();
-        return new SimpleEntityServerData(entity.getUniqueId(), type, location, eyeLocation, new Vector3f(x, y, z));
+        return new SimpleEntityServerData(entity.getUniqueId(), type, location, eyeLocation, new Vector3f(x, y, z),
+                entity::hasPermission);
     }
 
     @Override
@@ -83,7 +84,8 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     public void addPotionEffect(UUID entityId, PotionEffect effect) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
-            // TODO: add potion effect
+            // TODO: implement
+            throw new IllegalStateException("Failed to add potion effect: method not implemented.");
         }
     }
 
@@ -91,7 +93,8 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     public void removePotionEffect(UUID entityId, PotionType type) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
-            // TODO: remove potion effect
+            // TODO: implement
+            throw new IllegalStateException("Failed to remove potion effect: method not implemented.");
         }
     }
 

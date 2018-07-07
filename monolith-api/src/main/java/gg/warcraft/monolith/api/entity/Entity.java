@@ -42,7 +42,19 @@ public interface Entity {
      */
     Team getTeam();
 
+    /**
+     * @return The attributes of this entity. Never null.
+     */
     Attributes getAttributes();
 
+    /**
+     * @return The status of this entity. Never null.
+     */
     Status getStatus();
+
+    /**
+     * @param permission The permission. Can not be null or empty.
+     * @return True if the entity has the permission favorably set, false otherwise.
+     */
+    boolean hasPermission(String permission);
 }

@@ -67,4 +67,9 @@ public class LazyEntity implements Entity {
     public Status getStatus() {
         return status.get();
     }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return serverData.get().hasPermission(permission);
+    }
 }

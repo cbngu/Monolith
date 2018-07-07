@@ -8,27 +8,33 @@ import java.util.UUID;
 public interface EntityServerData {
 
     /**
-     * @return The id of the entity this data belongs to. Never null.
+     * @return The id of the entity. Never null.
      */
     UUID getEntityId();
 
     /**
-     * @return The type of the entity this data belongs to. Never null.
+     * @return The type of the entity. Never null.
      */
     EntityType getType();
 
     /**
-     * @return The location of the entity this data belongs to. Never null.
+     * @return The location of the entity. Never null.
      */
     OrientedLocation getLocation();
 
     /**
-     * @return The eye location of the entity this data belongs to. Never null.
+     * @return The eye location of the entity. Never null.
      */
     OrientedLocation getEyeLocation();
 
     /**
-     * @return The velocity of the entity this data belongs to. Never null.
+     * @return The velocity of the entity. Never null.
      */
     Vector3f getVelocity();
+
+    /**
+     * @param permission The permission. Can not be null or empty.
+     * @return True if the entity has the permission favorably set, false otherwise.
+     */
+    boolean hasPermission(String permission);
 }
