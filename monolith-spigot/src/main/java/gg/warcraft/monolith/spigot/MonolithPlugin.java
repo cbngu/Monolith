@@ -1,18 +1,17 @@
 package gg.warcraft.monolith.spigot;
 
-import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import gg.warcraft.monolith.api.Monolith;
-import gg.warcraft.monolith.api.MonolithModule;
 import gg.warcraft.monolith.app.AbstractMonolithModule;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class MonolithPlugin extends JavaPlugin {
 
@@ -26,8 +25,11 @@ public class MonolithPlugin extends JavaPlugin {
     }
 
     void initializeInjector() {
-        ServiceLoader<MonolithModule> monolithModuleLoader = ServiceLoader.load(MonolithModule.class);
-        List<MonolithModule> monolithModules = Lists.newArrayList(monolithModuleLoader.iterator());
+        List<AbstractModule> monolithModules = Monolith.getModules();
+        List<String> monolithModuleNames = monolithModules.stream()
+                .map(module -> module.getClass().getSimpleName())
+                .collect(Collectors.toList());
+        getLogger().info("Found " + monolithModules.size() + " Monolith modules: " + monolithModuleNames);
         Injector injector = Guice.createInjector(monolithModules);
         new Monolith(injector);
     }
@@ -70,6 +72,8 @@ public class MonolithPlugin extends JavaPlugin {
         SpigotMonolithModule.setOverworldName(overworldName);
         SpigotMonolithModule.setTheNetherName(theNetherName);
         SpigotMonolithModule.setTheEndName(theEndName);
+
+        Monolith.registerModule(new SpigotMonolithModule());
 
         initializeInjector();
     }

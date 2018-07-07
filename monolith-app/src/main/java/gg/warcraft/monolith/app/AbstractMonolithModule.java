@@ -1,9 +1,9 @@
 package gg.warcraft.monolith.app;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
-import gg.warcraft.monolith.api.MonolithModule;
 import gg.warcraft.monolith.api.command.CommandSender;
 import gg.warcraft.monolith.api.command.Console;
 import gg.warcraft.monolith.api.command.service.CommandCommandService;
@@ -69,7 +69,7 @@ import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-public class AbstractMonolithModule extends MonolithModule {
+public class AbstractMonolithModule extends AbstractModule {
     private static String persistenceService;
     private static String redisHost;
     private static int redisPort;

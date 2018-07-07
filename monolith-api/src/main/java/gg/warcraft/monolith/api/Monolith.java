@@ -1,6 +1,10 @@
 package gg.warcraft.monolith.api;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Monolith is the gateway to all other implementations. It allows you to retrieve the injector used to provide all
@@ -11,10 +15,20 @@ import com.google.inject.Injector;
  * child injector if you have modules to add of your own.
  */
 public class Monolith {
+    private static final List<AbstractModule> modules = new ArrayList<>();
+
     private static Monolith instance;
 
     public static Monolith getInstance() {
         return instance;
+    }
+
+    public static List<AbstractModule> getModules() {
+        return new ArrayList<>(modules);
+    }
+
+    public static void registerModule(AbstractModule module) {
+        modules.add(module);
     }
 
     private final Injector injector;
