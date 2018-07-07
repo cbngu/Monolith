@@ -38,11 +38,14 @@ public class Monolith {
         if (Monolith.instance == null) {
             Monolith.instance = this;
         } else {
-            throw new IllegalStateException("Monolith can not be instantiated twice.");
+            throw new IllegalStateException("Monolith can not be instantiated twice. Use the static getInstance method instead.");
         }
     }
 
     public Injector getInjector() {
+        if (injector == null) {
+            throw new IllegalStateException("Monolith injector was requested without being initialized. Did Monolith load correctly?");
+        }
         return injector;
     }
 }
