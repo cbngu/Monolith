@@ -1,7 +1,6 @@
 package gg.warcraft.monolith.app;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import gg.warcraft.monolith.api.command.CommandSender;
@@ -136,13 +135,14 @@ public class AbstractMonolithModule extends AbstractModule {
                 bind(ConfigurationCommandService.class).to(GitHubConfigurationCommandService.class);
                 bind(ConfigurationQueryService.class).to(DefaultConfigurationQueryService.class);
                 bind(ConfigurationRepository.class).to(DefaultConfigurationRepository.class);
+                break;
             default:
-                throw new IllegalArgumentException("Illegal configurationService in Monolith configuration: " + configurationService);
+                throw new IllegalArgumentException("Illegal configuration service in Monolith configuration: " + configurationService);
         }
     }
 
     private void configureCore() {
-        bind(EventService.class).to(GuavaEventService.class).in(Singleton.class);
+        bind(EventService.class).to(GuavaEventService.class);
     }
 
     private void configureEffect() {
@@ -187,10 +187,10 @@ public class AbstractMonolithModule extends AbstractModule {
                 jedisConfiguration.setMaxTotal(8);
                 JedisPool jedisPool = new JedisPool(jedisConfiguration, redisHost, redisPort, 10);
                 bind(JedisPool.class).toInstance(jedisPool);
-
                 bind(PersistenceService.class).to(JedisPersistenceService.class);
+                break;
             default:
-                throw new IllegalArgumentException("Illegal persistenceService in Monolith configuration: " + persistenceService);
+                throw new IllegalArgumentException("Illegal persistence service in Monolith configuration: " + persistenceService);
         }
     }
 

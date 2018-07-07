@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 /**
  * BoundingBlockBox is a utility class that allows consumers to test whether a given {@code Block} lies within the
- * bounding box. BoundingBlockBox objects can be instantiated using {@code MathUtils#createBoundingBlockBox}.
+ * bounding box.
  */
 public interface BoundingBlockBox extends Predicate<Block> {
 

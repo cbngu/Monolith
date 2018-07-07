@@ -5,21 +5,18 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import gg.warcraft.monolith.api.Monolith;
 import gg.warcraft.monolith.app.AbstractMonolithModule;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class MonolithPlugin extends JavaPlugin {
 
     void shutdownIfFirstTimeSetup(boolean isFirstTimeSetup) {
         if (isFirstTimeSetup) {
-            Logger logger = Bukkit.getLogger();
-            logger.severe("Monolith has not been configured yet, shutting down server.");
-            logger.severe("If you have finished configuration make sure to set firstTimeSetup to false.");
+            getLogger().severe("Monolith has not been configured yet, shutting down server.");
+            getLogger().severe("If you have finished configuration make sure to set firstTimeSetup to false.");
             getServer().shutdown();
         }
     }
@@ -68,7 +65,7 @@ public class MonolithPlugin extends JavaPlugin {
         String overworldName = localConfig.getString("worldName");
         String theNetherName = localConfig.getString("theNetherName");
         String theEndName = localConfig.getString("theEndName");
-        SpigotMonolithModule.setPlugin(this);
+        SpigotMonolithModule.setPluginSupplier(() -> getPlugin(MonolithPlugin.class));
         SpigotMonolithModule.setOverworldName(overworldName);
         SpigotMonolithModule.setTheNetherName(theNetherName);
         SpigotMonolithModule.setTheEndName(theEndName);

@@ -19,6 +19,7 @@ import gg.warcraft.monolith.spigot.core.SpigotTaskService;
 import gg.warcraft.monolith.spigot.entity.adapter.SpigotEntityAdapter;
 import gg.warcraft.monolith.spigot.entity.player.adapter.SpigotPlayerAdapter;
 import gg.warcraft.monolith.spigot.particle.ColorParticle;
+import gg.warcraft.monolith.spigot.particle.SimpleParticle;
 import gg.warcraft.monolith.spigot.particle.SpeedParticle;
 import gg.warcraft.monolith.spigot.world.Overworld;
 import gg.warcraft.monolith.spigot.world.TheEnd;
@@ -28,14 +29,16 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
+import java.util.function.Supplier;
+
 public class SpigotMonolithModule extends AbstractMonolithModule {
-    private static Plugin plugin;
+    private static Supplier<Plugin> pluginSupplier;
     private static String overworldName;
     private static String theNetherName;
     private static String theEndName;
 
-    public static void setPlugin(Plugin plugin) {
-        SpigotMonolithModule.plugin = plugin;
+    public static void setPluginSupplier(Supplier<Plugin> pluginSupplier) {
+        SpigotMonolithModule.pluginSupplier = pluginSupplier;
     }
 
     public static void setOverworldName(String overworldName) {
@@ -61,11 +64,14 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     }
 
     private void configureBukkit() {
-        bind(Plugin.class).toInstance(plugin);
-        bind(Server.class).toProvider(plugin::getServer);
-        bind(World.class).annotatedWith(Overworld.class).toProvider(() -> plugin.getServer().getWorld(overworldName));
-        bind(World.class).annotatedWith(TheNether.class).toProvider(() -> plugin.getServer().getWorld(theNetherName));
-        bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> plugin.getServer().getWorld(theEndName));
+        bind(Plugin.class).toProvider(pluginSupplier::get);
+        bind(Server.class).toProvider(() -> pluginSupplier.get().getServer());
+        bind(World.class).annotatedWith(Overworld.class).toProvider(() ->
+                pluginSupplier.get().getServer().getWorld(overworldName));
+        bind(World.class).annotatedWith(TheNether.class).toProvider(() ->
+                pluginSupplier.get().getServer().getWorld(theNetherName));
+        bind(World.class).annotatedWith(TheEnd.class).toProvider(() ->
+                pluginSupplier.get().getServer().getWorld(theEndName));
     }
 
     private void configureCommand() {
@@ -79,6 +85,7 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
 
     private void configureEffect() {
         install(new FactoryModuleBuilder()
+                .implement(Particle.class, Names.named("simple"), SimpleParticle.class)
                 .implement(Particle.class, Names.named("color"), ColorParticle.class)
                 .implement(Particle.class, Names.named("speed"), SpeedParticle.class)
                 .implement(Particle.class, Names.named("multi"), MultiParticle.class)

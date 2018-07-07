@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.item;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.entity.attribute.Attribute;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.item.ItemReader;
@@ -11,7 +13,8 @@ public class SimpleItemReader implements ItemReader {
 
     private final Item item;
 
-    public SimpleItemReader(Item item) {
+    @Inject
+    public SimpleItemReader(@Assisted Item item) {
         this.item = item;
     }
 

@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.app.item;
 
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.item.ItemBuilder;
 import gg.warcraft.monolith.api.item.ItemType;
@@ -18,7 +19,7 @@ public class SimpleItemBuilder implements ItemBuilder {
     private List<String> lore;
 
     @Inject
-    public SimpleItemBuilder(ItemType type, String name) {
+    public SimpleItemBuilder(@Assisted ItemType type, @Assisted String name) {
         this.type = type;
         this.name = name;
         this.stackSize = 1;

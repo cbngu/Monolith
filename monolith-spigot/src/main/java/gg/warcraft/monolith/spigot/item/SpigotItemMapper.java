@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.spigot.item;
 
+import com.google.inject.Inject;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.spigot.world.MaterialData;
 import org.bukkit.inventory.ItemStack;
@@ -7,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public class SpigotItemMapper {
     private final SpigotItemTypeMapper itemTypeMapper;
 
+    @Inject
     public SpigotItemMapper(SpigotItemTypeMapper itemTypeMapper) {
         this.itemTypeMapper = itemTypeMapper;
     }

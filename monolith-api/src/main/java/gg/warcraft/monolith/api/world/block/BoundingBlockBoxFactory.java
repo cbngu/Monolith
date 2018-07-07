@@ -2,9 +2,7 @@ package gg.warcraft.monolith.api.world.block;
 
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.world.WorldType;
-import org.joml.Vector3i;
-
-import java.util.function.Predicate;
+import org.joml.Vector3ic;
 
 /**
  * This factory is injectable.
@@ -12,7 +10,7 @@ import java.util.function.Predicate;
  * BoundingBlockBoxFactory serves as a point of entry into the world implementation. It allows for easy creation of
  * {@code BoundingBlockBox} objects.
  */
-public interface BoundingBlockBoxFactory extends Predicate<Block> {
+public interface BoundingBlockBoxFactory {
 
     /**
      * Creates a new {@code BoundingBlockBox} using the specified minimum and maximum corners.
@@ -26,6 +24,6 @@ public interface BoundingBlockBoxFactory extends Predicate<Block> {
      * @param maximumCorner The maximum corner ,inclusive, of the bounding box.
      * @return A new {@code BoundingBlockBox} with boundaries at the specified corners. Never null.
      */
-    BoundingBlockBox createBoundingBlockBox(WorldType world, @Assisted("minimum") Vector3i minimumCorner,
-                                            @Assisted("maximum") Vector3i maximumCorner);
+    BoundingBlockBox createBoundingBlockBox(WorldType world, @Assisted("minimum") Vector3ic minimumCorner,
+                                            @Assisted("maximum") Vector3ic maximumCorner);
 }
