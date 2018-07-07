@@ -58,19 +58,14 @@ public class SimpleBoundingBlockBoxReaderTest {
         Block mockBlock11 = mock(Block.class);
         when(mockBlock11.getType()).thenReturn(BlockType.AIR);
         Block mockBlock12 = mock(Block.class);
-        when(mockBlock12.getType()).thenReturn(BlockType.GRASS);
         Block mockBlock13 = mock(Block.class);
         when(mockBlock13.getType()).thenReturn(BlockType.DIRT);
         Block mockBlock21 = mock(Block.class);
-        when(mockBlock21.getType()).thenReturn(BlockType.STONE);
         Block mockBlock22 = mock(Block.class);
-        when(mockBlock22.getType()).thenReturn(BlockType.GLASS);
         Block mockBlock23 = mock(Block.class);
-        when(mockBlock23.getType()).thenReturn(BlockType.STILL_WATER);
         Block mockBlock31 = mock(Block.class);
         when(mockBlock31.getType()).thenReturn(BlockType.STILL_LAVA);
         Block mockBlock32 = mock(Block.class);
-        when(mockBlock32.getType()).thenReturn(BlockType.FLOWER_POT);
         Block mockBlock33 = mock(Block.class);
         when(mockBlock33.getType()).thenReturn(BlockType.VINES);
 

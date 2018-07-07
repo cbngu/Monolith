@@ -32,7 +32,11 @@ public class SimpleBoundingBlockBoxTest {
     @Before
     public void beforeEach() {
         WorldType world = WorldType.OVERWORLD;
+        when(mockWorld.getType()).thenReturn(WorldType.OVERWORLD);
         when(mockWorldQueryService.getWorld(world)).thenReturn(mockWorld);
+
+        when(mockBlockLocation.getWorld()).thenReturn(mockWorld);
+        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         Vector3i minimumCorner = new Vector3i(0, 0, 0);
         Vector3i maximumCorner = new Vector3i(9, 9, 9);
@@ -50,7 +54,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         boolean result = simpleBoundingBlockBox.test(mockBlock);
@@ -65,7 +68,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(0);
         when(mockBlockLocation.getY()).thenReturn(0);
         when(mockBlockLocation.getZ()).thenReturn(0);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         boolean result = simpleBoundingBlockBox.test(mockBlock);
@@ -80,7 +82,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(20);
         when(mockBlockLocation.getY()).thenReturn(20);
         when(mockBlockLocation.getZ()).thenReturn(20);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         boolean result = simpleBoundingBlockBox.test(mockBlock);
@@ -95,7 +96,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 0);
@@ -115,7 +115,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 90);
@@ -135,7 +134,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 180);
@@ -155,7 +153,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 270);
@@ -175,7 +172,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 2700);
@@ -195,7 +191,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, -90);
@@ -215,7 +210,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, -2070);
@@ -235,7 +229,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getX()).thenReturn(1);
         when(mockBlockLocation.getY()).thenReturn(1);
         when(mockBlockLocation.getZ()).thenReturn(1);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         // When
         simpleBoundingBlockBox.rotateY(mockBlock, 60);
