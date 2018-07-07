@@ -4,7 +4,7 @@ import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityData;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
-import gg.warcraft.monolith.api.entity.Faction;
+import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.status.Status;
 import gg.warcraft.monolith.api.util.Lazy;
@@ -54,8 +54,8 @@ public class LazyEntity implements Entity {
     }
 
     @Override
-    public Faction getFaction() {
-        return data.get().getFaction();
+    public Team getTeam() {
+        return data.get().getTeam();
     }
 
     @Override

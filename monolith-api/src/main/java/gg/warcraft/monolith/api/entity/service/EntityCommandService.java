@@ -1,7 +1,7 @@
 package gg.warcraft.monolith.api.entity.service;
 
 import gg.warcraft.monolith.api.entity.EntityType;
-import gg.warcraft.monolith.api.entity.Faction;
+import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
@@ -26,9 +26,9 @@ public interface EntityCommandService {
 
     /**
      * @param entityId The id of the entity. Can not be null.
-     * @param faction  The new faction of the entity. Can not be null.
+     * @param team     The new team of the entity. Can not be null.
      */
-    void setFaction(UUID entityId, Faction faction);
+    void setTeam(UUID entityId, Team team);
 
     /**
      * @param entityId The id of the entity. Can not be null.
@@ -38,7 +38,7 @@ public interface EntityCommandService {
 
     /**
      * @param entityId The id of the entity. Can not be null.
-     * @param effect   The potion effect to remove from the entity. Can not be null.
+     * @param type     The potion effect type to remove from the entity. Can not be null.
      */
     void removePotionEffect(UUID entityId, PotionType type);
 
@@ -46,7 +46,7 @@ public interface EntityCommandService {
      * @param type          The type of entity to spawn. Can not be null.
      * @param spawnLocation The location to spawn the entity at. Can not be null.
      */
-    void spawnEntity(EntityType entityType, Location spawnLocation);
+    void spawnEntity(EntityType type, Location spawnLocation);
 
     /**
      * @param entityId The id of the entity. Can not be null.
@@ -82,9 +82,9 @@ public interface EntityCommandService {
     /**
      * Knocks an entity back a distance from a point of impact.
      *
-     * @param entityId  The id of the entity.
-     * @param direction The direction.
-     * @param distance  The distance in blocks.
+     * @param entityId The id of the entity.
+     * @param source   The source of the knockback.
+     * @param distance The distance in blocks.
      */
     void knockback(UUID entityId, Location source, float distance);
 

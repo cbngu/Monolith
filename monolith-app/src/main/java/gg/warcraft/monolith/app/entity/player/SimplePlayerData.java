@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.app.entity.player;
 
-import gg.warcraft.monolith.api.entity.Faction;
+import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.player.PlayerData;
 
 import java.util.UUID;
@@ -12,17 +12,17 @@ public class SimplePlayerData implements PlayerData {
     private final long timeOfConnect;
     private final long timeOfFirstConnect;
     private final long timePlayed;
-    private final Faction faction;
+    private final Team team;
 
     public SimplePlayerData(UUID playerId, String minecraftName, String displayName, long timeOfConnect,
-                            long timeOfFirstConnect, long timePlayed, Faction faction) {
+                            long timeOfFirstConnect, long timePlayed, Team team) {
         this.playerId = playerId;
         this.minecraftName = minecraftName;
         this.displayName = displayName;
         this.timeOfConnect = timeOfConnect;
         this.timeOfFirstConnect = timeOfFirstConnect;
         this.timePlayed = timePlayed;
-        this.faction = faction;
+        this.team = team;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SimplePlayerData implements PlayerData {
     }
 
     @Override
-    public Faction getFaction() {
-        return faction;
+    public Team getTeam() {
+        return team;
     }
 }

@@ -8,12 +8,12 @@ import java.util.UUID;
 public interface EntityData {
 
     /**
-     * @return The id of the entity this data belongs to. Never null.
+     * @return The id of the entity. Never null.
      */
     UUID getEntityId();
 
     /**
-     * @return The faction of the entity this data belongs to. Can be null.
+     * @return The team of the entity. Can be null.
      */
-    Faction getFaction();
+    Team getTeam();
 }

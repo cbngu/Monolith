@@ -38,9 +38,9 @@ public interface Entity {
     Vector3f getVelocity();
 
     /**
-     * @return The faction of this entity. Can be null.
+     * @return The team of this entity. Can be null.
      */
-    Faction getFaction();
+    Team getTeam();
 
     Attributes getAttributes();
 
