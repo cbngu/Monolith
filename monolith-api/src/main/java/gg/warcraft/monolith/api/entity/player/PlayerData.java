@@ -36,6 +36,11 @@ public interface PlayerData extends EntityData {
     long getTimeOfFirstConnect();
 
     /**
+     * @return The unix timestamp in milliseconds when this player was last seen on the server.
+     */
+    long getTimeLastSeen();
+
+    /**
      * @return The total amount of time in milliseconds this player has played on the server.
      */
     long getTimePlayed();
