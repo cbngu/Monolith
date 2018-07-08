@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.persistence;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import gg.warcraft.monolith.api.persistence.YamlMapper;
@@ -10,7 +11,9 @@ public class JacksonYamlMapper implements YamlMapper {
     private final ObjectMapper mapper;
 
     public JacksonYamlMapper() {
-        this.mapper = new ObjectMapper(new YAMLFactory());
+        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+        yamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.mapper = yamlMapper;
     }
 
     @Override
@@ -18,7 +21,7 @@ public class JacksonYamlMapper implements YamlMapper {
         try {
             return mapper.readValue(yaml, to);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to parse YAML '" + yaml + "'", ex.getCause());
+            throw new IllegalArgumentException("Failed to parse YAML: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -27,7 +30,7 @@ public class JacksonYamlMapper implements YamlMapper {
         try {
             return mapper.readValue(yaml, to);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to read YAML '" + yaml + "'", ex.getCause());
+            throw new IllegalArgumentException("Failed to read YAML: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -36,7 +39,7 @@ public class JacksonYamlMapper implements YamlMapper {
         try {
             return mapper.writeValueAsString(object);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to create YAML from '" + object + "'", ex.getCause());
+            throw new IllegalArgumentException("Failed to create YAML: " + ex.getMessage(), ex.getCause());
         }
     }
 }

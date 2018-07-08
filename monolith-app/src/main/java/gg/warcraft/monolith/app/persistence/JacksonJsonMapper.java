@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.app.persistence;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gg.warcraft.monolith.api.persistence.JsonMapper;
 
@@ -10,7 +11,9 @@ public class JacksonJsonMapper implements JsonMapper {
     private final ObjectMapper mapper;
 
     public JacksonJsonMapper() {
-        this.mapper = new ObjectMapper(new JsonFactory());
+        ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
+        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.mapper = jsonMapper;
     }
 
     @Override
@@ -18,7 +21,7 @@ public class JacksonJsonMapper implements JsonMapper {
         try {
             return mapper.readValue(json, to);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to parse JSON '" + json + "'", ex.getCause());
+            throw new IllegalArgumentException("Failed to parse JSON: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -27,7 +30,7 @@ public class JacksonJsonMapper implements JsonMapper {
         try {
             return mapper.readValue(json, to);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to read JSON '" + json + "'", ex.getCause());
+            throw new IllegalArgumentException("Failed to read JSON: " + ex.getMessage(), ex.getCause());
         }
     }
 
@@ -36,7 +39,7 @@ public class JacksonJsonMapper implements JsonMapper {
         try {
             return mapper.writeValueAsString(object);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed to create JSON from '" + object + "'", ex.getCause());
+            throw new IllegalArgumentException("Failed to create JSON: " + ex.getMessage(), ex.getCause());
         }
     }
 }
