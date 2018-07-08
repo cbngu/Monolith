@@ -37,7 +37,7 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
         this.locationMapper = locationMapper;
     }
 
-    EntityServerData createEntityData(LivingEntity entity) {
+    EntityServerData createEntityServerData(LivingEntity entity) {
         EntityType type = entityTypeMapper.map(entity.getType());
         OrientedLocation location = locationMapper.map(entity);
         OrientedLocation eyeLocation = locationMapper.mapEye(entity);
@@ -53,7 +53,7 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     public EntityServerData getEntityServerData(UUID entityId) {
         Entity entity = server.getEntity(entityId);
         if (entity instanceof LivingEntity) {
-            return createEntityData((LivingEntity) entity);
+            return createEntityServerData((LivingEntity) entity);
         }
         return null;
     }
@@ -67,7 +67,7 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
                 .filter(entity -> entity.getType() != org.bukkit.entity.EntityType.PLAYER ||
                         ((Player) entity).getGameMode() != GameMode.CREATIVE)
                 .map(entity -> (LivingEntity) entity)
-                .map(this::createEntityData)
+                .map(this::createEntityServerData)
                 .collect(Collectors.toList());
     }
 

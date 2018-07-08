@@ -51,11 +51,17 @@ persistenceService: REDIS
 redisHost: 127.0.0.1
 redisPort: 6379
 
+# ENTITY SERVICE
+# Options: [DEFAULT, CUSTOM]
+# ------------------------------------------------------------
+#
+entityService: DEFAULT
+
 # WORLD SERVICE
 # ------------------------------------------------------------
 #
 worldName: world
-theNetherName: world_the_nether
+theNetherName: world_nether
 theEndName: world_the_end
 spawn:
   world: world

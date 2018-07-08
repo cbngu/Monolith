@@ -29,28 +29,21 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
-import java.util.function.Supplier;
-
 public class SpigotMonolithModule extends AbstractMonolithModule {
-    private static Supplier<Plugin> pluginSupplier;
-    private static String overworldName;
-    private static String theNetherName;
-    private static String theEndName;
+    private final Plugin plugin;
+    private final String overworldName;
+    private final String theNetherName;
+    private final String theEndName;
 
-    public static void setPluginSupplier(Supplier<Plugin> pluginSupplier) {
-        SpigotMonolithModule.pluginSupplier = pluginSupplier;
-    }
-
-    public static void setOverworldName(String overworldName) {
-        SpigotMonolithModule.overworldName = overworldName;
-    }
-
-    public static void setTheNetherName(String theNetherName) {
-        SpigotMonolithModule.theNetherName = theNetherName;
-    }
-
-    public static void setTheEndName(String theEndName) {
-        SpigotMonolithModule.theEndName = theEndName;
+    public SpigotMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
+                                String persistenceService, String redisHost, int redisPort,
+                                String entityService, Plugin plugin,
+                                String overworldName, String theNetherName, String theEndName) {
+        super(configurationService, gitHubAccount, gitHubRepository, persistenceService, redisHost, redisPort, entityService);
+        this.plugin = plugin;
+        this.overworldName = overworldName;
+        this.theNetherName = theNetherName;
+        this.theEndName = theEndName;
     }
 
     protected void configure() {
@@ -64,14 +57,11 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     }
 
     private void configureBukkit() {
-        bind(Plugin.class).toProvider(pluginSupplier::get);
-        bind(Server.class).toProvider(() -> pluginSupplier.get().getServer());
-        bind(World.class).annotatedWith(Overworld.class).toProvider(() ->
-                pluginSupplier.get().getServer().getWorld(overworldName));
-        bind(World.class).annotatedWith(TheNether.class).toProvider(() ->
-                pluginSupplier.get().getServer().getWorld(theNetherName));
-        bind(World.class).annotatedWith(TheEnd.class).toProvider(() ->
-                pluginSupplier.get().getServer().getWorld(theEndName));
+        bind(Plugin.class).toInstance(plugin);
+        bind(Server.class).toProvider(plugin::getServer);
+        bind(World.class).annotatedWith(Overworld.class).toProvider(() -> plugin.getServer().getWorld(overworldName));
+        bind(World.class).annotatedWith(TheNether.class).toProvider(() -> plugin.getServer().getWorld(theNetherName));
+        bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> plugin.getServer().getWorld(theEndName));
     }
 
     private void configureCommand() {

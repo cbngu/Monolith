@@ -4,22 +4,26 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import gg.warcraft.monolith.api.Monolith;
-import gg.warcraft.monolith.app.AbstractMonolithModule;
+import gg.warcraft.monolith.api.core.EventService;
+import gg.warcraft.monolith.app.command.ConsoleCommandSender;
+import gg.warcraft.monolith.app.command.PlayerCommandSender;
+import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
+import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
+import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
+import gg.warcraft.monolith.spigot.event.SpigotPlayerEventMapper;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MonolithPlugin extends JavaPlugin {
-
-    void shutdownIfFirstTimeSetup(boolean isFirstTimeSetup) {
-        if (isFirstTimeSetup) {
-            getLogger().severe("Monolith has not been configured yet, shutting down server.");
-            getLogger().severe("If you have finished configuration make sure to set firstTimeSetup to false.");
-            getServer().shutdown();
-        }
-    }
+    private Injector injector;
+    private EventService eventService;
 
     void initializeInjector() {
         List<AbstractModule> monolithModules = Monolith.getModules();
@@ -29,6 +33,19 @@ public class MonolithPlugin extends JavaPlugin {
         getLogger().info("Found " + monolithModules.size() + " Monolith modules: " + monolithModuleNames);
         Injector injector = Guice.createInjector(monolithModules);
         new Monolith(injector);
+    }
+
+    void initializeMonolithEventHandlers() {
+        CommandExecutedHandler commandExecutedHandler = injector.getInstance(CommandExecutedHandler.class);
+        eventService.subscribe(commandExecutedHandler);
+    }
+
+    void initializeSpigotEventMappers() {
+        SpigotEntityEventMapper entityEventMapper = injector.getInstance(SpigotEntityEventMapper.class);
+        getServer().getPluginManager().registerEvents(entityEventMapper, this);
+
+        SpigotPlayerEventMapper playerEventMapper = injector.getInstance(SpigotPlayerEventMapper.class);
+        getServer().getPluginManager().registerEvents(playerEventMapper, this);
     }
 
     @Override
@@ -41,7 +58,11 @@ public class MonolithPlugin extends JavaPlugin {
         FileConfiguration localConfig = getConfig();
 
         boolean isFirstTimeSetup = localConfig.getBoolean("firstTimeSetup");
-        shutdownIfFirstTimeSetup(isFirstTimeSetup);
+        if (isFirstTimeSetup) {
+            getLogger().severe("Monolith has not been configured yet, shutting down server.");
+            getLogger().severe("If you have finished configuration make sure to set firstTimeSetup to false.");
+            getServer().shutdown();
+        }
 
         boolean maintenance = localConfig.getBoolean("maintenance");
         if (maintenance) {
@@ -51,27 +72,41 @@ public class MonolithPlugin extends JavaPlugin {
         String configurationService = localConfig.getString("configurationService");
         String gitHubAccount = localConfig.getString("gitHubAccount");
         String gitHubRepository = localConfig.getString("gitHubRepository");
-        AbstractMonolithModule.setConfigurationService(configurationService);
-        AbstractMonolithModule.setGitHubAccount(gitHubAccount);
-        AbstractMonolithModule.setGitHubRepository(gitHubRepository);
 
         String persistenceService = localConfig.getString("persistenceService");
         String redisHost = localConfig.getString("redisHost");
         int redisPort = localConfig.getInt("redisPort");
-        AbstractMonolithModule.setPersistenceService(persistenceService);
-        AbstractMonolithModule.setRedisHost(redisHost);
-        AbstractMonolithModule.setRedisPort(redisPort);
+
+        String entityService = localConfig.getString("entityService");
 
         String overworldName = localConfig.getString("worldName");
         String theNetherName = localConfig.getString("theNetherName");
         String theEndName = localConfig.getString("theEndName");
-        SpigotMonolithModule.setPluginSupplier(() -> getPlugin(MonolithPlugin.class));
-        SpigotMonolithModule.setOverworldName(overworldName);
-        SpigotMonolithModule.setTheNetherName(theNetherName);
-        SpigotMonolithModule.setTheEndName(theEndName);
 
-        Monolith.registerModule(new SpigotMonolithModule());
+        AbstractModule spigotMonolithModule = new SpigotMonolithModule(
+                configurationService, gitHubAccount, gitHubRepository,
+                persistenceService, redisHost, redisPort,
+                entityService, this,
+                overworldName, theNetherName, theEndName);
+        Monolith.registerModule(spigotMonolithModule);
 
         initializeInjector();
+        injector = Monolith.getInstance().getInjector();
+        eventService = injector.getInstance(EventService.class);
+
+        initializeMonolithEventHandlers();
+        initializeSpigotEventMappers();
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        eventService.publish(new SimpleCommandExecutedEvent(
+                (sender instanceof Player)
+                        ? new PlayerCommandSender(sender.getName(), ((Player) sender).getUniqueId())
+                        : new ConsoleCommandSender(),
+                command.getName(),
+                label,
+                Arrays.asList(args)));
+        return true;
     }
 }

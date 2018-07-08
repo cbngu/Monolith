@@ -17,6 +17,12 @@ import gg.warcraft.monolith.api.effect.EffectVectorsFactory;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeRepository;
+import gg.warcraft.monolith.api.entity.player.service.PlayerCommandService;
+import gg.warcraft.monolith.api.entity.player.service.PlayerDataRepository;
+import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
+import gg.warcraft.monolith.api.entity.service.EntityCommandService;
+import gg.warcraft.monolith.api.entity.service.EntityDataRepository;
+import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusRepository;
@@ -30,6 +36,7 @@ import gg.warcraft.monolith.api.persistence.YamlMapper;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.block.BoundingBlockBoxFactory;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
@@ -52,6 +59,12 @@ import gg.warcraft.monolith.app.effect.vectors.SphereVectors;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeCommandService;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeQueryService;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeRepository;
+import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerCommandService;
+import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerDataRepository;
+import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerQueryService;
+import gg.warcraft.monolith.app.entity.service.DefaultEntityCommandService;
+import gg.warcraft.monolith.app.entity.service.DefaultEntityDataRepository;
+import gg.warcraft.monolith.app.entity.service.DefaultEntityQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusCommandService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
@@ -63,41 +76,31 @@ import gg.warcraft.monolith.app.persistence.JedisPersistenceService;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
+import gg.warcraft.monolith.app.world.block.DefaultBlockUtils;
 import gg.warcraft.monolith.app.world.block.SimpleBoundingBlockBox;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 public class AbstractMonolithModule extends AbstractModule {
-    private static String persistenceService;
-    private static String redisHost;
-    private static int redisPort;
-    private static String configurationService;
-    private static String gitHubAccount;
-    private static String gitHubRepository;
+    private final String persistenceService;
+    private final String redisHost;
+    private final int redisPort;
+    private final String configurationService;
+    private final String gitHubAccount;
+    private final String gitHubRepository;
+    private final String entityService;
 
-    public static void setPersistenceService(String persistenceService) {
-        AbstractMonolithModule.persistenceService = persistenceService;
-    }
-
-    public static void setRedisHost(String redisHost) {
-        AbstractMonolithModule.redisHost = redisHost;
-    }
-
-    public static void setRedisPort(int redisPort) {
-        AbstractMonolithModule.redisPort = redisPort;
-    }
-
-    public static void setConfigurationService(String configurationService) {
-        AbstractMonolithModule.configurationService = configurationService;
-    }
-
-    public static void setGitHubAccount(String gitHubAccount) {
-        AbstractMonolithModule.gitHubAccount = gitHubAccount;
-    }
-
-    public static void setGitHubRepository(String gitHubRepository) {
-        AbstractMonolithModule.gitHubRepository = gitHubRepository;
+    public AbstractMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
+                                  String persistenceService, String redisHost, int redisPort,
+                                  String entityService) {
+        this.configurationService = configurationService;
+        this.gitHubAccount = gitHubAccount;
+        this.gitHubRepository = gitHubRepository;
+        this.persistenceService = persistenceService;
+        this.redisHost = redisHost;
+        this.redisPort = redisPort;
+        this.entityService = entityService;
     }
 
     @Override
@@ -165,6 +168,23 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(StatusCommandService.class).to(DefaultStatusCommandService.class);
         bind(StatusQueryService.class).to(DefaultStatusQueryService.class);
         bind(StatusRepository.class).to(DefaultStatusRepository.class);
+
+        switch (entityService) {
+            case "DEFAULT":
+                bind(EntityCommandService.class).to(DefaultEntityCommandService.class);
+                bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
+                bind(EntityDataRepository.class).to(DefaultEntityDataRepository.class);
+
+                bind(PlayerCommandService.class).to(DefaultPlayerCommandService.class);
+                bind(PlayerQueryService.class).to(DefaultPlayerQueryService.class);
+                bind(PlayerDataRepository.class).to(DefaultPlayerDataRepository.class);
+                break;
+            case "CUSTOM":
+                // do nothing, the implementing server should provide bindings
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal entity service in Monolith configuration: " + entityService);
+        }
     }
 
     private void configureItem() {
@@ -202,6 +222,7 @@ public class AbstractMonolithModule extends AbstractModule {
 
     private void configureWorld() {
         bind(WorldQueryService.class).to(DefaultWorldQueryService.class);
+        bind(BlockUtils.class).to(DefaultBlockUtils.class);
 
         install(new FactoryModuleBuilder()
                 .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)
