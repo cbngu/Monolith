@@ -51,11 +51,11 @@ public class SimpleOrientedLocationConfiguration implements OrientedLocationConf
 
     @Override
     public float getPitch() {
-        return 0;
+        return pitch;
     }
 
     @Override
     public float getYaw() {
-        return 0;
+        return yaw;
     }
 }

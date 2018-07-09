@@ -1,12 +1,12 @@
 package gg.warcraft.monolith.app.config.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
-import gg.warcraft.monolith.api.persistence.JsonMapper;
-import gg.warcraft.monolith.api.persistence.Mapper;
-import gg.warcraft.monolith.api.persistence.YamlMapper;
+import gg.warcraft.monolith.api.core.Json;
+import gg.warcraft.monolith.api.core.Yaml;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
@@ -17,14 +17,16 @@ import java.io.InputStreamReader;
 
 public class GitHubConfigurationCommandService implements ConfigurationCommandService {
     private final ConfigurationRepository configurationRepository;
-    private final YamlMapper yamlMapper;
-    private final JsonMapper jsonMapper;
+    private final ObjectMapper yamlMapper;
+    private final ObjectMapper jsonMapper;
     private final String accountName;
     private final String repositoryName;
 
     @Inject
-    public GitHubConfigurationCommandService(ConfigurationRepository configurationRepository, YamlMapper yamlMapper,
-                                             JsonMapper jsonMapper, @Named("GitHubAccount") String accountName,
+    public GitHubConfigurationCommandService(ConfigurationRepository configurationRepository,
+                                             @Json ObjectMapper jsonMapper,
+                                             @Yaml ObjectMapper yamlMapper,
+                                             @Named("GitHubAccount") String accountName,
                                              @Named("GitHubRepository") String repositoryName) {
         this.configurationRepository = configurationRepository;
         this.yamlMapper = yamlMapper;
@@ -33,7 +35,7 @@ public class GitHubConfigurationCommandService implements ConfigurationCommandSe
         this.repositoryName = repositoryName;
     }
 
-    Mapper getMapperFor(String fileName) {
+    ObjectMapper getMapperFor(String fileName) {
         if (fileName.endsWith(".yml")) {
             return yamlMapper;
         } else if (fileName.endsWith(".json")) {
@@ -53,12 +55,12 @@ public class GitHubConfigurationCommandService implements ConfigurationCommandSe
 
     @Override
     public void reloadConfiguration(String configurationFileName, Class<?> configurationClass) throws IOException {
-        Mapper mapper = getMapperFor(configurationFileName);
+        ObjectMapper mapper = getMapperFor(configurationFileName);
         GHRepository gitHubRepository = connectToRepository();
         GHContent content = gitHubRepository.getFileContent(configurationFileName);
 
         try (InputStreamReader reader = new InputStreamReader(content.read())) {
-            Object configurationObject = mapper.parse(reader, configurationClass);
+            Object configurationObject = mapper.readValue(reader, configurationClass);
             configurationRepository.save(configurationObject);
         }
     }

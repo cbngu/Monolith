@@ -1,5 +1,8 @@
 package gg.warcraft.monolith.app;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
@@ -12,6 +15,8 @@ import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.config.service.ConfigurationQueryService;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
 import gg.warcraft.monolith.api.core.EventService;
+import gg.warcraft.monolith.api.core.Json;
+import gg.warcraft.monolith.api.core.Yaml;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.EffectVectorsFactory;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService;
@@ -30,9 +35,7 @@ import gg.warcraft.monolith.api.item.ItemBuilder;
 import gg.warcraft.monolith.api.item.ItemBuilderFactory;
 import gg.warcraft.monolith.api.item.ItemReader;
 import gg.warcraft.monolith.api.item.ItemReaderFactory;
-import gg.warcraft.monolith.api.persistence.JsonMapper;
 import gg.warcraft.monolith.api.persistence.PersistenceService;
-import gg.warcraft.monolith.api.persistence.YamlMapper;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
@@ -70,8 +73,6 @@ import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
 import gg.warcraft.monolith.app.item.SimpleItemBuilder;
 import gg.warcraft.monolith.app.item.SimpleItemReader;
-import gg.warcraft.monolith.app.persistence.JacksonJsonMapper;
-import gg.warcraft.monolith.app.persistence.JacksonYamlMapper;
 import gg.warcraft.monolith.app.persistence.JedisPersistenceService;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
@@ -146,6 +147,8 @@ public class AbstractMonolithModule extends AbstractModule {
 
     private void configureCore() {
         bind(EventService.class).to(GuavaEventService.class);
+        bind(ObjectMapper.class).annotatedWith(Json.class).toProvider(() -> new ObjectMapper(new JsonFactory()));
+        bind(ObjectMapper.class).annotatedWith(Yaml.class).toProvider(() -> new ObjectMapper(new YAMLFactory()));
     }
 
     private void configureEffect() {
@@ -197,9 +200,6 @@ public class AbstractMonolithModule extends AbstractModule {
     }
 
     private void configurePersistence() {
-        bind(JsonMapper.class).to(JacksonJsonMapper.class);
-        bind(YamlMapper.class).to(JacksonYamlMapper.class);
-
         switch (persistenceService) {
             case "REDIS":
                 JedisPoolConfig jedisConfiguration = new JedisPoolConfig();

@@ -1,11 +1,14 @@
 package gg.warcraft.monolith.app.config.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
-import gg.warcraft.monolith.api.persistence.JsonMapper;
+import gg.warcraft.monolith.api.core.Json;
 import gg.warcraft.monolith.api.persistence.PersistenceService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,11 +17,11 @@ public class DefaultConfigurationRepository implements ConfigurationRepository {
     private static final String KEY_PREFIX = "configuration:";
 
     private final PersistenceService persistenceService;
-    private final JsonMapper jsonMapper;
+    private final ObjectMapper jsonMapper;
     private final Map<Class<?>, Object> configurationObjects;
 
     @Inject
-    public DefaultConfigurationRepository(PersistenceService persistenceService, JsonMapper jsonMapper) {
+    public DefaultConfigurationRepository(PersistenceService persistenceService, @Json ObjectMapper jsonMapper) {
         this.persistenceService = persistenceService;
         this.jsonMapper = jsonMapper;
         this.configurationObjects = new HashMap<>();
@@ -29,7 +32,11 @@ public class DefaultConfigurationRepository implements ConfigurationRepository {
         Object configuration = configurationObjects.computeIfAbsent(configurationClass, key -> {
             String dataKey = getDataKey(configurationClass);
             String asJson = persistenceService.get(dataKey);
-            return asJson == null ? null : jsonMapper.parse(asJson, configurationClass);
+            try {
+                return asJson == null ? null : jsonMapper.readValue(asJson, configurationClass);
+            } catch (IOException ex) {
+                throw new IllegalStateException("Failed to parse JSON for " + configurationClass + ": " + ex.getMessage());
+            }
         });
         return configurationClass.cast(configuration);
     }
@@ -43,7 +50,11 @@ public class DefaultConfigurationRepository implements ConfigurationRepository {
         configurationObjects.put(configurationObject.getClass(), configurationObject);
 
         String dataKey = getDataKey(configurationObject.getClass());
-        String asJson = jsonMapper.stringify(configurationObject);
-        persistenceService.set(dataKey, asJson);
+        try {
+            String asJson = jsonMapper.writeValueAsString(configurationObject);
+            persistenceService.set(dataKey, asJson);
+        } catch (JsonProcessingException ex) {
+            throw new IllegalStateException("Failed to write JSON for " + configurationObject.getClass() + ": " + ex.getMessage());
+        }
     }
 }
