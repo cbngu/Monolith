@@ -6,6 +6,7 @@ import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.Sign;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotBlockMapper;
@@ -54,6 +55,17 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
     public void setBlockType(Block block, BlockType type) {
         org.bukkit.block.Block spigotBlock = blockMapper.map(block);
         spigotBlock.setTypeIdAndData(type.getId(), (byte) type.getData(), false);
+    }
+
+    @Override
+    public void setSignLines(Sign sign, String[] lines) {
+        org.bukkit.block.Block spigotBlock = blockMapper.map(sign);
+        org.bukkit.block.Sign spigotSign = (org.bukkit.block.Sign) spigotBlock.getState();
+        spigotSign.setLine(0, lines[0]);
+        spigotSign.setLine(1, lines[1]);
+        spigotSign.setLine(2, lines[2]);
+        spigotSign.setLine(3, lines[3]);
+        spigotSign.update(true, false);
     }
 
     @Override

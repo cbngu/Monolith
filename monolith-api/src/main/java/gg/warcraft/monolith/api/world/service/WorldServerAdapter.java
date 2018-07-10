@@ -6,6 +6,7 @@ import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.Sign;
 
 import java.util.List;
 
@@ -42,9 +43,15 @@ public interface WorldServerAdapter {
 
     /**
      * @param block The block to update.
-     * @param type  The type to update to.
+     * @param type  The new type.
      */
     void setBlockType(Block block, BlockType type);
+
+    /**
+     * @param sign  The sign to update.
+     * @param lines The new lines.
+     */
+    void setSignLines(Sign sign, String[] lines);
 
     /**
      * @param items    The items to drop.
