@@ -4,6 +4,7 @@ import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityData;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.Equipment;
 import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.status.Status;
@@ -16,12 +17,14 @@ import java.util.function.Supplier;
 
 public class LazyEntity implements Entity {
     private final Lazy<? extends EntityData> data;
-    private final Lazy<EntityServerData> serverData;
+    private final Lazy<? extends EntityServerData> serverData;
     private final Lazy<Attributes> attributes;
     private final Lazy<Status> status;
 
-    public LazyEntity(Supplier<? extends EntityData> dataSupplier, Supplier<EntityServerData> serverDataSupplier,
-                      Supplier<Attributes> attributesSupplier, Supplier<Status> statusSupplier) {
+    public LazyEntity(Supplier<? extends EntityData> dataSupplier,
+                      Supplier<? extends EntityServerData> serverDataSupplier,
+                      Supplier<Attributes> attributesSupplier,
+                      Supplier<Status> statusSupplier) {
         this.data = new Lazy<>(dataSupplier);
         this.serverData = new Lazy<>(serverDataSupplier);
         this.attributes = new Lazy<>(attributesSupplier);
@@ -66,6 +69,11 @@ public class LazyEntity implements Entity {
     @Override
     public Status getStatus() {
         return status.get();
+    }
+
+    @Override
+    public Equipment getEquipment() {
+        return serverData.get().getEquipment();
     }
 
     @Override

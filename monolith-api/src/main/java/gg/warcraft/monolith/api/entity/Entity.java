@@ -53,6 +53,11 @@ public interface Entity {
     Status getStatus();
 
     /**
+     * @return The equipment this entity is currently wearing. Never null.
+     */
+    Equipment getEquipment();
+
+    /**
      * @param permission The permission. Can not be null or empty.
      * @return True if the entity has the permission favorably set, false otherwise.
      */

@@ -6,7 +6,6 @@ import gg.warcraft.monolith.api.entity.player.Player;
 import gg.warcraft.monolith.api.entity.player.service.PlayerDataRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
-import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.app.entity.player.LazyPlayer;
 
@@ -19,24 +18,22 @@ public class DefaultPlayerQueryService implements PlayerQueryService {
     private final AttributeQueryService attributeQueryService;
     private final StatusQueryService statusQueryService;
     private final PlayerServerAdapter playerServerAdapter;
-    private final EntityServerAdapter entityServerAdapter;
 
     @Inject
     public DefaultPlayerQueryService(PlayerDataRepository playerDataRepository,
                                      AttributeQueryService attributeQueryService, StatusQueryService statusQueryService,
-                                     PlayerServerAdapter playerServerAdapter, EntityServerAdapter entityServerAdapter) {
+                                     PlayerServerAdapter playerServerAdapter) {
         this.playerDataRepository = playerDataRepository;
         this.attributeQueryService = attributeQueryService;
         this.statusQueryService = statusQueryService;
         this.playerServerAdapter = playerServerAdapter;
-        this.entityServerAdapter = entityServerAdapter;
     }
 
     @Override
     public Player getPlayer(UUID playerId) {
         return new LazyPlayer(
                 () -> playerDataRepository.get(playerId),
-                () -> entityServerAdapter.getEntityServerData(playerId),
+                () -> playerServerAdapter.getPlayerServerData(playerId),
                 () -> attributeQueryService.getAttributes(playerId),
                 () -> statusQueryService.getStatus(playerId));
     }

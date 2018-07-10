@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.api.entity.player.service;
 
+import gg.warcraft.monolith.api.entity.player.PlayerServerData;
+
 import java.util.Collection;
 import java.util.UUID;
 
@@ -11,6 +13,12 @@ import java.util.UUID;
  * to a given name.
  */
 public interface PlayerServerAdapter {
+
+    /**
+     * @param playerId The id of the player. Can not be null.
+     * @return The server data of the player. Can be null.
+     */
+    PlayerServerData getPlayerServerData(UUID playerId);
 
     /**
      * @return The ids of all online players. Never null, but can be empty. Items are never null.

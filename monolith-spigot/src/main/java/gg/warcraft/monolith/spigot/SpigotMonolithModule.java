@@ -7,6 +7,7 @@ import gg.warcraft.monolith.api.core.AuthorizationService;
 import gg.warcraft.monolith.api.core.TaskService;
 import gg.warcraft.monolith.api.effect.Particle;
 import gg.warcraft.monolith.api.effect.ParticleFactory;
+import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
@@ -16,8 +17,10 @@ import gg.warcraft.monolith.app.effect.particle.QueuedParticle;
 import gg.warcraft.monolith.spigot.command.SpigotCommandAdapter;
 import gg.warcraft.monolith.spigot.core.SpigotAuthorizationService;
 import gg.warcraft.monolith.spigot.core.SpigotTaskService;
-import gg.warcraft.monolith.spigot.entity.adapter.SpigotEntityAdapter;
-import gg.warcraft.monolith.spigot.entity.player.adapter.SpigotPlayerAdapter;
+import gg.warcraft.monolith.spigot.entity.SpigotEntityData;
+import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
+import gg.warcraft.monolith.spigot.entity.player.service.SpigotPlayerAdapter;
+import gg.warcraft.monolith.spigot.entity.service.SpigotEntityAdapter;
 import gg.warcraft.monolith.spigot.particle.ColorParticle;
 import gg.warcraft.monolith.spigot.particle.SimpleParticle;
 import gg.warcraft.monolith.spigot.particle.SpeedParticle;
@@ -86,6 +89,10 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     private void configureEntity() {
         bind(EntityServerAdapter.class).to(SpigotEntityAdapter.class);
         bind(PlayerServerAdapter.class).to(SpigotPlayerAdapter.class);
+
+        install(new FactoryModuleBuilder()
+                .implement(EntityServerData.class, SpigotEntityData.class)
+                .build(SpigotEntityDataFactory.class));
     }
 
     private void configureWorld() {

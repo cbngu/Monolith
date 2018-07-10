@@ -1,14 +1,13 @@
-package gg.warcraft.monolith.spigot.entity.adapter;
+package gg.warcraft.monolith.spigot.entity.service;
 
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.world.Location;
-import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.PotionEffect;
 import gg.warcraft.monolith.api.world.PotionType;
-import gg.warcraft.monolith.app.entity.SimpleEntityServerData;
+import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
 import org.bukkit.GameMode;
@@ -17,7 +16,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.util.List;
@@ -28,25 +26,19 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     private final Server server;
     private final SpigotEntityTypeMapper entityTypeMapper;
     private final SpigotLocationMapper locationMapper;
+    private final SpigotEntityDataFactory entityDataFactory;
 
     @Inject
     public SpigotEntityAdapter(Server server, SpigotEntityTypeMapper entityTypeMapper,
-                               SpigotLocationMapper locationMapper) {
+                               SpigotLocationMapper locationMapper, SpigotEntityDataFactory entityDataFactory) {
         this.server = server;
         this.entityTypeMapper = entityTypeMapper;
         this.locationMapper = locationMapper;
+        this.entityDataFactory = entityDataFactory;
     }
 
     EntityServerData createEntityServerData(LivingEntity entity) {
-        EntityType type = entityTypeMapper.map(entity.getType());
-        OrientedLocation location = locationMapper.map(entity);
-        OrientedLocation eyeLocation = locationMapper.mapEye(entity);
-        Vector velocity = entity.getVelocity();
-        float x = (float) velocity.getX();
-        float y = (float) velocity.getY();
-        float z = (float) velocity.getZ();
-        return new SimpleEntityServerData(entity.getUniqueId(), type, location, eyeLocation, new Vector3f(x, y, z),
-                entity::hasPermission);
+        return entityDataFactory.create(entity);
     }
 
     @Override
