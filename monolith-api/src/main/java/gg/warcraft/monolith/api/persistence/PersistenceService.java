@@ -24,6 +24,27 @@ public interface PersistenceService {
     void set(String key, String value);
 
     /**
+     * @param key The key of the value list to retrieve. Can not be null or empty.
+     * @return The value list. Can be null or empty.
+     */
+    List<String> getList(String key);
+
+    /**
+     * Pushes a value onto the list at key. Care should be taken that this method will overwrite the existing list in
+     * its entirety with the new values provided.
+     *
+     * @param key    The key to set the value list at. Can not be nul or empty.
+     * @param values The value list. Can be null or empty.
+     */
+    void setList(String key, List<String> values);
+
+    /**
+     * @param key   The key of the list to push the value onto. Can not be nul or empty.
+     * @param value The value. Can be null or empty.
+     */
+    void pushList(String key, String value);
+
+    /**
      * @param key The key of the value map to retrieve. Can not be null or empty.
      * @return The value map. Can be null or empty.
      */

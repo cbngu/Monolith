@@ -30,6 +30,22 @@ public class JedisPersistenceService implements PersistenceService {
     }
 
     @Override
+    public List<String> getList(String key) {
+        return jedis.lrange(key, -1, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public void setList(String key, List<String> values) {
+        jedis.del(key);
+        jedis.lpush(key, values.toArray(new String[0]));
+    }
+
+    @Override
+    public void pushList(String key, String value) {
+        jedis.lpush(key, value);
+    }
+
+    @Override
     public Map<String, String> getMap(String key) {
         return jedis.hgetAll(key);
     }
