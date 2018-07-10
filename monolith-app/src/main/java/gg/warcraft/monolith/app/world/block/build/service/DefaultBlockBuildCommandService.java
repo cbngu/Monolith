@@ -129,7 +129,7 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
     @Override
     public void initializeBuilds() {
         Stream<Block> floor = buildRepositoryBoundingBox.sliceY(buildRepositoryBoundingBox.getLowerBoundary());
-        floor.filter(block -> block.getType() == BlockType.WALL_MOUNTED_SIGN_BLOCK)
+        floor.filter(block -> block.getType() == BlockType.WALL_MOUNTED_SIGN)
                 .map(block -> (Sign) block)
                 .map(this::initializeBuild)
                 .filter(Objects::nonNull)

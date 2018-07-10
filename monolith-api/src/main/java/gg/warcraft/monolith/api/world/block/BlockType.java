@@ -1,13 +1,8 @@
 package gg.warcraft.monolith.api.world.block;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 /**
- * BlockType serves as an abstraction layer between Monolith plugin code and the eventual server implementation the
- * plugin is run on. It is identical to part of Spigot's {@code Material} and the server adapter will substitute its
+ * BlockType serves as an abstraction layer between the Monolith domain and the Minecraft server implementation the
+ * plugins are run on. It is identical to part of Spigot's {@code Material} and the server adapter will substitute its
  * values with the correct implementation during runtime.
  */
 public enum BlockType {
@@ -147,15 +142,15 @@ public enum BlockType {
     FARMLAND("minecraft:farmland", 60),
     FURNACE("minecraft:furnace", 61),
     BURNING_FURNACE("minecraft:lit_furnace", 62),
-    STANDING_SIGN_BLOCK("minecraft:standing_sign", 63),
-    OAK_DOOR_BLOCK("minecraft:wooden_door", 64),
+    STANDING_SIGN("minecraft:standing_sign", 63),
+    OAK_DOOR("minecraft:wooden_door", 64),
     LADDER("minecraft:ladder", 65),
     RAIL("minecraft:rail", 66),
     COBBLESTONE_STAIRS("minecraft:stone_stairs", 67),
-    WALL_MOUNTED_SIGN_BLOCK("minecraft:wall_sign", 68),
+    WALL_MOUNTED_SIGN("minecraft:wall_sign", 68),
     LEVER("minecraft:lever", 69),
     STONE_PRESSURE_PLATE("minecraft:stone_pressure_plate", 70),
-    IRON_DOOR_BLOCK("minecraft:iron_door", 71),
+    IRON_DOOR("minecraft:iron_door", 71),
     WOODEN_PRESSURE_PLATE("minecraft:wooden_pressure_plate", 72),
     REDSTONE_ORE("minecraft:redstone_ore", 73),
     GLOWING_REDSTONE_ORE("minecraft:lit_redstone_ore", 74),
@@ -369,11 +364,11 @@ public enum BlockType {
     JUNGLE_FENCE("minecraft:jungle_fence", 190),
     DARK_OAK_FENCE("minecraft:dark_oak_fence", 191),
     ACACIA_FENCE("minecraft:acacia_fence", 192),
-    SPRUCE_DOOR_BLOCK("minecraft:spruce_door", 193),
-    BIRCH_DOOR_BLOCK("minecraft:birch_door", 194),
-    JUNGLE_DOOR_BLOCK("minecraft:jungle_door", 195),
-    ACACIA_DOOR_BLOCK("minecraft:acacia_door", 196),
-    DARK_OAK_DOOR_BLOCK("minecraft:dark_oak_door", 197),
+    SPRUCE_DOOR("minecraft:spruce_door", 193),
+    BIRCH_DOOR("minecraft:birch_door", 194),
+    JUNGLE_DOOR("minecraft:jungle_door", 195),
+    ACACIA_DOOR("minecraft:acacia_door", 196),
+    DARK_OAK_DOOR("minecraft:dark_oak_door", 197),
     END_ROD("minecraft:end_rod", 198),
     CHORUS_PLANT("minecraft:chorus_plant", 199),
     CHORUS_FLOWER("minecraft:chorus_flower", 200),
@@ -460,68 +455,6 @@ public enum BlockType {
     RED_CONCRETE_POWDER("minecraft:concrete_powder", 252, 14),
     BLACK_CONCRETE_POWDER("minecraft:concrete_powder", 252, 15),
     STRUCTURE_BLOCK("minecraft:structure_block", 255);
-
-    private static final Map<String, BlockType> types = new HashMap<>();
-
-    public static final Set<BlockType> NON_SOLIDS = new HashSet<>();
-
-    static {
-        for (BlockType type : BlockType.values()) {
-            String typeKey = type.getId() + ":" + type.getData();
-            types.put(typeKey, type);
-        }
-
-        NON_SOLIDS.add(BlockType.AIR);
-        NON_SOLIDS.add(BlockType.FLOWING_WATER);
-        NON_SOLIDS.add(BlockType.STILL_WATER);
-        NON_SOLIDS.add(BlockType.DEAD_SHRUB);
-        NON_SOLIDS.add(BlockType.TALL_GRASS);
-        NON_SOLIDS.add(BlockType.FERN);
-        NON_SOLIDS.add(BlockType.DEAD_BUSH);
-    }
-
-    /**
-     * Returns the block type with the given id.
-     *
-     * @param id The id.
-     * @return The block type with the given id. Can be null.
-     */
-    public static BlockType get(int id) {
-        return get(id, 0);
-    }
-
-    /**
-     * Returns the block type with the given id and data.
-     * <p>
-     * TODO: some blocks hold directional data, look into a way to preserve or store without flooding the enum
-     *
-     * @param id   The id.
-     * @param data The data.
-     * @return The block type with the given id and data. Can be null.
-     */
-    public static BlockType get(int id, int data) {
-        int adjustedData = data & 0x3;
-        return types.get(id + ":" + adjustedData);
-    }
-
-    /**
-     * @param type The type.
-     * @return True if the type is a door, false otherwise.
-     */
-    public static boolean isDoor(BlockType type) {
-        switch (type) {
-            case ACACIA_DOOR_BLOCK:
-            case BIRCH_DOOR_BLOCK:
-            case DARK_OAK_DOOR_BLOCK:
-            case IRON_DOOR_BLOCK:
-            case JUNGLE_DOOR_BLOCK:
-            case OAK_DOOR_BLOCK:
-            case SPRUCE_DOOR_BLOCK:
-                return true;
-            default:
-                return false;
-        }
-    }
 
     private final String type;
     private final int id;

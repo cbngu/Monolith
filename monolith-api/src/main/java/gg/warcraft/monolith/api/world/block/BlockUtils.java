@@ -2,6 +2,12 @@ package gg.warcraft.monolith.api.world.block;
 
 import java.util.Set;
 
+/**
+ * This utility is injectable.
+ * <p>
+ * The BlockUtils utility services as a point of entry into the block implementation. It provides methods to easily
+ * extract neighbouring blocks.
+ */
 public interface BlockUtils {
 
     /**
