@@ -7,6 +7,7 @@ import gg.warcraft.monolith.api.entity.service.EntityDataRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.entity.SimpleEntityData;
@@ -19,8 +20,8 @@ public class DefaultEntityCommandService extends AbstractEntityCommandService {
     @Inject
     public DefaultEntityCommandService(EntityDataRepository entityDataRepository, EntityQueryService entityQueryService,
                                        EntityServerAdapter entityServerAdapter, WorldQueryService worldQueryService,
-                                       BlockUtils blockUtils, TimeUtils timeUtils) {
-        super(entityQueryService, entityServerAdapter, worldQueryService, blockUtils, timeUtils);
+                                       BlockUtils blockUtils, BlockTypeUtils blockTypeUtils, TimeUtils timeUtils) {
+        super(entityQueryService, entityServerAdapter, worldQueryService, blockUtils, blockTypeUtils, timeUtils);
         this.entityDataRepository = entityDataRepository;
     }
 

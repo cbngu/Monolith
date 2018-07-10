@@ -12,7 +12,7 @@ import gg.warcraft.monolith.api.world.PotionEffect;
 import gg.warcraft.monolith.api.world.PotionType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
-import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.world.SimplePotionEffect;
@@ -29,6 +29,7 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     private final EntityServerAdapter entityServerAdapter;
     private final WorldQueryService worldQueryService;
     private final BlockUtils blockUtils;
+    private final BlockTypeUtils blockTypeUtils;
     private final TimeUtils timeUtils;
 
     final Map<Float, Float> knockbackStrength;
@@ -36,11 +37,13 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     final Map<Float, Float> leapStrength;
 
     public AbstractEntityCommandService(EntityQueryService entityQueryService, EntityServerAdapter entityServerAdapter,
-                                        WorldQueryService worldQueryService, BlockUtils blockUtils, TimeUtils timeUtils) {
+                                        WorldQueryService worldQueryService, BlockUtils blockUtils,
+                                        BlockTypeUtils blockTypeUtils, TimeUtils timeUtils) {
         this.entityQueryService = entityQueryService;
         this.entityServerAdapter = entityServerAdapter;
         this.worldQueryService = worldQueryService;
         this.blockUtils = blockUtils;
+        this.blockTypeUtils = blockTypeUtils;
         this.timeUtils = timeUtils;
         this.knockbackStrength = new HashMap<>();
         this.knockupStrength = new HashMap<>();
@@ -101,7 +104,7 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
 
     private Block findBlockUnderFeet(Entity entity) {
         Block current = worldQueryService.getBlockAt(entity.getLocation());
-        while (BlockType.NON_SOLIDS.contains(current.getType())
+        while (blockTypeUtils.getNonSolids().contains(current.getType())
                 && current.getLocation().getY() >= 0) {
             current = blockUtils.getRelative(current, BlockFace.DOWN);
         }
