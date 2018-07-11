@@ -22,4 +22,23 @@ public class SpigotBlockFaceMapper {
                 return org.bukkit.block.BlockFace.NORTH;
         }
     }
+
+    public BlockFace map(org.bukkit.block.BlockFace face) {
+        switch (face) {
+            case NORTH:
+                return BlockFace.NORTH;
+            case EAST:
+                return BlockFace.EAST;
+            case SOUTH:
+                return BlockFace.SOUTH;
+            case WEST:
+                return BlockFace.WEST;
+            case UP:
+                return BlockFace.UP;
+            case DOWN:
+                return BlockFace.DOWN;
+            default:
+                return BlockFace.NORTH;
+        }
+    }
 }
