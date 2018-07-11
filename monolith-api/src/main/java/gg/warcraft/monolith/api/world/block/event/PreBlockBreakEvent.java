@@ -3,10 +3,13 @@ package gg.warcraft.monolith.api.world.block.event;
 import gg.warcraft.monolith.api.item.Item;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PreBlockBreakEvent extends PreBlockEvent {
 
-    List<Item> getDrops();
+    List<Item> getAlternativeDrops();
 
-    void setDrops(List<Item> drops);
+    UUID getPlayerId();
+
+    void setAlternativeDrops(List<Item> drops);
 }

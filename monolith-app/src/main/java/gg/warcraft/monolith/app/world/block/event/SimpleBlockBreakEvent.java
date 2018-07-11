@@ -6,17 +6,25 @@ import gg.warcraft.monolith.api.world.block.event.BlockBreakEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SimpleBlockBreakEvent extends SimpleBlockEvent implements BlockBreakEvent {
-    private final List<Item> drops;
+    private final List<Item> alternativeDrops;
+    private final UUID playerId;
 
-    public SimpleBlockBreakEvent(Block block, List<Item> drops) {
+    public SimpleBlockBreakEvent(Block block, List<Item> alternativeDrops, UUID playerId) {
         super(block);
-        this.drops = drops;
+        this.alternativeDrops = alternativeDrops;
+        this.playerId = playerId;
     }
 
     @Override
-    public List<Item> getDrops() {
-        return new ArrayList<>(drops);
+    public List<Item> getAlternativeDrops() {
+        return new ArrayList<>(alternativeDrops);
+    }
+
+    @Override
+    public UUID getPlayerId() {
+        return playerId;
     }
 }

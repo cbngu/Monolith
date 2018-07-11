@@ -2,7 +2,7 @@ package gg.warcraft.monolith.api.core;
 
 /**
  * Pre-events replace Minecraft's event priority system by allowing handlers to cancel or explicitly allow them. They
- * are fired before their corresponding read-only events and once explicitly allowed once can no longer be cancelled.
+ * are fired before their corresponding read-only events and once explicitly allowed can no longer be cancelled.
  * Pre-events that have been explicitly allowed will not cancel the native Minecraft event regardless of whether it was
  * also cancelled.
  */

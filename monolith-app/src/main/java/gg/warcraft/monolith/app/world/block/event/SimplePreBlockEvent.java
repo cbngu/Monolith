@@ -7,7 +7,8 @@ import gg.warcraft.monolith.app.core.SimplePreEvent;
 public class SimplePreBlockEvent extends SimplePreEvent implements PreBlockEvent {
     private final Block block;
 
-    public SimplePreBlockEvent(Block block) {
+    public SimplePreBlockEvent(Block block, boolean cancelled) {
+        super(cancelled);
         this.block = block;
     }
 

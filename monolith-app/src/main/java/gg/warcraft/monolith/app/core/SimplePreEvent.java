@@ -6,6 +6,10 @@ public class SimplePreEvent implements PreEvent {
     private boolean cancelled;
     private boolean explicitlyAllowed;
 
+    public SimplePreEvent(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
     @Override
     public boolean isCancelled() {
         return cancelled;

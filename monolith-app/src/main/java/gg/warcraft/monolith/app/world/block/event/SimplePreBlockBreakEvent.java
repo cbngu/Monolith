@@ -4,23 +4,39 @@ import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.event.PreBlockBreakEvent;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SimplePreBlockBreakEvent extends SimplePreBlockEvent implements PreBlockBreakEvent {
-    private List<Item> drops;
+    private List<Item> alternativeDrops;
+    private final UUID playerId;
 
-    public SimplePreBlockBreakEvent(Block block, List<Item> drops) {
-        super(block);
-        this.drops = drops;
+    public SimplePreBlockBreakEvent(Block block, List<Item> alternativeDrops, UUID playerId, boolean cancelled) {
+        super(block, cancelled);
+        this.alternativeDrops = alternativeDrops;
+        this.playerId = playerId;
     }
 
     @Override
-    public List<Item> getDrops() {
-        return drops;
+    public List<Item> getAlternativeDrops() {
+        if (alternativeDrops == null) {
+            return null;
+        }
+        return new ArrayList<>(alternativeDrops);
     }
 
     @Override
-    public void setDrops(List<Item> drops) {
-        this.drops = drops;
+    public void setAlternativeDrops(List<Item> alternativeDrops) {
+        if (alternativeDrops == null) {
+            this.alternativeDrops = null;
+        } else {
+            this.alternativeDrops = new ArrayList<>(alternativeDrops);
+        }
+    }
+
+    @Override
+    public UUID getPlayerId() {
+        return playerId;
     }
 }
