@@ -14,4 +14,18 @@ public interface PlayerCommandService {
      * @param playerId The id of the player to update. Can not be null.
      */
     void updateTimePlayed(UUID playerId);
+
+    /**
+     * @param playerId the id of the player. Can not be null.
+     * @param message  The message to send. Can not be null or empty.
+     */
+    void sendMessage(UUID playerId, String message);
+
+    /**
+     * Sends a server notification to the player. Server notifications are yellow messages prefixed with '[SERVER]'.
+     *
+     * @param playerId     the id of the player. Can not be null.
+     * @param notification The notification to send. Can not be null or empty.
+     */
+    void sendNotification(UUID playerId, String notification);
 }

@@ -47,4 +47,12 @@ public class SpigotPlayerAdapter implements PlayerServerAdapter {
         Player player = server.getPlayerExact(minecraftName);
         return player != null ? player.getUniqueId() : null;
     }
+
+    @Override
+    public void sendMessage(UUID playerId, String message) {
+        Player player = server.getPlayer(playerId);
+        if (player != null) {
+            player.sendMessage(message);
+        }
+    }
 }

@@ -36,4 +36,10 @@ public interface PlayerServerAdapter {
      * @return The Minecraft id belonging to the name. Can be null.
      */
     UUID resolvePlayerId(String minecraftName);
+
+    /**
+     * @param playerId the id of the player. Can not be null.
+     * @param message  The message to send. Can not be null or empty.
+     */
+    void sendMessage(UUID playerId, String message);
 }
