@@ -41,6 +41,7 @@ import gg.warcraft.monolith.api.persistence.PersistenceService;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBoxFactory;
@@ -80,6 +81,7 @@ import gg.warcraft.monolith.app.persistence.JedisPersistenceService;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
+import gg.warcraft.monolith.app.world.block.DefaultBlockTypeUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockUtils;
 import gg.warcraft.monolith.app.world.block.box.SimpleBoundingBlockBox;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
@@ -236,6 +238,7 @@ public class AbstractMonolithModule extends AbstractModule {
     private void configureWorld() {
         bind(WorldQueryService.class).to(DefaultWorldQueryService.class);
         bind(BlockUtils.class).to(DefaultBlockUtils.class);
+        bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
 
         install(new FactoryModuleBuilder()
                 .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)

@@ -19,8 +19,6 @@ public class DefaultBlockTypeUtils implements BlockTypeUtils {
         }
 
         NON_SOLIDS.add(BlockType.AIR);
-        NON_SOLIDS.add(BlockType.FLOWING_WATER);
-        NON_SOLIDS.add(BlockType.STILL_WATER);
         NON_SOLIDS.add(BlockType.DEAD_SHRUB);
         NON_SOLIDS.add(BlockType.TALL_GRASS);
         NON_SOLIDS.add(BlockType.FERN);
