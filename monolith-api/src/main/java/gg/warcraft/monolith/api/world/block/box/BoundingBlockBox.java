@@ -1,8 +1,10 @@
-package gg.warcraft.monolith.api.world.block;
+package gg.warcraft.monolith.api.world.block.box;
 
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.World;
+import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.BlockType;
 import org.joml.Vector3i;
 
 import java.util.List;

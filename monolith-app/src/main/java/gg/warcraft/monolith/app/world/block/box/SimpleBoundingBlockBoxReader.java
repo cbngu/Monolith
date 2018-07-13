@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.app.world.block;
+package gg.warcraft.monolith.app.world.block.box;
 
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.util.Offset;
@@ -6,8 +6,8 @@ import gg.warcraft.monolith.api.util.TriFunction;
 import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
-import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
-import gg.warcraft.monolith.api.world.block.BoundingBlockBoxReader;
+import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
+import gg.warcraft.monolith.api.world.block.box.BoundingBlockBoxReader;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.util.SimpleOffset;
 

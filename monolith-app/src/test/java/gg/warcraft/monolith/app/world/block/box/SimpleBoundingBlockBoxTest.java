@@ -1,10 +1,10 @@
-package gg.warcraft.monolith.app.world.block;
+package gg.warcraft.monolith.app.world.block.box;
 
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
-import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
+import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import org.joml.Vector3i;
 import org.junit.After;

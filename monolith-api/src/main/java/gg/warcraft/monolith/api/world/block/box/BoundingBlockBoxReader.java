@@ -1,6 +1,7 @@
-package gg.warcraft.monolith.api.world.block;
+package gg.warcraft.monolith.api.world.block.box;
 
 import gg.warcraft.monolith.api.util.Offset;
+import gg.warcraft.monolith.api.world.block.Block;
 
 public interface BoundingBlockBoxReader {
 

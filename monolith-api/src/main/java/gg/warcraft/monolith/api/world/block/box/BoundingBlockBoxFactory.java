@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.world.block;
+package gg.warcraft.monolith.api.world.block.box;
 
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.world.WorldType;

@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.app.world.block.build;
 
-import gg.warcraft.monolith.api.world.block.BoundingBlockBox;
+import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.block.build.BlockBuild;
 
 import java.util.Arrays;
