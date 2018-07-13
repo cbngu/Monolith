@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.config;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gg.warcraft.monolith.api.config.BlockLocationConfiguration;
 import gg.warcraft.monolith.api.world.WorldType;
 
@@ -9,14 +11,11 @@ public class SimpleBlockLocationConfiguration implements BlockLocationConfigurat
     private final int y;
     private final int z;
 
-    public SimpleBlockLocationConfiguration() {
-        this.world = null;
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-    }
-
-    public SimpleBlockLocationConfiguration(WorldType world, int x, int y, int z) {
+    @JsonCreator
+    public SimpleBlockLocationConfiguration(@JsonProperty("world") WorldType world,
+                                            @JsonProperty("x") int x,
+                                            @JsonProperty("y") int y,
+                                            @JsonProperty("z") int z) {
         this.world = world;
         this.x = x;
         this.y = y;

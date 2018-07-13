@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.config;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gg.warcraft.monolith.api.config.OrientedLocationConfiguration;
 import gg.warcraft.monolith.api.world.WorldType;
 
@@ -11,16 +13,13 @@ public class SimpleOrientedLocationConfiguration implements OrientedLocationConf
     private final float pitch;
     private final float yaw;
 
-    public SimpleOrientedLocationConfiguration() {
-        this.world = null;
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        this.pitch = 0;
-        this.yaw = 0;
-    }
-
-    public SimpleOrientedLocationConfiguration(WorldType world, float x, float y, float z, float pitch, float yaw) {
+    @JsonCreator
+    public SimpleOrientedLocationConfiguration(@JsonProperty("world") WorldType world,
+                                               @JsonProperty("x") float x,
+                                               @JsonProperty("y") float y,
+                                               @JsonProperty("z") float z,
+                                               @JsonProperty("pitch") float pitch,
+                                               @JsonProperty("yaw") float yaw) {
         this.world = world;
         this.x = x;
         this.y = y;

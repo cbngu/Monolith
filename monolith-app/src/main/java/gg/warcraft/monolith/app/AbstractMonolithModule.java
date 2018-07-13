@@ -1,7 +1,9 @@
 package gg.warcraft.monolith.app;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
@@ -52,6 +54,7 @@ import gg.warcraft.monolith.app.config.service.DefaultConfigurationRepository;
 import gg.warcraft.monolith.app.config.service.GitHubConfigurationCommandService;
 import gg.warcraft.monolith.app.config.service.LocalConfigurationCommandService;
 import gg.warcraft.monolith.app.core.GuavaEventService;
+import gg.warcraft.monolith.app.core.MonolithMapperModule;
 import gg.warcraft.monolith.app.effect.vectors.CircleVectors;
 import gg.warcraft.monolith.app.effect.vectors.DomeVectors;
 import gg.warcraft.monolith.app.effect.vectors.LineVectors;
@@ -147,8 +150,18 @@ public class AbstractMonolithModule extends AbstractModule {
 
     private void configureCore() {
         bind(EventService.class).to(GuavaEventService.class);
-        bind(ObjectMapper.class).annotatedWith(Json.class).toProvider(() -> new ObjectMapper(new JsonFactory()));
-        bind(ObjectMapper.class).annotatedWith(Yaml.class).toProvider(() -> new ObjectMapper(new YAMLFactory()));
+
+        SimpleModule monolithMapperModule = new MonolithMapperModule();
+
+        ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
+        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        jsonMapper.registerModule(monolithMapperModule);
+        bind(ObjectMapper.class).annotatedWith(Json.class).toProvider(jsonMapper::copy);
+
+        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+        yamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        yamlMapper.registerModule(monolithMapperModule);
+        bind(ObjectMapper.class).annotatedWith(Yaml.class).toProvider(yamlMapper::copy);
     }
 
     private void configureEffect() {
