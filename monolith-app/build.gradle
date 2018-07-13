@@ -1,6 +1,6 @@
 dependencies {
     api project(':monolith-api')
-    
+
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.6'
     implementation 'org.kohsuke:github-api:1.93'
