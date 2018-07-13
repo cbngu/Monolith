@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.app.core;
+package gg.warcraft.monolith.app.config;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
@@ -8,11 +8,6 @@ import gg.warcraft.monolith.api.config.BoundingBlockBoxConfiguration;
 import gg.warcraft.monolith.api.config.LocationConfiguration;
 import gg.warcraft.monolith.api.config.OrientedLocationConfiguration;
 import gg.warcraft.monolith.api.config.Vector3iConfiguration;
-import gg.warcraft.monolith.app.config.SimpleBlockLocationConfiguration;
-import gg.warcraft.monolith.app.config.SimpleBoundingBlockBoxConfiguration;
-import gg.warcraft.monolith.app.config.SimpleLocationConfiguration;
-import gg.warcraft.monolith.app.config.SimpleOrientedLocationConfiguration;
-import gg.warcraft.monolith.app.config.SimpleVector3iConfiguration;
 
 public class MonolithMapperModule extends SimpleModule {
 
