@@ -48,6 +48,9 @@ import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupQueryServi
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupRepository;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBoxFactory;
+import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingCommandService;
+import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingQueryService;
+import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingRepository;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
@@ -91,6 +94,9 @@ import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupCom
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupQueryService;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupRepository;
 import gg.warcraft.monolith.app.world.block.box.SimpleBoundingBlockBox;
+import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingCommandService;
+import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingQueryService;
+import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingRepository;
 import gg.warcraft.monolith.app.world.service.DefaultWorldCommandService;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 import redis.clients.jedis.JedisPool;
@@ -250,9 +256,13 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(BlockUtils.class).to(DefaultBlockUtils.class);
         bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
 
-        bind(BlockBackupQueryService.class).to(DefaultBlockBackupQueryService.class);
         bind(BlockBackupCommandService.class).to(DefaultBlockBackupCommandService.class);
+        bind(BlockBackupQueryService.class).to(DefaultBlockBackupQueryService.class);
         bind(BlockBackupRepository.class).to(DefaultBlockBackupRepository.class);
+
+        bind(BlockSpoofingCommandService.class).to(DefaultBlockSpoofingCommandService.class);
+        bind(BlockSpoofingQueryService.class).to(DefaultBlockSpoofingQueryService.class);
+        bind(BlockSpoofingRepository.class).to(DefaultBlockSpoofingRepository.class);
 
         install(new FactoryModuleBuilder()
                 .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)
