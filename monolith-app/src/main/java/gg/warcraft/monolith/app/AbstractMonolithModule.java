@@ -43,8 +43,12 @@ import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
+import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupCommandService;
+import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupQueryService;
+import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupRepository;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBoxFactory;
+import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.service.DefaultCommandCommandService;
@@ -83,7 +87,11 @@ import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockTypeUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockUtils;
+import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupCommandService;
+import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupQueryService;
+import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupRepository;
 import gg.warcraft.monolith.app.world.block.box.SimpleBoundingBlockBox;
+import gg.warcraft.monolith.app.world.service.DefaultWorldCommandService;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -237,8 +245,14 @@ public class AbstractMonolithModule extends AbstractModule {
 
     private void configureWorld() {
         bind(WorldQueryService.class).to(DefaultWorldQueryService.class);
+        bind(WorldCommandService.class).to(DefaultWorldCommandService.class);
+
         bind(BlockUtils.class).to(DefaultBlockUtils.class);
         bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
+
+        bind(BlockBackupQueryService.class).to(DefaultBlockBackupQueryService.class);
+        bind(BlockBackupCommandService.class).to(DefaultBlockBackupCommandService.class);
+        bind(BlockBackupRepository.class).to(DefaultBlockBackupRepository.class);
 
         install(new FactoryModuleBuilder()
                 .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)

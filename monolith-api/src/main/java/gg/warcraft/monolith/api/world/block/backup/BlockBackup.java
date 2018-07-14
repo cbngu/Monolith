@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.api.world.block.backup;
 
-import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.block.BlockType;
 
 import java.util.UUID;
@@ -26,5 +26,5 @@ public interface BlockBackup {
      *
      * @return The location of the block this backup belongs to. Never null.
      */
-    Location getLocation();
+    BlockLocation getLocation();
 }
