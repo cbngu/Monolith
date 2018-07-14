@@ -4,10 +4,10 @@ import gg.warcraft.monolith.api.entity.event.EntityEvent;
 
 import java.util.UUID;
 
-public class AbstractEntityEvent implements EntityEvent {
+public class SimpleEntityEvent implements EntityEvent {
     private final UUID entityId;
 
-    public AbstractEntityEvent(UUID entityId) {
+    public SimpleEntityEvent(UUID entityId) {
         this.entityId = entityId;
     }
 

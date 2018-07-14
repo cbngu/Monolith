@@ -3,12 +3,16 @@ package gg.warcraft.monolith.spigot.event;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
-import gg.warcraft.monolith.api.item.ItemType;
+import gg.warcraft.monolith.api.entity.event.EntityPreDeathEvent;
+import gg.warcraft.monolith.api.entity.player.Player;
+import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityDeathEvent;
-import gg.warcraft.monolith.spigot.item.SpigotItemTypeMapper;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreDeathEvent;
+import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,29 +20,52 @@ import java.util.stream.Collectors;
 
 public class SpigotEntityEventMapper implements Listener {
     private final EventService eventService;
-    private final SpigotItemTypeMapper itemTypeMapper;
+    private final SpigotItemMapper itemMapper;
 
     @Inject
-    public SpigotEntityEventMapper(EventService eventService, SpigotItemTypeMapper itemTypeMapper) {
+    public SpigotEntityEventMapper(EventService eventService, SpigotItemMapper itemMapper) {
         this.eventService = eventService;
-        this.itemTypeMapper = itemTypeMapper;
+        this.itemMapper = itemMapper;
+    }
+
+    @EventHandler
+    public void onEntityDamageEvent(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            return;
+        }
+
+        if (event.getEntity() instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) event.getEntity();
+            if (event.getDamage() > livingEntity.getHealth()) {
+                EntityPreDeathEvent entityPreDeathEvent =
+                        new SimpleEntityPreDeathEvent(livingEntity.getUniqueId(), false);
+                eventService.publish(entityPreDeathEvent);
+
+                if (entityPreDeathEvent.isCancelled() && !entityPreDeathEvent.isExplicitlyAllowed()) {
+                    event.setDamage(livingEntity.getHealth() - 1);
+                }
+            }
+        }
     }
 
     @EventHandler
     public void onEntityDeath(org.bukkit.event.entity.EntityDeathEvent event) {
+        if (event.getEntity() instanceof Player) {
+            return;
+        }
+
         UUID entityId = event.getEntity().getUniqueId();
-        List<ItemType> drops = event.getDrops().stream()
-                .map(itemStack -> itemTypeMapper.map(itemStack.getType(), itemStack.getData().getData()))
+        List<Item> drops = event.getDrops().stream()
+                .map(itemMapper::map)
                 .collect(Collectors.toList());
         EntityDeathEvent entityDeathEvent = new SimpleEntityDeathEvent(entityId, drops);
         eventService.publish(entityDeathEvent);
 
-        // Give back the drops that we want to send back to Spigot
-        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
-                .map(itemTypeMapper::map)
-                .map(drop -> new ItemStack(drop.getMaterial(), 1, (short) 0, drop.getData()))
-                .collect(Collectors.toList());
+//        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
+//                .map(itemMapper::map)
+//                .collect(Collectors.toList());
+        // TODO wrap up implementation
         event.getDrops().clear();
-        event.getDrops().addAll(spigotDrops);
+//        event.getDrops().addAll(spigotDrops);
     }
 }

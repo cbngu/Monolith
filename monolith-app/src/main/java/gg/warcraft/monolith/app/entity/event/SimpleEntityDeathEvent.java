@@ -1,28 +1,22 @@
 package gg.warcraft.monolith.app.entity.event;
 
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
-import gg.warcraft.monolith.api.item.ItemType;
+import gg.warcraft.monolith.api.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SimpleEntityDeathEvent extends AbstractEntityEvent implements EntityDeathEvent {
-    private final List<ItemType> drops;
+public class SimpleEntityDeathEvent extends SimpleEntityEvent implements EntityDeathEvent {
+    private final List<Item> drops;
 
-    public SimpleEntityDeathEvent(UUID entityId, List<ItemType> drops) {
+    public SimpleEntityDeathEvent(UUID entityId, List<Item> drops) {
         super(entityId);
         this.drops = drops;
     }
 
     @Override
-    public List<ItemType> getDrops() {
+    public List<Item> getDrops() {
         return new ArrayList<>(drops);
-    }
-
-    @Override
-    public void setDrops(List<ItemType> drops) {
-        this.drops.clear();
-        this.drops.addAll(drops);
     }
 }
