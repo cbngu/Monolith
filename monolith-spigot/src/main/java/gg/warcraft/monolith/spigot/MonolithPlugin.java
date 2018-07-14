@@ -11,6 +11,7 @@ import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
 import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
 import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotPlayerEventMapper;
+import gg.warcraft.monolith.spigot.event.SpigotWorldEventMapper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,6 +47,9 @@ public class MonolithPlugin extends JavaPlugin {
 
         SpigotPlayerEventMapper playerEventMapper = injector.getInstance(SpigotPlayerEventMapper.class);
         getServer().getPluginManager().registerEvents(playerEventMapper, this);
+
+        SpigotWorldEventMapper worldEventMapper = injector.getInstance(SpigotWorldEventMapper.class);
+        getServer().getPluginManager().registerEvents(worldEventMapper, this);
     }
 
     @Override
