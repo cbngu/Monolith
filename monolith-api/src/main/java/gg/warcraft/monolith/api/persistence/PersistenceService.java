@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.persistence;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This service is injectable.
@@ -33,13 +34,13 @@ public interface PersistenceService {
      * Pushes a value onto the list at key. Care should be taken that this method will overwrite the existing list in
      * its entirety with the new values provided.
      *
-     * @param key    The key to set the value list at. Can not be nul or empty.
+     * @param key    The key to set the value list at. Can not be null or empty.
      * @param values The value list. Can be null or empty.
      */
     void setList(String key, List<String> values);
 
     /**
-     * @param key   The key of the list to push the value onto. Can not be nul or empty.
+     * @param key   The key of the list to push the value onto. Can not be null or empty.
      * @param value The value. Can be null or empty.
      */
     void pushList(String key, String value);
@@ -51,10 +52,28 @@ public interface PersistenceService {
     Map<String, String> getMap(String key);
 
     /**
-     * @param key    The key to set the value map at. Can not be nul or empty.
+     * @param key    The key to set the value map at. Can not be null or empty.
      * @param values The value map. Can be null or empty.
      */
     void setMap(String key, Map<String, String> values);
+
+    /**
+     * @param key The key of the value set to retrieve. Can not be null or empty.
+     * @return The value set. Can be null or empty.
+     */
+    Set<String> getSet(String key);
+
+    /**
+     * @param key    The key of the value set to add the values to. Can not be null or empty.
+     * @param values The values to add to the set. Can be null or empty.
+     */
+    void addSet(String key, List<String> values);
+
+    /**
+     * @param key    The key of the value set to remove the values from. Can not be null or empty.
+     * @param values The values to remove from the set. Can be null or empty.
+     */
+    void removeSet(String key, List<String> values);
 
     /**
      * @param key The key to delete any associated value or value map for. Can not be null or empty.

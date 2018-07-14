@@ -10,6 +10,7 @@ import redis.clients.jedis.ScanResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class JedisPersistenceService implements PersistenceService {
     private final Jedis jedis;
@@ -37,7 +38,9 @@ public class JedisPersistenceService implements PersistenceService {
     @Override
     public void setList(String key, List<String> values) {
         jedis.del(key);
-        jedis.lpush(key, values.toArray(new String[0]));
+        if (!values.isEmpty()) {
+            jedis.lpush(key, values.toArray(new String[0]));
+        }
     }
 
     @Override
@@ -53,6 +56,25 @@ public class JedisPersistenceService implements PersistenceService {
     @Override
     public void setMap(String key, Map<String, String> values) {
         values.forEach((field, value) -> jedis.hset(key, field, value));
+    }
+
+    @Override
+    public Set<String> getSet(String key) {
+        return jedis.smembers(key);
+    }
+
+    @Override
+    public void addSet(String key, List<String> values) {
+        if (!values.isEmpty()) {
+            jedis.sadd(key, values.toArray(new String[0]));
+        }
+    }
+
+    @Override
+    public void removeSet(String key, List<String> values) {
+        if (!values.isEmpty()) {
+            jedis.srem(key, values.toArray(new String[0]));
+        }
     }
 
     @Override
