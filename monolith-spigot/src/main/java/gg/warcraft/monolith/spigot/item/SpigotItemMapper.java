@@ -21,6 +21,7 @@ public class SpigotItemMapper {
         ItemStack itemStack = new ItemStack(materialData.getMaterial(), item.getStackSize(), (short) item.getDamage(),
                 materialData.getData());
         ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(item.getName());
         itemMeta.setLore(item.getLore());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
