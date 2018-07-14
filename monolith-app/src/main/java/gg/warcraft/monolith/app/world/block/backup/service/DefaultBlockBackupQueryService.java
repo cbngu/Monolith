@@ -1,10 +1,10 @@
 package gg.warcraft.monolith.app.world.block.backup.service;
 
+import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupQueryService;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupRepository;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 

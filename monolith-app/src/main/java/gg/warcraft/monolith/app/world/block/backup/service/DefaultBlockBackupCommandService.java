@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.world.block.backup.service;
 
+import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupCommandService;
@@ -8,7 +9,6 @@ import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
 import gg.warcraft.monolith.app.world.block.SimpleBlock;
 import gg.warcraft.monolith.app.world.block.backup.SimpleBlockBackup;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 public class DefaultBlockBackupCommandService implements BlockBackupCommandService {
