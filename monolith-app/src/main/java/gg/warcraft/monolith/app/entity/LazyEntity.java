@@ -10,6 +10,7 @@ import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.status.Status;
 import gg.warcraft.monolith.api.util.Lazy;
 import gg.warcraft.monolith.api.world.OrientedLocation;
+import org.joml.AABBf;
 import org.joml.Vector3f;
 
 import java.util.UUID;
@@ -74,6 +75,11 @@ public class LazyEntity implements Entity {
     @Override
     public Equipment getEquipment() {
         return serverData.get().getEquipment();
+    }
+
+    @Override
+    public AABBf getBoundingBox() {
+        return serverData.get().getBoundingBox();
     }
 
     @Override

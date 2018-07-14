@@ -8,7 +8,6 @@ import gg.warcraft.monolith.spigot.entity.SpigotEntityData;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,8 +21,8 @@ public class SpigotPlayerData extends SpigotEntityData implements PlayerServerDa
 
     @Inject
     public SpigotPlayerData(SpigotEntityTypeMapper entityTypeMapper, SpigotLocationMapper locationMapper,
-                            SpigotItemMapper itemMapper, LivingEntity entity, @Assisted Player player) {
-        super(entityTypeMapper, locationMapper, itemMapper, entity);
+                            SpigotItemMapper itemMapper, @Assisted Player player) {
+        super(entityTypeMapper, locationMapper, itemMapper, player);
         this.itemMapper = itemMapper;
         this.player = player;
     }

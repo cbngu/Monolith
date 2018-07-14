@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.api.entity;
 
 import gg.warcraft.monolith.api.world.OrientedLocation;
+import org.joml.AABBf;
 import org.joml.Vector3f;
 
 import java.util.UUID;
@@ -36,6 +37,11 @@ public interface EntityServerData {
      * @return The equipment the entity is currently wearing. Never null.
      */
     Equipment getEquipment();
+
+    /**
+     * @return The axis aligned bounding box of this entity. Never null.
+     */
+    AABBf getBoundingBox();
 
     /**
      * @param permission The permission. Can not be null or empty.
