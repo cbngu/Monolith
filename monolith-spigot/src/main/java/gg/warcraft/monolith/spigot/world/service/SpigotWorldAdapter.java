@@ -12,20 +12,25 @@ import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotBlockMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
 import gg.warcraft.monolith.spigot.world.SpigotWorldMapper;
+import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SpigotWorldAdapter implements WorldServerAdapter {
+    private final Server server;
     private final SpigotWorldMapper worldMapper;
     private final SpigotBlockMapper blockMapper;
     private final SpigotLocationMapper locationMapper;
     private final SpigotItemMapper itemMapper;
 
     @Inject
-    public SpigotWorldAdapter(SpigotWorldMapper worldMapper, SpigotBlockMapper blockMapper,
+    public SpigotWorldAdapter(Server server, SpigotWorldMapper worldMapper, SpigotBlockMapper blockMapper,
                               SpigotLocationMapper locationMapper, SpigotItemMapper itemMapper) {
+        this.server = server;
         this.worldMapper = worldMapper;
         this.blockMapper = blockMapper;
         this.locationMapper = locationMapper;
@@ -76,5 +81,14 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
             ItemStack itemStack = itemMapper.map(item);
             world.dropItem(spigotLocation, itemStack);
         });
+    }
+
+    @Override
+    public void spoofBlock(Block fakeBlock, UUID playerId) {
+        Player player = server.getPlayer(playerId);
+        if (player != null) {
+            org.bukkit.block.Block spigotBlock = blockMapper.map(fakeBlock);
+            player.sendBlockChange(spigotBlock.getLocation(), spigotBlock.getType(), spigotBlock.getData());
+        }
     }
 }

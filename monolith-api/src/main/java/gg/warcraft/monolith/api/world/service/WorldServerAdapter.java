@@ -9,6 +9,7 @@ import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.Sign;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This adapter is injectable, however you generally have no need for it. Use the command and query services instead.
@@ -58,4 +59,6 @@ public interface WorldServerAdapter {
      * @param location The location to drop at.
      */
     void dropItemsAt(List<Item> items, Location location);
+
+    void spoofBlock(Block fakeBlock, UUID playerId);
 }
