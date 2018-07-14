@@ -8,6 +8,7 @@ import gg.warcraft.monolith.api.core.TaskService;
 import gg.warcraft.monolith.api.effect.Particle;
 import gg.warcraft.monolith.api.effect.ParticleFactory;
 import gg.warcraft.monolith.api.entity.EntityServerData;
+import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
@@ -20,6 +21,8 @@ import gg.warcraft.monolith.spigot.core.SpigotTaskService;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityData;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
 import gg.warcraft.monolith.spigot.entity.player.service.SpigotPlayerAdapter;
+import gg.warcraft.monolith.spigot.entity.player.service.SpigotPlayerData;
+import gg.warcraft.monolith.spigot.entity.player.service.SpigotPlayerDataFactory;
 import gg.warcraft.monolith.spigot.entity.service.SpigotEntityAdapter;
 import gg.warcraft.monolith.spigot.particle.ColorParticle;
 import gg.warcraft.monolith.spigot.particle.SimpleParticle;
@@ -93,6 +96,9 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
         install(new FactoryModuleBuilder()
                 .implement(EntityServerData.class, SpigotEntityData.class)
                 .build(SpigotEntityDataFactory.class));
+        install(new FactoryModuleBuilder()
+                .implement(PlayerServerData.class, SpigotPlayerData.class)
+                .build(SpigotPlayerDataFactory.class));
     }
 
     private void configureWorld() {
