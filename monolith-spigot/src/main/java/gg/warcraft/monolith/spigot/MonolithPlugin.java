@@ -5,6 +5,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import gg.warcraft.monolith.api.Monolith;
 import gg.warcraft.monolith.api.core.EventService;
+import gg.warcraft.monolith.api.world.WorldType;
+import gg.warcraft.monolith.api.world.block.build.service.BlockBuildCommandService;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.PlayerCommandSender;
 import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
@@ -17,6 +19,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,23 +59,7 @@ public class MonolithPlugin extends JavaPlugin {
     @Override
     public void onLoad() {
         saveDefaultConfig();
-    }
-
-    @Override
-    public void onEnable() {
         FileConfiguration localConfig = getConfig();
-
-        boolean isFirstTimeSetup = localConfig.getBoolean("firstTimeSetup");
-        if (isFirstTimeSetup) {
-            getLogger().severe("Monolith has not been configured yet, shutting down server.");
-            getLogger().severe("If you have finished configuration make sure to set firstTimeSetup to false.");
-            getServer().shutdown();
-        }
-
-        boolean maintenance = localConfig.getBoolean("maintenance");
-        if (maintenance) {
-            // TODO setup maintenance login and session checker
-        }
 
         String configurationService = localConfig.getString("configurationService");
         String gitHubAccount = localConfig.getString("gitHubAccount");
@@ -83,16 +71,46 @@ public class MonolithPlugin extends JavaPlugin {
 
         String entityService = localConfig.getString("entityService");
 
-        String overworldName = localConfig.getString("worldName");
-        String theNetherName = localConfig.getString("theNetherName");
-        String theEndName = localConfig.getString("theEndName");
+        String buildRepositoryWorldString = localConfig.getString("buildRepository.world");
+        WorldType buildRepositoryWorld = WorldType.valueOf(buildRepositoryWorldString);
+        Vector3ic buildRepositoryMinimumCorner = new Vector3i(
+                localConfig.getInt("buildRepository.minimumCorner.x"),
+                localConfig.getInt("buildRepository.minimumCorner.y"),
+                localConfig.getInt("buildRepository.minimumCorner.z"));
+        Vector3ic buildRepositoryMaximumCorner = new Vector3i(
+                localConfig.getInt("buildRepository.maximumCorner.x"),
+                localConfig.getInt("buildRepository.maximumCorner.y"),
+                localConfig.getInt("buildRepository.maximumCorner.z"));
+
+        String overworldName = localConfig.getString("worldDirectoryName");
+        String netherName = localConfig.getString("netherDirectoryName");
+        String theEndName = localConfig.getString("endDirectoryName");
 
         AbstractModule spigotMonolithModule = new SpigotMonolithModule(
                 configurationService, gitHubAccount, gitHubRepository,
                 persistenceService, redisHost, redisPort,
-                entityService, this,
-                overworldName, theNetherName, theEndName);
+                entityService, buildRepositoryWorld,
+                buildRepositoryMinimumCorner, buildRepositoryMaximumCorner,
+                this, overworldName, netherName, theEndName);
         Monolith.registerModule(spigotMonolithModule);
+    }
+
+    @Override
+    public void onEnable() {
+        FileConfiguration localConfig = getConfig();
+
+        boolean isFirstTimeSetup = localConfig.getBoolean("firstTimeSetup");
+        if (isFirstTimeSetup) {
+            getLogger().severe("Monolith has not been configured yet, shutting down server.");
+            getLogger().severe("If you have finished configuration make sure to set firstTimeSetup to false.");
+            getServer().shutdown();
+            return;
+        }
+
+        boolean maintenance = localConfig.getBoolean("maintenance");
+        if (maintenance) {
+            // TODO setup maintenance login and session checker
+        }
 
         initializeInjector();
         injector = Monolith.getInstance().getInjector();
@@ -100,6 +118,9 @@ public class MonolithPlugin extends JavaPlugin {
 
         initializeMonolithEventHandlers();
         initializeSpigotEventMappers();
+
+        BlockBuildCommandService blockBuildCommandService = injector.getInstance(BlockBuildCommandService.class);
+        blockBuildCommandService.initializeBuilds();
     }
 
     @Override

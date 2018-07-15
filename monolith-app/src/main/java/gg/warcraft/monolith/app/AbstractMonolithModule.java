@@ -42,6 +42,7 @@ import gg.warcraft.monolith.api.persistence.PersistenceService;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupCommandService;
@@ -49,6 +50,9 @@ import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupQueryServi
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupRepository;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBoxFactory;
+import gg.warcraft.monolith.api.world.block.build.service.BlockBuildCommandService;
+import gg.warcraft.monolith.api.world.block.build.service.BlockBuildQueryService;
+import gg.warcraft.monolith.api.world.block.build.service.BlockBuildRepository;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingCommandService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingQueryService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingRepository;
@@ -95,11 +99,15 @@ import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupCom
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupQueryService;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupRepository;
 import gg.warcraft.monolith.app.world.block.box.SimpleBoundingBlockBox;
+import gg.warcraft.monolith.app.world.block.build.service.DefaultBlockBuildCommandService;
+import gg.warcraft.monolith.app.world.block.build.service.DefaultBlockBuildQueryService;
+import gg.warcraft.monolith.app.world.block.build.service.DefaultBlockBuildRepository;
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingCommandService;
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingQueryService;
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingRepository;
 import gg.warcraft.monolith.app.world.service.DefaultWorldCommandService;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
+import org.joml.Vector3ic;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -111,10 +119,14 @@ public class AbstractMonolithModule extends AbstractModule {
     private final String gitHubAccount;
     private final String gitHubRepository;
     private final String entityService;
+    private final WorldType buildRepositoryWorld;
+    private final Vector3ic buildRepositoryMinimumCorner;
+    private final Vector3ic buildRepositoryMaximumCorner;
 
     public AbstractMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                   String persistenceService, String redisHost, int redisPort,
-                                  String entityService) {
+                                  String entityService, WorldType buildRepositoryWorld,
+                                  Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner) {
         this.configurationService = configurationService;
         this.gitHubAccount = gitHubAccount;
         this.gitHubRepository = gitHubRepository;
@@ -122,6 +134,9 @@ public class AbstractMonolithModule extends AbstractModule {
         this.redisHost = redisHost;
         this.redisPort = redisPort;
         this.entityService = entityService;
+        this.buildRepositoryWorld = buildRepositoryWorld;
+        this.buildRepositoryMinimumCorner = buildRepositoryMinimumCorner;
+        this.buildRepositoryMaximumCorner = buildRepositoryMaximumCorner;
     }
 
     @Override
@@ -159,6 +174,9 @@ public class AbstractMonolithModule extends AbstractModule {
                 bind(ConfigurationCommandService.class).to(GitHubConfigurationCommandService.class);
                 bind(ConfigurationQueryService.class).to(DefaultConfigurationQueryService.class);
                 bind(ConfigurationRepository.class).to(DefaultConfigurationRepository.class);
+                break;
+            case "CUSTOM":
+                // do nothing, the implementing server should provide bindings
                 break;
             default:
                 throw new IllegalArgumentException("Illegal configuration service in Monolith configuration: " + configurationService);
@@ -241,6 +259,9 @@ public class AbstractMonolithModule extends AbstractModule {
                 bind(JedisPool.class).toInstance(jedisPool);
                 bind(PersistenceService.class).to(JedisPersistenceService.class);
                 break;
+            case "CUSTOM":
+                // do nothing, the implementing server should provide bindings
+                break;
             default:
                 throw new IllegalArgumentException("Illegal persistence service in Monolith configuration: " + persistenceService);
         }
@@ -258,6 +279,17 @@ public class AbstractMonolithModule extends AbstractModule {
 
         bind(BlockUtils.class).to(DefaultBlockUtils.class);
         bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
+
+        bind(WorldType.class).annotatedWith(Names.named("BuildRepositoryWorld"))
+                .toInstance(buildRepositoryWorld);
+        bind(Vector3ic.class).annotatedWith(Names.named("BuildRepositoryMinimumCorner"))
+                .toInstance(buildRepositoryMinimumCorner);
+        bind(Vector3ic.class).annotatedWith(Names.named("BuildRepositoryMaximumCorner"))
+                .toInstance(buildRepositoryMaximumCorner);
+
+        bind(BlockBuildCommandService.class).to(DefaultBlockBuildCommandService.class);
+        bind(BlockBuildQueryService.class).to(DefaultBlockBuildQueryService.class);
+        bind(BlockBuildRepository.class).to(DefaultBlockBuildRepository.class);
 
         bind(BlockBackupCommandService.class).to(DefaultBlockBackupCommandService.class);
         bind(BlockBackupQueryService.class).to(DefaultBlockBackupQueryService.class);

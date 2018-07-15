@@ -1,9 +1,22 @@
-# Monolith configuration
+# MONOLITH CONFIGURATION
+# ------------------------------------------------------------
+# Monolith is highly configurable and this file is at the heart
+# of it. Except for the firstTimeSetup flag right below this
+# paragraph most of the configuration is perfectly fine to leave
+# as their default values. That said though, it is certainly
+# better to go over it in its entirety. It doesn't take long.
+# If you run into any issues while using Monolith or have any
+# question regarding the plugin itself or its configuration do
+# not hesitate to get in touch through any of these channels:
+# - The project repository at github.com/WarCraft/Monolith
+# - The dev channel on our discord at discord.warcraft.gg
+# - The dev category on our forum at community.warcraft.gg
+
 
 # FIRST TIME SETUP
 # Options: [true, false]
 # ------------------------------------------------------------
-# If this is true your server will not start. Monolith heavily
+# If set to true your server will not start. Monolith heavily
 # relies on its configuration and running prior to having
 # provided one is deemed unstable.
 # By setting this to false you acknowledge to having fully
@@ -11,15 +24,19 @@
 # signal that the plugin can start.
 firstTimeSetup: true
 
+
 # AUTHORIZATION SERVICE
+# Options: [true, false]
 # ------------------------------------------------------------
-# If true your server is launched in maintenance mode, meaning
-# only those with the maintenance permission are able to join.
+# If set to true your server is launched in maintenance mode,
+# only those with the maintenance permission will be able to
+# join.
 maintenance: false
 maintenancePermission: monolith.staff
 
+
 # CONFIGURATION SERVICE
-# Options: [LOCAL, GITHUB]
+# Options: [LOCAL, GITHUB, CUSTOM]
 # ------------------------------------------------------------
 # If LOCAL you are required to configure all of the Monolith
 # plugins via their respective config.yml files in their data
@@ -36,8 +53,9 @@ configurationService: LOCAL
 gitHubAccount: AccountName
 gitHubRepository: RepositoryName
 
+
 # PERSISTENCE SERVICE
-# Options: [REDIS]
+# Options: [REDIS, CUSTOM]
 # ------------------------------------------------------------
 # If REDIS you are required to have an unauthenticated Redis
 # server running at the provided host and port.
@@ -51,39 +69,34 @@ persistenceService: REDIS
 redisHost: 127.0.0.1
 redisPort: 6379
 
-# ENTITY SERVICE
-# Options: [DEFAULT, CUSTOM]
-# ------------------------------------------------------------
-#
-entityService: DEFAULT
 
 # WORLD SERVICE
 # ------------------------------------------------------------
 #
-worldName: world
-theNetherName: world_nether
-theEndName: world_the_end
-spawn:
-  world: world
-  x: 0
-  y: 0
-  z: 0
+worldDirectoryName: world
+netherDirectoryName: world_nether
+endDirectoryName: world_the_end
+
 
 # BUILD REPOSITORY
+# World options: [OVERWORLD, NETHER, END]
 # ------------------------------------------------------------
-minimumCorner:
-  world: world
-  x: 0
-  y: 0
-  z: 0
-maximumCorner:
-  world: world
-  x: 0
-  y: 0
-  z: 0
+buildRepository:
+  world: OVERWORLD
+  minimumCorner:
+    x: 0
+    y: 0
+    z: 0
+  maximumCorner:
+    x: 0
+    y: 0
+    z: 0
+
 
 # MISCELLANEOUS
 # ------------------------------------------------------------
+shutdownMessage: The server is going down for maintenance, please check http://your.website.here for updates.
+
 # Finally Monolith allows you to specify a list of tips which
 # will be broadcast to the server every x minutes where x is
 # tipsPeriodInMinutes. You can also specify the message sent
@@ -92,4 +105,3 @@ maximumCorner:
 tips:
   - Any feedback? Please let us know at discord.link.here!
 tipsPeriodInMinutes: 10
-shutdownMessage: The server is going down for maintenance, please check http://your.website.here for updates.

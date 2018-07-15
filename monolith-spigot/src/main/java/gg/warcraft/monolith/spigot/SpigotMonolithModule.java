@@ -11,6 +11,7 @@ import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
+import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
 import gg.warcraft.monolith.app.AbstractMonolithModule;
 import gg.warcraft.monolith.app.effect.particle.MultiParticle;
@@ -34,6 +35,9 @@ import gg.warcraft.monolith.spigot.world.service.SpigotWorldAdapter;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
+import org.joml.Vector3ic;
+
+import java.util.logging.Logger;
 
 public class SpigotMonolithModule extends AbstractMonolithModule {
     private final Plugin plugin;
@@ -43,9 +47,11 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
 
     public SpigotMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                 String persistenceService, String redisHost, int redisPort,
-                                String entityService, Plugin plugin,
-                                String overworldName, String theNetherName, String theEndName) {
-        super(configurationService, gitHubAccount, gitHubRepository, persistenceService, redisHost, redisPort, entityService);
+                                String entityService, WorldType buildRepositoryWorld,
+                                Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner,
+                                Plugin plugin, String overworldName, String theNetherName, String theEndName) {
+        super(configurationService, gitHubAccount, gitHubRepository, persistenceService, redisHost, redisPort,
+                entityService, buildRepositoryWorld, buildRepositoryMinimumCorner, buildRepositoryMaximumCorner);
         this.plugin = plugin;
         this.overworldName = overworldName;
         this.theNetherName = theNetherName;
@@ -65,6 +71,7 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     private void configureBukkit() {
         bind(Plugin.class).toInstance(plugin);
         bind(Server.class).toProvider(plugin::getServer);
+        bind(Logger.class).toProvider(() -> plugin.getServer().getLogger());
         bind(World.class).annotatedWith(Overworld.class).toProvider(() -> plugin.getServer().getWorld(overworldName));
         bind(World.class).annotatedWith(TheNether.class).toProvider(() -> plugin.getServer().getWorld(theNetherName));
         bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> plugin.getServer().getWorld(theEndName));

@@ -3,8 +3,8 @@ package gg.warcraft.monolith.app.world.block.build.service;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.World;
+import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
@@ -17,6 +17,7 @@ import gg.warcraft.monolith.api.world.block.build.service.BlockBuildRepository;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.world.block.build.SimpleBlockBuild;
 import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -36,16 +37,14 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
     @Inject
     public DefaultBlockBuildCommandService(WorldQueryService worldQueryService, BlockBuildRepository buildRepository,
                                            BlockUtils blockUtils, BoundingBlockBoxFactory blockBoxFactory,
-                                           @Named("BuildRepositoryMinimumCorner") BlockLocation minimumCorner,
-                                           @Named("BuildRepositoryMaximumCorner") BlockLocation maximumCorner) {
-        Preconditions.checkArgument(minimumCorner.getWorld().getType() == maximumCorner.getWorld().getType(),
-                "Failed to create build repository bounding box with minimum and maximum corners in different worlds.");
+                                           @Named("BuildRepositoryWorld") WorldType world,
+                                           @Named("BuildRepositoryMinimumCorner") Vector3ic minimumCorner,
+                                           @Named("BuildRepositoryMaximumCorner") Vector3ic maximumCorner) {
         this.worldQueryService = worldQueryService;
         this.buildRepository = buildRepository;
         this.blockUtils = blockUtils;
         this.blockBoxFactory = blockBoxFactory;
-        this.buildRepositoryBoundingBox = blockBoxFactory.createBoundingBlockBox(minimumCorner.getWorld().getType(),
-                minimumCorner.toVector(), maximumCorner.toVector());
+        this.buildRepositoryBoundingBox = blockBoxFactory.createBoundingBlockBox(world, minimumCorner, maximumCorner);
     }
 
     int findMinMaxCoordinate(Set<Block> blocks, Function<Block, Integer> coordinate, BinaryOperator<Integer> reducer) {
