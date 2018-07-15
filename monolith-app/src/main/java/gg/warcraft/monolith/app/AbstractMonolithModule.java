@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
+import gg.warcraft.monolith.api.MonolithPluginUtils;
 import gg.warcraft.monolith.api.command.CommandSender;
 import gg.warcraft.monolith.api.command.Console;
 import gg.warcraft.monolith.api.command.service.CommandCommandService;
@@ -165,6 +166,8 @@ public class AbstractMonolithModule extends AbstractModule {
     }
 
     private void configureCore() {
+        bind(MonolithPluginUtils.class).to(DefaultMonolithPluginUtils.class);
+
         bind(EventService.class).to(GuavaEventService.class);
 
         SimpleModule monolithMapperModule = new MonolithMapperModule();
