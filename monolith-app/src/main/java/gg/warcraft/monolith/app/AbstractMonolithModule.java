@@ -42,6 +42,7 @@ import gg.warcraft.monolith.api.persistence.PersistenceService;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.DirectionUtils;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
@@ -93,6 +94,7 @@ import gg.warcraft.monolith.app.persistence.JedisPersistenceService;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
+import gg.warcraft.monolith.app.world.DefaultDirectionUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockTypeUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockUtils;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupCommandService;
@@ -277,9 +279,6 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(WorldQueryService.class).to(DefaultWorldQueryService.class);
         bind(WorldCommandService.class).to(DefaultWorldCommandService.class);
 
-        bind(BlockUtils.class).to(DefaultBlockUtils.class);
-        bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
-
         bind(WorldType.class).annotatedWith(Names.named("BuildRepositoryWorld"))
                 .toInstance(buildRepositoryWorld);
         bind(Vector3ic.class).annotatedWith(Names.named("BuildRepositoryMinimumCorner"))
@@ -298,6 +297,10 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(BlockSpoofingCommandService.class).to(DefaultBlockSpoofingCommandService.class);
         bind(BlockSpoofingQueryService.class).to(DefaultBlockSpoofingQueryService.class);
         bind(BlockSpoofingRepository.class).to(DefaultBlockSpoofingRepository.class);
+
+        bind(BlockUtils.class).to(DefaultBlockUtils.class);
+        bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
+        bind(DirectionUtils.class).to(DefaultDirectionUtils.class);
 
         install(new FactoryModuleBuilder()
                 .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)
