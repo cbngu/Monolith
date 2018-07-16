@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.spigot.world;
 
+import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 
 public class SpigotBlockFaceMapper {
@@ -39,6 +40,25 @@ public class SpigotBlockFaceMapper {
                 return BlockFace.DOWN;
             default:
                 return BlockFace.NORTH;
+        }
+    }
+
+    public Direction mapDirection(org.bukkit.block.BlockFace face) {
+        switch (face) {
+            case NORTH:
+                return Direction.NORTH;
+            case EAST:
+                return Direction.EAST;
+            case SOUTH:
+                return Direction.SOUTH;
+            case WEST:
+                return Direction.WEST;
+            case UP:
+                return Direction.UP;
+            case DOWN:
+                return Direction.DOWN;
+            default:
+                return Direction.NORTH;
         }
     }
 }

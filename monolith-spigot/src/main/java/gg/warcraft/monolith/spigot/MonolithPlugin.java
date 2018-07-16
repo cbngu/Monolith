@@ -119,6 +119,7 @@ public class MonolithPlugin extends JavaPlugin {
         initializeMonolithEventHandlers();
         initializeSpigotEventMappers();
 
+        getLogger().info("Initializing build repository, this might take a little bit..");
         BlockBuildCommandService blockBuildCommandService = injector.getInstance(BlockBuildCommandService.class);
         blockBuildCommandService.initializeBuilds();
     }
