@@ -10,12 +10,16 @@ import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.event.BlockBreakEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockInteractEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockInteraction;
-import gg.warcraft.monolith.api.world.block.event.PreBlockBreakEvent;
+import gg.warcraft.monolith.api.world.block.event.BlockPlaceEvent;
+import gg.warcraft.monolith.api.world.block.event.BlockPreBreakEvent;
+import gg.warcraft.monolith.api.world.block.event.BlockPrePlaceEvent;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockBreakEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockInteractEvent;
-import gg.warcraft.monolith.app.world.block.event.SimplePreBlockBreakEvent;
+import gg.warcraft.monolith.app.world.block.event.SimpleBlockPlaceEvent;
+import gg.warcraft.monolith.app.world.block.event.SimpleBlockPreBreakEvent;
+import gg.warcraft.monolith.app.world.block.event.SimpleBlockPrePlaceEvent;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotBlockFaceMapper;
 import gg.warcraft.monolith.spigot.world.SpigotBlockMapper;
@@ -55,20 +59,20 @@ public class SpigotWorldEventMapper implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void preBlockBreakEvent(org.bukkit.event.block.BlockBreakEvent event) {
+    public void onBlockPreBreakEvent(org.bukkit.event.block.BlockBreakEvent event) {
         Block block = blockMapper.map(event.getBlock());
         List<Item> alternativeDrops = event.isDropItems() ? null : new ArrayList<>();
         UUID playerId = event.getPlayer().getUniqueId();
         boolean cancelled = event.isCancelled();
-        PreBlockBreakEvent preBlockBreakEvent = new SimplePreBlockBreakEvent(block, alternativeDrops, playerId, cancelled);
-        eventService.publish(preBlockBreakEvent);
+        BlockPreBreakEvent blockPreBreakEvent = new SimpleBlockPreBreakEvent(block, alternativeDrops, playerId, cancelled);
+        eventService.publish(blockPreBreakEvent);
 
-        if (preBlockBreakEvent.isExplicitlyAllowed()) {
+        if (blockPreBreakEvent.isExplicitlyAllowed()) {
             event.setCancelled(false);
         } else {
-            event.setCancelled(preBlockBreakEvent.isCancelled());
+            event.setCancelled(blockPreBreakEvent.isCancelled());
         }
-        List<Item> actualAlternativeDrops = preBlockBreakEvent.getAlternativeDrops();
+        List<Item> actualAlternativeDrops = blockPreBreakEvent.getAlternativeDrops();
         if (actualAlternativeDrops == null) {
             event.setDropItems(true);
         } else {
@@ -99,9 +103,36 @@ public class SpigotWorldEventMapper implements Listener {
         }
     }
 
-    @EventHandler
-    public void onBlockPlaceEvent(org.bukkit.event.block.BlockPlaceEvent event) {
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onBlockPrePlaceEvent(org.bukkit.event.block.BlockPlaceEvent event) {
+        Block block = blockMapper.map(event.getBlock());
+        Block placedBlock = blockMapper.map(event.getBlockPlaced());
+        Block placedAgainst = blockMapper.map(event.getBlockAgainst());
+        UUID playerId = event.getPlayer().getUniqueId();
+        boolean cancelled = event.isCancelled();
+        BlockPrePlaceEvent blockPrePlaceEvent =
+                new SimpleBlockPrePlaceEvent(block, placedBlock, placedAgainst, playerId, cancelled);
+        eventService.publish(blockPrePlaceEvent);
 
+        if (blockPrePlaceEvent.isExplicitlyAllowed()) {
+            event.setCancelled(false);
+        } else {
+            event.setCancelled(blockPrePlaceEvent.isCancelled());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlockPlaceEvent(org.bukkit.event.block.BlockPlaceEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        Block block = blockMapper.map(event.getBlock());
+        Block placedBlock = blockMapper.map(event.getBlockPlaced());
+        Block placedAgainst = blockMapper.map(event.getBlockAgainst());
+        UUID playerId = event.getPlayer().getUniqueId();
+        BlockPlaceEvent blockPlaceEvent = new SimpleBlockPlaceEvent(block, placedBlock, placedAgainst, playerId);
+        eventService.publish(blockPlaceEvent);
     }
 
     void onBlockInteractEvent(PlayerInteractEvent event) {
