@@ -1,28 +1,32 @@
 package gg.warcraft.monolith.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.MonolithPluginUtils;
 import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.config.service.ConfigurationQueryService;
+import gg.warcraft.monolith.api.core.PluginLogger;
+import gg.warcraft.monolith.api.core.Yaml;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class DefaultMonolithPluginUtils implements MonolithPluginUtils {
     private final ConfigurationQueryService configurationQueryService;
     private final ConfigurationCommandService configurationCommandService;
-    private final Logger logger;
     private final ObjectMapper yamlMapper;
+    private final Logger logger;
 
     @Inject
     public DefaultMonolithPluginUtils(ConfigurationQueryService configurationQueryService,
                                       ConfigurationCommandService configurationCommandService,
-                                      Logger logger, ObjectMapper yamlMapper) {
+                                      @Yaml ObjectMapper yamlMapper, @PluginLogger Logger logger) {
         this.configurationQueryService = configurationQueryService;
         this.configurationCommandService = configurationCommandService;
-        this.logger = logger;
         this.yamlMapper = yamlMapper;
+        this.logger = logger;
     }
 
     @Override
@@ -54,7 +58,8 @@ public class DefaultMonolithPluginUtils implements MonolithPluginUtils {
 
     @Override
     public <T> T loadConfiguration(String configurationType, String configurationFileName, String configurationYaml,
-                                   Class<T> configurationClass) {
+                                   Class<T> configurationClass, SimpleModule... extraMapperModules) {
+        Arrays.stream(extraMapperModules).forEach(yamlMapper::registerModule);
         switch (configurationType) {
             case "REMOTE":
                 T configuration = loadRemoteConfiguration(configurationFileName, configurationClass);

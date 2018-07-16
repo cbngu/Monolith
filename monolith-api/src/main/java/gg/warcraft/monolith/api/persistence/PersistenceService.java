@@ -8,7 +8,9 @@ import java.util.Set;
  * This service is injectable.
  * <p>
  * The PersistenceService serves as a point of entry into the persistence module implementation. It provides methods to
- * get and set data in the store. Redis is currently the only supported implementation of this interface.
+ * get and set data in the key-value/document store.
+ * <p>
+ * Redis is currently the only supported implementation of this interface.
  */
 public interface PersistenceService {
 

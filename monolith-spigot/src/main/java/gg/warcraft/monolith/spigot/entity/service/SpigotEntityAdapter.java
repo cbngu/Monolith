@@ -6,7 +6,7 @@ import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
-import gg.warcraft.monolith.api.world.PotionType;
+import gg.warcraft.monolith.api.world.PotionEffectType;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
@@ -82,7 +82,7 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     @Override
-    public void removePotionEffect(UUID entityId, PotionType type) {
+    public void removePotionEffect(UUID entityId, PotionEffectType type) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
             // TODO: implement
@@ -100,9 +100,18 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     @Override
-    public void spawnEntity(EntityType type, Location spawnLocation) {
+    public UUID spawnEntity(EntityType type, Location spawnLocation) {
         org.bukkit.entity.EntityType spigotEntityType = entityTypeMapper.map(type);
         org.bukkit.Location spigotSpawnLocation = locationMapper.map(spawnLocation);
-        spigotSpawnLocation.getWorld().spawnEntity(spigotSpawnLocation, spigotEntityType);
+        Entity entity = spigotSpawnLocation.getWorld().spawnEntity(spigotSpawnLocation, spigotEntityType);
+        return entity.getUniqueId();
+    }
+
+    @Override
+    public void removeEntity(UUID entityId) {
+        Entity entity = server.getEntity(entityId);
+        if (entity != null) {
+            entity.remove();
+        }
     }
 }

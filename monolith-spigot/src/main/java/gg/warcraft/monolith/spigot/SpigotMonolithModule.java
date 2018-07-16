@@ -4,6 +4,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import gg.warcraft.monolith.api.command.service.CommandServerAdapter;
 import gg.warcraft.monolith.api.core.AuthorizationService;
+import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.api.core.TaskService;
 import gg.warcraft.monolith.api.effect.Particle;
 import gg.warcraft.monolith.api.effect.ParticleFactory;
@@ -71,7 +72,7 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     private void configureBukkit() {
         bind(Plugin.class).toInstance(plugin);
         bind(Server.class).toProvider(plugin::getServer);
-        bind(Logger.class).toProvider(() -> plugin.getServer().getLogger());
+        bind(Logger.class).annotatedWith(PluginLogger.class).toProvider(plugin::getLogger);
         bind(World.class).annotatedWith(Overworld.class).toProvider(() -> plugin.getServer().getWorld(overworldName));
         bind(World.class).annotatedWith(TheNether.class).toProvider(() -> plugin.getServer().getWorld(theNetherName));
         bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> plugin.getServer().getWorld(theEndName));

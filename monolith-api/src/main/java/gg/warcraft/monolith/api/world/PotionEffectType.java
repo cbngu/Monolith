@@ -1,11 +1,11 @@
 package gg.warcraft.monolith.api.world;
 
 /**
- * PotionType serves as an abstraction layer between Monolith plugin code and the eventual server implementation the
+ * PotionEffectType serves as an abstraction layer between Monolith plugin code and the eventual server implementation the
  * plugin is run on. It is identical to Spigot's {@code PotionEffectType} and the server adapter will substitute its
  * values with the correct implementation during runtime.
  */
-public enum PotionType {
+public enum PotionEffectType {
     SPEED(1),
     SLOW(2),
     FAST_DIGGING(3),
@@ -38,7 +38,7 @@ public enum PotionType {
 
     private final int id;
 
-    PotionType(final int id) {
+    PotionEffectType(final int id) {
         this.id = id;
     }
 

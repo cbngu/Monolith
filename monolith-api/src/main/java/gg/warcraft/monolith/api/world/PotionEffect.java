@@ -8,22 +8,22 @@ import gg.warcraft.monolith.api.util.Duration;
 public interface PotionEffect {
 
     /**
-     * @return The type of this potion effect.
+     * @return The type of this potion effect. Never null.
      */
-    PotionType getType();
+    PotionEffectType getType();
 
     /**
-     * Returns the strength of this potion effect.
+     * Returns the level of this potion effect.
      * <p>
-     * This strength value is 1-based compared to Spigot's {@code PotionEffect} amplifier being 0-based. A potion effect
-     * with a strength value of 0 will have the same effect as no potion effect at all.
+     * This level value is 1-based compared to Spigot's {@code PotionEffect} amplifier being 0-based. A potion effect
+     * with a level value of 0 will have the same effect as no potion effect at all.
      *
-     * @return The strength of this potion effect.
+     * @return The level of this potion effect.
      */
-    int getStrength();
+    int getLevel();
 
     /**
-     * @return The duration of this potion effect.
+     * @return The duration of this potion effect. Never null.
      */
     Duration getDuration();
 }
