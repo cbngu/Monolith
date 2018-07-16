@@ -5,7 +5,7 @@ import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
-import gg.warcraft.monolith.api.world.PotionType;
+import gg.warcraft.monolith.api.world.PotionEffectType;
 import org.joml.Vector3fc;
 
 import java.util.UUID;
@@ -40,19 +40,37 @@ public interface EntityCommandService {
      * @param entityId The id of the entity. Can not be null.
      * @param type     The potion effect type to remove from the entity. Can not be null.
      */
-    void removePotionEffect(UUID entityId, PotionType type);
+    void removePotionEffect(UUID entityId, PotionEffectType type);
 
     /**
      * @param type          The type of entity to spawn. Can not be null.
      * @param spawnLocation The location to spawn the entity at. Can not be null.
+     * @return The id of the spawned entity.
      */
-    void spawnEntity(EntityType type, Location spawnLocation);
+    UUID spawnEntity(EntityType type, Location spawnLocation);
+
+    /**
+     * @param entityId The id of the entity to remove. Can not be null.
+     */
+    void removeEntity(UUID entityId);
 
     /**
      * @param entityId The id of the entity. Can not be null.
      * @param location The location to teleport the entity to. Can not be null.
      */
     void teleport(UUID entityId, Location location);
+
+    /**
+     * @param entityId The id of the entity. Can not be null.
+     * @param amount   The amount of damage the entity should take.
+     */
+    void damage(UUID entityId, float amount);
+
+    /**
+     * @param entityId The id of the entity. Can not be null.
+     * @param amount   The amount of healing the entity should take.
+     */
+    void heal(UUID entityId, float amount);
 
     /**
      * Prevents an entity from jumping for a duration.

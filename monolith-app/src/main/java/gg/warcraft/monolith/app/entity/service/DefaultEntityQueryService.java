@@ -3,6 +3,7 @@ package gg.warcraft.monolith.app.entity.service;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityServerData;
+import gg.warcraft.monolith.api.entity.EntityTarget;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityDataRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
@@ -60,5 +61,11 @@ public class DefaultEntityQueryService implements EntityQueryService {
         return entityServerAdapter.getNearbyEntitiesServerData(location, deltaX, deltaY, deltaZ).stream()
                 .map(this::getEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public EntityTarget getTarget(UUID entityId, float range) {
+        // TODO implement
+        return null;
     }
 }

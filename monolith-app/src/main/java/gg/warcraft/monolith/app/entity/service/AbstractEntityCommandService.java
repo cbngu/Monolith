@@ -9,7 +9,7 @@ import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
-import gg.warcraft.monolith.api.world.PotionType;
+import gg.warcraft.monolith.api.world.PotionEffectType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
@@ -61,18 +61,39 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     }
 
     @Override
-    public void removePotionEffect(UUID entityId, PotionType type) {
+    public void removePotionEffect(UUID entityId, PotionEffectType type) {
         entityServerAdapter.removePotionEffect(entityId, type);
     }
 
     @Override
-    public void spawnEntity(EntityType entityType, Location spawnLocation) {
-        entityServerAdapter.spawnEntity(entityType, spawnLocation);
+    public UUID spawnEntity(EntityType entityType, Location spawnLocation) {
+        return entityServerAdapter.spawnEntity(entityType, spawnLocation);
+    }
+
+    @Override
+    public void removeEntity(UUID entityId) {
+        entityServerAdapter.removeEntity(entityId);
     }
 
     @Override
     public void teleport(UUID entityId, Location location) {
         entityServerAdapter.teleport(entityId, location);
+    }
+
+    @Override
+    public void damage(UUID entityId, float amount) {
+        // TODO publish EntityPreDamageEvent
+        // TODO damage entity depending on damage in event
+        // TODO publish EntityDamageEvent
+        throw new IllegalStateException("Method not implemented");
+    }
+
+    @Override
+    public void heal(UUID entityId, float amount) {
+        // TODO publish EntityPreHealEvent
+        // TODO heal entity depending on healing in event
+        // TODO publish EntityHealEvent
+        throw new IllegalStateException("Method not implemented");
     }
 
     @Override
@@ -88,15 +109,15 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
         this.setVelocity(entityId, new Vector3f());
         this.teleport(entityId, safeLocation);
 
-        this.removePotionEffect(entityId, PotionType.JUMP);
-        PotionEffect effect = new SimplePotionEffect(PotionType.JUMP, 128, duration);
+        this.removePotionEffect(entityId, PotionEffectType.JUMP);
+        PotionEffect effect = new SimplePotionEffect(PotionEffectType.JUMP, 128, duration);
         this.addPotionEffect(entityId, effect);
     }
 
     @Override
     public void freeze(UUID entityId, Duration duration) {
-        this.removePotionEffect(entityId, PotionType.SLOW);
-        PotionEffect effect = new SimplePotionEffect(PotionType.SLOW, 7, duration);
+        this.removePotionEffect(entityId, PotionEffectType.SLOW);
+        PotionEffect effect = new SimplePotionEffect(PotionEffectType.SLOW, 7, duration);
         this.addPotionEffect(entityId, effect);
 
         this.heavy(entityId, duration);
