@@ -5,7 +5,7 @@ import gg.warcraft.monolith.api.item.Item;
 import java.util.List;
 import java.util.UUID;
 
-public interface PreBlockBreakEvent extends PreBlockEvent {
+public interface BlockPreBreakEvent extends BlockPreEvent {
 
     List<Item> getAlternativeDrops();
 

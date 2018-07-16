@@ -4,17 +4,17 @@ import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.event.BlockInteraction;
-import gg.warcraft.monolith.api.world.block.event.PreBlockInteractEvent;
+import gg.warcraft.monolith.api.world.block.event.BlockPreInteractEvent;
 
 import java.util.UUID;
 
-public class SimplePreBlockInteractEvent extends SimplePreBlockEvent implements PreBlockInteractEvent {
+public class SimpleBlockPreInteractEvent extends SimpleBlockPreEvent implements BlockPreInteractEvent {
     private final BlockInteraction interaction;
     private final BlockFace clickedFace;
     private final Item itemInClickHand;
     private final UUID playerId;
 
-    public SimplePreBlockInteractEvent(Block block, BlockInteraction interaction, BlockFace clickedFace,
+    public SimpleBlockPreInteractEvent(Block block, BlockInteraction interaction, BlockFace clickedFace,
                                        Item itemInClickHand, UUID playerId, boolean cancelled) {
         super(block, cancelled);
         this.interaction = interaction;

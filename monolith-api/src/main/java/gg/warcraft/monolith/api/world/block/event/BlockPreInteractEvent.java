@@ -5,7 +5,7 @@ import gg.warcraft.monolith.api.world.block.BlockFace;
 
 import java.util.UUID;
 
-public interface PreBlockInteractEvent extends PreBlockEvent {
+public interface BlockPreInteractEvent extends BlockPreEvent {
 
     BlockInteraction getInteraction();
 

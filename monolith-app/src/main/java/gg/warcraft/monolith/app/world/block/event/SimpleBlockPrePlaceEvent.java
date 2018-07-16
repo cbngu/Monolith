@@ -1,17 +1,19 @@
 package gg.warcraft.monolith.app.world.block.event;
 
 import gg.warcraft.monolith.api.world.block.Block;
-import gg.warcraft.monolith.api.world.block.event.BlockPlaceEvent;
+import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.event.BlockPrePlaceEvent;
 
 import java.util.UUID;
 
-public class SimpleBlockPlaceEvent extends SimpleBlockEvent implements BlockPlaceEvent {
+public class SimpleBlockPrePlaceEvent extends SimpleBlockPreEvent implements BlockPrePlaceEvent {
     private Block placedBlock;
     private Block placedAgainst;
     private final UUID playerId;
 
-    public SimpleBlockPlaceEvent(Block block, Block placedBlock, Block placedAgainst, UUID playerId) {
-        super(block);
+    public SimpleBlockPrePlaceEvent(Block block, Block placedBlock, Block placedAgainst, UUID playerId,
+                                    boolean cancelled) {
+        super(block, cancelled);
         this.placedBlock = placedBlock;
         this.placedAgainst = placedAgainst;
         this.playerId = playerId;
@@ -30,5 +32,11 @@ public class SimpleBlockPlaceEvent extends SimpleBlockEvent implements BlockPlac
     @Override
     public UUID getPlayerId() {
         return playerId;
+    }
+
+    @Override
+    public void setPlacedBlockType(BlockType type) {
+        // TODO
+        throw new IllegalStateException("not implemented");
     }
 }
