@@ -1,7 +1,7 @@
-package gg.warcraft.monolith.app.persistence;
+package gg.warcraft.monolith.app.core;
 
 import com.google.inject.Inject;
-import gg.warcraft.monolith.api.persistence.PersistenceService;
+import gg.warcraft.monolith.api.core.PersistenceService;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ScanParams;

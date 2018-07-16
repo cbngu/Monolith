@@ -18,8 +18,9 @@ import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.config.service.ConfigurationQueryService;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
 import gg.warcraft.monolith.api.core.EventService;
-import gg.warcraft.monolith.api.core.Json;
-import gg.warcraft.monolith.api.core.Yaml;
+import gg.warcraft.monolith.api.core.JsonMapper;
+import gg.warcraft.monolith.api.core.PersistenceService;
+import gg.warcraft.monolith.api.core.YamlMapper;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.EffectVectorsFactory;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService;
@@ -38,7 +39,6 @@ import gg.warcraft.monolith.api.item.ItemBuilder;
 import gg.warcraft.monolith.api.item.ItemBuilderFactory;
 import gg.warcraft.monolith.api.item.ItemReader;
 import gg.warcraft.monolith.api.item.ItemReaderFactory;
-import gg.warcraft.monolith.api.persistence.PersistenceService;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
@@ -69,6 +69,7 @@ import gg.warcraft.monolith.app.config.service.DefaultConfigurationRepository;
 import gg.warcraft.monolith.app.config.service.GitHubConfigurationCommandService;
 import gg.warcraft.monolith.app.config.service.LocalConfigurationCommandService;
 import gg.warcraft.monolith.app.core.GuavaEventService;
+import gg.warcraft.monolith.app.core.JedisPersistenceService;
 import gg.warcraft.monolith.app.effect.vectors.CircleVectors;
 import gg.warcraft.monolith.app.effect.vectors.DomeVectors;
 import gg.warcraft.monolith.app.effect.vectors.LineVectors;
@@ -90,7 +91,6 @@ import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
 import gg.warcraft.monolith.app.item.SimpleItemBuilder;
 import gg.warcraft.monolith.app.item.SimpleItemReader;
-import gg.warcraft.monolith.app.persistence.JedisPersistenceService;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
@@ -195,12 +195,12 @@ public class AbstractMonolithModule extends AbstractModule {
         ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         jsonMapper.registerModule(monolithMapperModule);
-        bind(ObjectMapper.class).annotatedWith(Json.class).toProvider(jsonMapper::copy);
+        bind(ObjectMapper.class).annotatedWith(JsonMapper.class).toProvider(jsonMapper::copy);
 
         ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
         yamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         yamlMapper.registerModule(monolithMapperModule);
-        bind(ObjectMapper.class).annotatedWith(Yaml.class).toProvider(yamlMapper::copy);
+        bind(ObjectMapper.class).annotatedWith(YamlMapper.class).toProvider(yamlMapper::copy);
     }
 
     private void configureEffect() {

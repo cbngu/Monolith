@@ -7,7 +7,7 @@ import gg.warcraft.monolith.api.MonolithPluginUtils;
 import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.config.service.ConfigurationQueryService;
 import gg.warcraft.monolith.api.core.PluginLogger;
-import gg.warcraft.monolith.api.core.Yaml;
+import gg.warcraft.monolith.api.core.YamlMapper;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class DefaultMonolithPluginUtils implements MonolithPluginUtils {
     @Inject
     public DefaultMonolithPluginUtils(ConfigurationQueryService configurationQueryService,
                                       ConfigurationCommandService configurationCommandService,
-                                      @Yaml ObjectMapper yamlMapper, @PluginLogger Logger logger) {
+                                      @YamlMapper ObjectMapper yamlMapper, @PluginLogger Logger logger) {
         this.configurationQueryService = configurationQueryService;
         this.configurationCommandService = configurationCommandService;
         this.yamlMapper = yamlMapper;

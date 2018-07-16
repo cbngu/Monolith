@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.persistence;
+package gg.warcraft.monolith.api.core;
 
 import java.util.List;
 import java.util.Map;

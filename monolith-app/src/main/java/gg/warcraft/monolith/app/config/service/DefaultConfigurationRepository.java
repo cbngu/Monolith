@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
-import gg.warcraft.monolith.api.core.Json;
-import gg.warcraft.monolith.api.persistence.PersistenceService;
+import gg.warcraft.monolith.api.core.JsonMapper;
+import gg.warcraft.monolith.api.core.PersistenceService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class DefaultConfigurationRepository implements ConfigurationRepository {
     private final Map<Class<?>, Object> configurationObjects;
 
     @Inject
-    public DefaultConfigurationRepository(PersistenceService persistenceService, @Json ObjectMapper jsonMapper) {
+    public DefaultConfigurationRepository(PersistenceService persistenceService, @JsonMapper ObjectMapper jsonMapper) {
         this.persistenceService = persistenceService;
         this.jsonMapper = jsonMapper;
         this.configurationObjects = new HashMap<>();

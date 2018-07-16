@@ -2,7 +2,7 @@ package gg.warcraft.monolith.app.world.block.backup.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import gg.warcraft.monolith.api.persistence.PersistenceService;
+import gg.warcraft.monolith.api.core.PersistenceService;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;

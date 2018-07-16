@@ -5,8 +5,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import gg.warcraft.monolith.api.config.service.ConfigurationCommandService;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
-import gg.warcraft.monolith.api.core.Json;
-import gg.warcraft.monolith.api.core.Yaml;
+import gg.warcraft.monolith.api.core.JsonMapper;
+import gg.warcraft.monolith.api.core.YamlMapper;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
@@ -24,8 +24,8 @@ public class GitHubConfigurationCommandService implements ConfigurationCommandSe
 
     @Inject
     public GitHubConfigurationCommandService(ConfigurationRepository configurationRepository,
-                                             @Json ObjectMapper jsonMapper,
-                                             @Yaml ObjectMapper yamlMapper,
+                                             @JsonMapper ObjectMapper jsonMapper,
+                                             @YamlMapper ObjectMapper yamlMapper,
                                              @Named("GitHubAccount") String accountName,
                                              @Named("GitHubRepository") String repositoryName) {
         this.configurationRepository = configurationRepository;
