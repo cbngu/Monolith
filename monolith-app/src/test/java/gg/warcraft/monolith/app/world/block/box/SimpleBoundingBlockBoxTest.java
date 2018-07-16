@@ -7,6 +7,7 @@ import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,6 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +42,14 @@ public class SimpleBoundingBlockBoxTest {
 
         Vector3i minimumCorner = new Vector3i(0, 0, 0);
         Vector3i maximumCorner = new Vector3i(9, 9, 9);
+
+        BlockLocation mockBlockMinimumCorner = mock(BlockLocation.class);
+        when(mockBlockMinimumCorner.toVector()).thenReturn(minimumCorner);
+        BlockLocation mockBlockMaximumCorner = mock(BlockLocation.class);
+        when(mockBlockMaximumCorner.toVector()).thenReturn(maximumCorner);
+        when(mockWorldQueryService.getBlockLocation(world, 0, 0, 0)).thenReturn(mockBlockMinimumCorner);
+        when(mockWorldQueryService.getBlockLocation(world, 9, 9, 9)).thenReturn(mockBlockMaximumCorner);
+
         simpleBoundingBlockBox = new SimpleBoundingBlockBox(mockWorldQueryService, world, minimumCorner, maximumCorner);
     }
 
@@ -88,6 +98,23 @@ public class SimpleBoundingBlockBoxTest {
 
         // Then
         assertFalse(result);
+    }
+
+    @Test
+    public void translate_shouldCorrectlyMoveBoundingBox() {
+        // Given
+        Vector3ic translation = new Vector3i(3, -3, 3);
+
+        // When
+        BoundingBlockBox result = simpleBoundingBlockBox.translate(translation);
+
+        // Then
+        Assert.assertEquals(3, result.getNorthBoundary());
+        Assert.assertEquals(12, result.getEastBoundary());
+        Assert.assertEquals(12, result.getSouthBoundary());
+        Assert.assertEquals(3, result.getWestBoundary());
+        Assert.assertEquals(-3, result.getLowerBoundary());
+        Assert.assertEquals(6, result.getUpperBoundary());
     }
 
     @Test

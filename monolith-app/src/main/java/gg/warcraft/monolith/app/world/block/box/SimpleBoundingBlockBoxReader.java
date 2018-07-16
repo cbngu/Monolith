@@ -13,6 +13,10 @@ import gg.warcraft.monolith.app.util.SimpleOffset;
 
 import java.util.function.Function;
 
+/**
+ * SimpleBoundingBlockBoxReader reads from the closest left corner depending on the read direction. This means that when
+ * reading north the Z-axis is flipped as positive Z is closer than negative Z.
+ */
 public class SimpleBoundingBlockBoxReader implements BoundingBlockBoxReader {
     private final BoundingBlockBox boundingBlockBox;
 
@@ -34,10 +38,10 @@ public class SimpleBoundingBlockBoxReader implements BoundingBlockBoxReader {
                     return worldQueryService.getBlockAt(world, x, y, z);
                 };
                 readOffsetFor = (block) -> {
-                    int xOffset = block.getLocation().getX() - boundingBlockBox.getWestBoundary();
-                    int yOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
-                    int zOffset = boundingBlockBox.getSouthBoundary() - block.getLocation().getZ();
-                    return new SimpleOffset(xOffset, yOffset, zOffset);
+                    int horizontalOffset = block.getLocation().getX() - boundingBlockBox.getWestBoundary();
+                    int verticalOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
+                    int depthOffset = boundingBlockBox.getSouthBoundary() - block.getLocation().getZ();
+                    return new SimpleOffset(horizontalOffset, verticalOffset, depthOffset);
                 };
                 break;
             case EAST:
@@ -48,10 +52,10 @@ public class SimpleBoundingBlockBoxReader implements BoundingBlockBoxReader {
                     return worldQueryService.getBlockAt(world, x, y, z);
                 };
                 readOffsetFor = (block) -> {
-                    int xOffset = block.getLocation().getX() - boundingBlockBox.getWestBoundary();
-                    int yOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
-                    int zOffset = block.getLocation().getZ() - boundingBlockBox.getSouthBoundary();
-                    return new SimpleOffset(zOffset, yOffset, xOffset);
+                    int horizontalOffset = block.getLocation().getZ() - boundingBlockBox.getNorthBoundary();
+                    int verticalOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
+                    int depthOffset = block.getLocation().getX() - boundingBlockBox.getWestBoundary();
+                    return new SimpleOffset(horizontalOffset, verticalOffset, depthOffset);
                 };
                 break;
             case SOUTH:
@@ -62,10 +66,10 @@ public class SimpleBoundingBlockBoxReader implements BoundingBlockBoxReader {
                     return worldQueryService.getBlockAt(world, x, y, z);
                 };
                 readOffsetFor = (block) -> {
-                    int xOffset = boundingBlockBox.getEastBoundary() - block.getLocation().getX();
-                    int yOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
-                    int zOffset = block.getLocation().getZ() - boundingBlockBox.getNorthBoundary();
-                    return new SimpleOffset(xOffset, yOffset, zOffset);
+                    int horizontalOffset = boundingBlockBox.getEastBoundary() - block.getLocation().getX();
+                    int verticalOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
+                    int depthOffset = block.getLocation().getZ() - boundingBlockBox.getNorthBoundary();
+                    return new SimpleOffset(horizontalOffset, verticalOffset, depthOffset);
                 };
                 break;
             case WEST:
@@ -76,10 +80,10 @@ public class SimpleBoundingBlockBoxReader implements BoundingBlockBoxReader {
                     return worldQueryService.getBlockAt(world, x, y, z);
                 };
                 readOffsetFor = (block) -> {
-                    int xOffset = boundingBlockBox.getEastBoundary() - block.getLocation().getX();
-                    int yOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
-                    int zOffset = boundingBlockBox.getSouthBoundary() - block.getLocation().getZ();
-                    return new SimpleOffset(zOffset, yOffset, xOffset);
+                    int horizontalOffset = boundingBlockBox.getSouthBoundary() - block.getLocation().getZ();
+                    int verticalOffset = block.getLocation().getY() - boundingBlockBox.getLowerBoundary();
+                    int depthOffset = boundingBlockBox.getEastBoundary() - block.getLocation().getX();
+                    return new SimpleOffset(horizontalOffset, verticalOffset, depthOffset);
                 };
                 break;
             case UP:
@@ -97,8 +101,8 @@ public class SimpleBoundingBlockBoxReader implements BoundingBlockBoxReader {
     @Override
     public Block getBlockAt(Offset offset) {
         return getBlockAt(offset.getHorizontalOffset().intValue(),
-                offset.getDepthOffset().intValue(),
-                offset.getVerticalOffset().intValue());
+                offset.getVerticalOffset().intValue(),
+                offset.getDepthOffset().intValue());
     }
 
     @Override

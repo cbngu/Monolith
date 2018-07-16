@@ -5,7 +5,7 @@ import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
-import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -85,7 +85,7 @@ public interface BoundingBlockBox extends Predicate<Block> {
      * @param vector The translation.
      * @return A copy of this bounding box translated by the specified vector.
      */
-    BoundingBlockBox translate(Vector3i vector);
+    BoundingBlockBox translate(Vector3ic vector);
 
     /**
      * @return A lazy stream of all blocks within this bounding box.

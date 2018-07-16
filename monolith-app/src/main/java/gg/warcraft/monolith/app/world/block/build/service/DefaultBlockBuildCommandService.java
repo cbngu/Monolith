@@ -3,6 +3,7 @@ package gg.warcraft.monolith.app.world.block.build.service;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
@@ -20,10 +21,12 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,18 +34,20 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
     private final WorldQueryService worldQueryService;
     private final BlockBuildRepository buildRepository;
     private final BlockUtils blockUtils;
+    private final Logger logger;
     private final BoundingBlockBoxFactory blockBoxFactory;
     private final BoundingBlockBox buildRepositoryBoundingBox;
 
     @Inject
     public DefaultBlockBuildCommandService(WorldQueryService worldQueryService, BlockBuildRepository buildRepository,
                                            BlockUtils blockUtils, BoundingBlockBoxFactory blockBoxFactory,
-                                           @Named("BuildRepositoryWorld") WorldType world,
+                                           @PluginLogger Logger logger, @Named("BuildRepositoryWorld") WorldType world,
                                            @Named("BuildRepositoryMinimumCorner") Vector3ic minimumCorner,
                                            @Named("BuildRepositoryMaximumCorner") Vector3ic maximumCorner) {
         this.worldQueryService = worldQueryService;
         this.buildRepository = buildRepository;
         this.blockUtils = blockUtils;
+        this.logger = logger;
         this.blockBoxFactory = blockBoxFactory;
         this.buildRepositoryBoundingBox = blockBoxFactory.createBoundingBlockBox(world, minimumCorner, maximumCorner);
     }
@@ -128,10 +133,13 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
     @Override
     public void initializeBuilds() {
         Stream<Block> floor = buildRepositoryBoundingBox.sliceY(buildRepositoryBoundingBox.getLowerBoundary());
-        floor.filter(block -> block.getType() == BlockType.WALL_MOUNTED_SIGN)
+        List<BlockBuild> builds = floor
+                .filter(block -> block.getType() == BlockType.WALL_MOUNTED_SIGN)
                 .map(block -> (Sign) block)
                 .map(this::initializeBuild)
                 .filter(Objects::nonNull)
-                .forEach(buildRepository::save);
+                .collect(Collectors.toList());
+        logger.info("Initialized " + builds.size() + " builds in build repository at " + buildRepositoryBoundingBox);
+        builds.forEach(buildRepository::save);
     }
 }

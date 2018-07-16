@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.world;
 
+import com.google.common.base.MoreObjects;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
 
@@ -48,5 +49,17 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
                 getPitch() + "," +
                 getYaw();
         return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("world", getWorld().getType())
+                .add("x", getX())
+                .add("y", getY())
+                .add("z", getZ())
+                .add("pitch", getPitch())
+                .add("yaw", getYaw())
+                .toString();
     }
 }

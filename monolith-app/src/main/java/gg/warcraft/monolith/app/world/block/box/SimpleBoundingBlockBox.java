@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.world.block.box;
 
+import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.world.BlockLocation;
@@ -139,12 +140,11 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
         }
 
         // translate large rotation to predictable rotation
-        while (degrees >= 360) {
-            degrees -= 360;
-        }
+        degrees %= 360;
 
         if (degrees % 90 != 0) {
-            throw new IllegalArgumentException("Failed to rotate bounding block box for illegal rotation of " + degrees);
+            throw new IllegalArgumentException("Failed to rotate bounding block box for illegal rotation of "
+                    + degrees + ", rotation must be a multiple of 90.");
         }
 
         switch (degrees / 90) {
@@ -189,7 +189,7 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     }
 
     @Override
-    public BoundingBlockBox translate(Vector3i vector) {
+    public BoundingBlockBox translate(Vector3ic vector) {
         Vector3i newMinimumCorner = new Vector3i(minimumCorner.toVector()).add(vector);
         Vector3i newMaximumCorner = new Vector3i(maximumCorner.toVector()).add(vector);
         return new SimpleBoundingBlockBox(worldQueryService, world.getType(), newMinimumCorner, newMaximumCorner);
@@ -240,5 +240,18 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
                         .iterate(minY, currentY -> currentY + 1)
                         .limit(maxY - minY + 1)
                         .map(y -> worldQueryService.getBlockAt(getWorld().getType(), x, y, z)));
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("world", getWorld().getType())
+                .add("minX", getWestBoundary())
+                .add("minY", getLowerBoundary())
+                .add("minZ", getNorthBoundary())
+                .add("maxX", getEastBoundary())
+                .add("maxY", getUpperBoundary())
+                .add("maxZ", getSouthBoundary())
+                .toString();
     }
 }

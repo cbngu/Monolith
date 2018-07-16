@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.world.block;
 
+import com.google.common.base.MoreObjects;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
@@ -39,5 +40,13 @@ public class SimpleBlock implements Block {
     public int hashCode() {
         String id = getType() + ":" + getLocation();
         return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("type", getType())
+                .add("location", getLocation())
+                .toString();
     }
 }

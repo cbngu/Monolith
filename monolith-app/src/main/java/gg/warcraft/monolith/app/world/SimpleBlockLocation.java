@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.world;
 
+import com.google.common.base.MoreObjects;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.World;
 import org.joml.Vector3i;
@@ -116,5 +117,15 @@ public class SimpleBlockLocation implements BlockLocation {
                 getY() + "," +
                 getZ();
         return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("world", getWorld().getType())
+                .add("x", getX())
+                .add("y", getY())
+                .add("z", getZ())
+                .toString();
     }
 }
