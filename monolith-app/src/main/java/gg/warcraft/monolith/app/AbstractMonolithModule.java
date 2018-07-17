@@ -39,6 +39,13 @@ import gg.warcraft.monolith.api.item.ItemBuilder;
 import gg.warcraft.monolith.api.item.ItemBuilderFactory;
 import gg.warcraft.monolith.api.item.ItemReader;
 import gg.warcraft.monolith.api.item.ItemReaderFactory;
+import gg.warcraft.monolith.api.menu.ButtonBuilder;
+import gg.warcraft.monolith.api.menu.ButtonBuilderFactory;
+import gg.warcraft.monolith.api.menu.MenuBuilder;
+import gg.warcraft.monolith.api.menu.MenuBuilderFactory;
+import gg.warcraft.monolith.api.menu.service.MenuCommandService;
+import gg.warcraft.monolith.api.menu.service.MenuQueryService;
+import gg.warcraft.monolith.api.menu.service.MenuRepository;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
@@ -91,6 +98,11 @@ import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
 import gg.warcraft.monolith.app.item.SimpleItemBuilder;
 import gg.warcraft.monolith.app.item.SimpleItemReader;
+import gg.warcraft.monolith.app.menu.SimpleButtonBuilder;
+import gg.warcraft.monolith.app.menu.SimpleMenuBuilder;
+import gg.warcraft.monolith.app.menu.service.DefaultMenuCommandService;
+import gg.warcraft.monolith.app.menu.service.DefaultMenuQueryService;
+import gg.warcraft.monolith.app.menu.service.DefaultMenuRepository;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
@@ -149,6 +161,7 @@ public class AbstractMonolithModule extends AbstractModule {
         configureEffect();
         configureEntity();
         configureItem();
+        configureMenu();
         configurePersistence();
         configureUtil();
         configureWorld();
@@ -249,6 +262,20 @@ public class AbstractMonolithModule extends AbstractModule {
         install(new FactoryModuleBuilder()
                 .implement(ItemReader.class, SimpleItemReader.class)
                 .build(ItemReaderFactory.class));
+    }
+
+    private void configureMenu() {
+        bind(MenuCommandService.class).to(DefaultMenuCommandService.class);
+        bind(MenuQueryService.class).to(DefaultMenuQueryService.class);
+        bind(MenuRepository.class).to(DefaultMenuRepository.class);
+
+        install(new FactoryModuleBuilder()
+                .implement(ButtonBuilder.class, SimpleButtonBuilder.class)
+                .build(ButtonBuilderFactory.class));
+
+        install(new FactoryModuleBuilder()
+                .implement(MenuBuilder.class, SimpleMenuBuilder.class)
+                .build(MenuBuilderFactory.class));
     }
 
     private void configurePersistence() {
