@@ -11,6 +11,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.UUID;
+
 public class SpigotMenuMapper {
     private final Server server;
     private final SpigotItemTypeMapper itemTypeMapper;
@@ -21,8 +23,8 @@ public class SpigotMenuMapper {
         this.itemTypeMapper = itemTypeMapper;
     }
 
-    public Inventory map(Menu menu) {
-        Player player = server.getPlayer(menu.getViewerId());
+    public Inventory map(Menu menu, UUID viewerId) {
+        Player player = server.getPlayer(viewerId);
         Inventory inventory = server.createInventory(player, menu.getSize().getNumberOfSlots(), menu.getTitle());
         menu.getButtons().forEach((slot, button) -> {
             ItemStack item = map(button);

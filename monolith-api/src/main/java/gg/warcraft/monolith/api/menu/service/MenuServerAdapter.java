@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface MenuServerAdapter {
 
-    void showMenu(Menu menu);
+    void showMenu(Menu menu, UUID viewerId);
 
     void closeMenu(UUID viewerId);
 }

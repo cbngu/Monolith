@@ -8,7 +8,7 @@ public interface MenuRepository {
 
     Menu getMenu(UUID viewerId);
 
-    void save(Menu menu);
+    void save(Menu menu, UUID viewerId);
 
     void delete(UUID viewerId);
 }

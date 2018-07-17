@@ -21,9 +21,9 @@ public class SpigotMenuAdapter implements MenuServerAdapter {
     }
 
     @Override
-    public void showMenu(Menu menu) {
-        Inventory inventory = menuMapper.map(menu);
-        Player player = server.getPlayer(menu.getViewerId());
+    public void showMenu(Menu menu, UUID viewerId) {
+        Inventory inventory = menuMapper.map(menu, viewerId);
+        Player player = server.getPlayer(viewerId);
         player.openInventory(inventory);
     }
 

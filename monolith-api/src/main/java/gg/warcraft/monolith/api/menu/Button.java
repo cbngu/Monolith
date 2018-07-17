@@ -3,6 +3,7 @@ package gg.warcraft.monolith.api.menu;
 import gg.warcraft.monolith.api.item.ItemType;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface Button {
 
@@ -23,7 +24,7 @@ public interface Button {
     List<String> getTooltip();
 
     /**
-     * @return The action that should happen when this button is pressed. Never null.
+     * @return The action that should happen when this button is clicked. Never null.
      */
-    Runnable getAction();
+    Consumer<Click> getAction();
 }

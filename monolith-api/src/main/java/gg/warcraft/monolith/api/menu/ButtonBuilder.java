@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.api.menu;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface ButtonBuilder {
 
@@ -8,7 +9,7 @@ public interface ButtonBuilder {
 
     void withTooltip(List<String> tooltip);
 
-    void withAction(Runnable action);
+    void withAction(Consumer<Click> action);
 
     Button build();
 }

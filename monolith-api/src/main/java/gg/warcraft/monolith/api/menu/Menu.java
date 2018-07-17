@@ -1,14 +1,8 @@
 package gg.warcraft.monolith.api.menu;
 
 import java.util.Map;
-import java.util.UUID;
 
 public interface Menu {
-
-    /**
-     * @return The player that is viewing this menu. Never null.
-     */
-    UUID getViewerId();
 
     /**
      * @return The title of this menu. Never null or empty.

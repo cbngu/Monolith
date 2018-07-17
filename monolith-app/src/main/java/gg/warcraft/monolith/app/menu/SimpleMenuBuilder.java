@@ -1,6 +1,8 @@
 package gg.warcraft.monolith.app.menu;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.menu.Button;
 import gg.warcraft.monolith.api.menu.Menu;
 import gg.warcraft.monolith.api.menu.MenuBuilder;
@@ -8,17 +10,15 @@ import gg.warcraft.monolith.api.menu.MenuSize;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class SimpleMenuBuilder implements MenuBuilder {
-    private final UUID viewerId;
     private final String title;
     private final MenuSize size;
 
     private Map<Integer, Button> buttons;
 
-    public SimpleMenuBuilder(UUID viewerId, String title, MenuSize size) {
-        this.viewerId = viewerId;
+    @Inject
+    public SimpleMenuBuilder(@Assisted String title, @Assisted MenuSize size) {
         this.title = title;
         this.size = size;
         this.buttons = new HashMap<>();
@@ -44,6 +44,6 @@ public class SimpleMenuBuilder implements MenuBuilder {
 
     @Override
     public Menu build() {
-        return new SimpleMenu(viewerId, title, size, buttons);
+        return new SimpleMenu(title, size, buttons);
     }
 }

@@ -22,8 +22,8 @@ public class DefaultMenuRepository implements MenuRepository {
     }
 
     @Override
-    public void save(Menu menu) {
-        menus.put(menu.getViewerId(), menu);
+    public void save(Menu menu, UUID viewerId) {
+        menus.put(viewerId, menu);
     }
 
     @Override
