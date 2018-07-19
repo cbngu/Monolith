@@ -27,10 +27,10 @@ import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerCommandService;
-import gg.warcraft.monolith.api.entity.player.service.PlayerDataRepository;
+import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityCommandService;
-import gg.warcraft.monolith.api.entity.service.EntityDataRepository;
+import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
@@ -88,10 +88,10 @@ import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeCommand
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeQueryService;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeRepository;
 import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerCommandService;
-import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerDataRepository;
+import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerProfileRepository;
 import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerQueryService;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityCommandService;
-import gg.warcraft.monolith.app.entity.service.DefaultEntityDataRepository;
+import gg.warcraft.monolith.app.entity.service.DefaultEntityProfileRepository;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusCommandService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
@@ -241,11 +241,11 @@ public class AbstractMonolithModule extends AbstractModule {
             case "DEFAULT":
                 bind(EntityCommandService.class).to(DefaultEntityCommandService.class);
                 bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
-                bind(EntityDataRepository.class).to(DefaultEntityDataRepository.class);
+                bind(EntityProfileRepository.class).to(DefaultEntityProfileRepository.class);
 
                 bind(PlayerCommandService.class).to(DefaultPlayerCommandService.class);
                 bind(PlayerQueryService.class).to(DefaultPlayerQueryService.class);
-                bind(PlayerDataRepository.class).to(DefaultPlayerDataRepository.class);
+                bind(PlayerProfileRepository.class).to(DefaultPlayerProfileRepository.class);
                 break;
             case "CUSTOM":
                 // do nothing, the implementing server should provide bindings

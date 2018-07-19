@@ -3,6 +3,7 @@ package gg.warcraft.monolith.spigot.entity.player.service;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
+import gg.warcraft.monolith.spigot.entity.player.SpigotPlayerDataFactory;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -34,12 +35,6 @@ public class SpigotPlayerAdapter implements PlayerServerAdapter {
         return server.getOnlinePlayers().stream()
                 .map(Player::getUniqueId)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean isNameAvailable(String name) {
-        // TODO: integrate with display name
-        return server.getPlayerExact(name) == null;
     }
 
     @Override

@@ -5,7 +5,7 @@ import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityTarget;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
-import gg.warcraft.monolith.api.entity.service.EntityDataRepository;
+import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
@@ -17,17 +17,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class DefaultEntityQueryService implements EntityQueryService {
-    private final EntityDataRepository entityDataRepository;
+    private final EntityProfileRepository entityProfileRepository;
     private final AttributeQueryService attributeQueryService;
     private final StatusQueryService statusQueryService;
     private final EntityServerAdapter entityServerAdapter;
 
     @Inject
-    public DefaultEntityQueryService(EntityDataRepository entityDataRepository,
+    public DefaultEntityQueryService(EntityProfileRepository entityProfileRepository,
                                      AttributeQueryService attributeQueryService,
                                      StatusQueryService statusQueryService,
                                      EntityServerAdapter entityServerAdapter) {
-        this.entityDataRepository = entityDataRepository;
+        this.entityProfileRepository = entityProfileRepository;
         this.attributeQueryService = attributeQueryService;
         this.statusQueryService = statusQueryService;
         this.entityServerAdapter = entityServerAdapter;
@@ -36,7 +36,7 @@ public class DefaultEntityQueryService implements EntityQueryService {
     Entity getEntity(EntityServerData serverData) {
         UUID entityId = serverData.getEntityId();
         return new LazyEntity(
-                () -> entityDataRepository.get(entityId),
+                () -> entityProfileRepository.get(entityId),
                 () -> serverData,
                 () -> attributeQueryService.getAttributes(entityId),
                 () -> statusQueryService.getStatus(entityId));

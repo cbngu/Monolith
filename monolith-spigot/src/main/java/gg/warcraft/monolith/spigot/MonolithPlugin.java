@@ -5,19 +5,24 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import gg.warcraft.monolith.api.Monolith;
 import gg.warcraft.monolith.api.core.EventService;
+import gg.warcraft.monolith.api.core.TaskService;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.build.service.BlockBuildCommandService;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.PlayerCommandSender;
 import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
 import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
+import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializationHandler;
+import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler;
 import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
+import gg.warcraft.monolith.spigot.event.SpigotInventoryEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotPlayerEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotWorldEventMapper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -29,6 +34,7 @@ import java.util.stream.Collectors;
 public class MonolithPlugin extends JavaPlugin {
     private Injector injector;
     private EventService eventService;
+    private TaskService taskService;
 
     void initializeInjector() {
         List<AbstractModule> monolithModules = Monolith.getModules();
@@ -40,20 +46,33 @@ public class MonolithPlugin extends JavaPlugin {
         new Monolith(injector);
     }
 
-    void initializeMonolithEventHandlers() {
+    void initializeMonolithHandlers() {
+        PlayerProfileInitializationHandler playerProfileInitializationHandler =
+                injector.getInstance(PlayerProfileInitializationHandler.class);
+        eventService.subscribe(playerProfileInitializationHandler);
+
+        PlayerProfileUpdateHandler playerProfileUpdateHandler =
+                injector.getInstance(PlayerProfileUpdateHandler.class);
+        taskService.runEachTick(playerProfileUpdateHandler);
+
         CommandExecutedHandler commandExecutedHandler = injector.getInstance(CommandExecutedHandler.class);
         eventService.subscribe(commandExecutedHandler);
     }
 
     void initializeSpigotEventMappers() {
+        PluginManager pluginManager = getServer().getPluginManager();
+
         SpigotEntityEventMapper entityEventMapper = injector.getInstance(SpigotEntityEventMapper.class);
-        getServer().getPluginManager().registerEvents(entityEventMapper, this);
+        pluginManager.registerEvents(entityEventMapper, this);
+
+        SpigotInventoryEventMapper inventoryEventMapper = injector.getInstance(SpigotInventoryEventMapper.class);
+        pluginManager.registerEvents(inventoryEventMapper, this);
 
         SpigotPlayerEventMapper playerEventMapper = injector.getInstance(SpigotPlayerEventMapper.class);
-        getServer().getPluginManager().registerEvents(playerEventMapper, this);
+        pluginManager.registerEvents(playerEventMapper, this);
 
         SpigotWorldEventMapper worldEventMapper = injector.getInstance(SpigotWorldEventMapper.class);
-        getServer().getPluginManager().registerEvents(worldEventMapper, this);
+        pluginManager.registerEvents(worldEventMapper, this);
     }
 
     @Override
@@ -115,8 +134,9 @@ public class MonolithPlugin extends JavaPlugin {
         initializeInjector();
         injector = Monolith.getInstance().getInjector();
         eventService = injector.getInstance(EventService.class);
+        taskService = injector.getInstance(TaskService.class);
 
-        initializeMonolithEventHandlers();
+        initializeMonolithHandlers();
         initializeSpigotEventMappers();
 
         getLogger().info("Initializing build repository, this might take a little bit..");

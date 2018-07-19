@@ -2,7 +2,7 @@ package gg.warcraft.monolith.app.entity.player;
 
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.player.Player;
-import gg.warcraft.monolith.api.entity.player.PlayerData;
+import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.status.Status;
 import gg.warcraft.monolith.api.item.Item;
@@ -13,43 +13,58 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class LazyPlayer extends LazyEntity implements Player {
-    private final Lazy<PlayerData> data;
+    private final Lazy<PlayerProfile> profile;
     private final Lazy<PlayerServerData> serverData;
 
-    public LazyPlayer(Supplier<PlayerData> dataSupplier, Supplier<PlayerServerData> serverDataSupplier,
+    public LazyPlayer(Supplier<PlayerProfile> profileSupplier, Supplier<PlayerServerData> serverDataSupplier,
                       Supplier<Attributes> attributesSupplier, Supplier<Status> statusSupplier) {
-        super(dataSupplier, serverDataSupplier, attributesSupplier, statusSupplier);
-        this.data = new Lazy<>(dataSupplier);
+        super(profileSupplier, serverDataSupplier, attributesSupplier, statusSupplier);
+        this.profile = new Lazy<>(profileSupplier);
         this.serverData = new Lazy<>(serverDataSupplier);
     }
 
     @Override
-    public String getMinecraftName() {
-        return data.get().getMinecraftName();
+    public long getTimeConnected() {
+        return profile.get().getTimeConnected();
     }
 
     @Override
-    public String getDisplayName() {
-        return data.get().getDisplayName();
+    public long getTimeFirstConnected() {
+        return profile.get().getTimeFirstConnected();
     }
 
     @Override
-    public long getTimeOfConnect() {
-        return data.get().getTimeOfConnect();
-    }
-
-    @Override
-    public long getTimeOfFirstConnect() {
-        return data.get().getTimeOfFirstConnect();
+    public long getTimeLastSeen() {
+        return profile.get().getTimeLastSeen();
     }
 
     @Override
     public long getTimePlayed() {
-        return data.get().getTimePlayed();
+        return profile.get().getTimePlayed();
+    }
+
+    @Override
+    public int getCurrency(String currency) {
+        return profile.get().getCurrencies().getOrDefault(currency, 0);
+    }
+
+    @Override
+    public int getCurrencyTotal(String currency) {
+        return profile.get().getCurrenciesTotal().getOrDefault(currency, 0);
+    }
+
+    @Override
+    public String getMinecraftName() {
+        return serverData.get().getMinecraftName();
     }
 
     @Override
     public List<Item> getInventory() {
         return serverData.get().getInventory();
+    }
+
+    @Override
+    public boolean isSneaking() {
+        return serverData.get().isSneaking();
     }
 }

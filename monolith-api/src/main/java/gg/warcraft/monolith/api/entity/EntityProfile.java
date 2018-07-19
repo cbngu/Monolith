@@ -3,9 +3,9 @@ package gg.warcraft.monolith.api.entity;
 import java.util.UUID;
 
 /**
- * EntityData represents the custom data associated with an {@code Entity}.
+ * EntityProfile represents the custom data associated with an {@code Entity}.
  */
-public interface EntityData {
+public interface EntityProfile {
 
     /**
      * @return The id of the entity. Never null.

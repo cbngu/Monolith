@@ -11,25 +11,20 @@ import java.util.List;
 public interface Player extends Entity {
 
     /**
-     * @return The Minecraft (account) name of this player. Never null or empty.
-     */
-    String getMinecraftName();
-
-    /**
-     * @return The current display name of this player. Never null or empty.
-     */
-    String getDisplayName();
-
-    /**
      * @return The unix timestamp in milliseconds when this player connected this session, or the previous session if
      * they have since logged off.
      */
-    long getTimeOfConnect();
+    long getTimeConnected();
 
     /**
      * @return The unix timestamp in milliseconds when this player first connected to the server.
      */
-    long getTimeOfFirstConnect();
+    long getTimeFirstConnected();
+
+    /**
+     * @return The unix timestamp in milliseconds when this player was last seen on the server.
+     */
+    long getTimeLastSeen();
 
     /**
      * @return The total amount of time in milliseconds this player has played on the server.
@@ -37,7 +32,29 @@ public interface Player extends Entity {
     long getTimePlayed();
 
     /**
+     * @param currency The currency. Can not be null or empty.
+     * @return The amount of the given currency this player currently has.
+     */
+    int getCurrency(String currency);
+
+    /**
+     * @param currency The currency. Can not be null or empty.
+     * @return The total amount of the given currency this player has accumulated over time.
+     */
+    int getCurrencyTotal(String currency);
+
+    /**
+     * @return The Minecraft (account) name of this player. Never null or empty.
+     */
+    String getMinecraftName();
+
+    /**
      * @return All items in the inventory of this player. Never null, but can be empty. Items are never null.
      */
     List<Item> getInventory();
+
+    /**
+     * @return True if this player is sneaking, false otherwise.
+     */
+    boolean isSneaking();
 }

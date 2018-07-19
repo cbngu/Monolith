@@ -26,12 +26,6 @@ public interface PlayerQueryService {
     Collection<? extends Player> getOnlinePlayers();
 
     /**
-     * @param name The name. Can not be null or empty.
-     * @return True if the name is not currently used by a player, false otherwise.
-     */
-    boolean isNameAvailable(String name);
-
-    /**
      * @param minecraftName The Minecraft name. Can not be null.
      * @return The Minecraft id belonging to the name. Can be null.
      */

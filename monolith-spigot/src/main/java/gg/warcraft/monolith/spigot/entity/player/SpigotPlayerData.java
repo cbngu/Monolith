@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.spigot.entity.player.service;
+package gg.warcraft.monolith.spigot.entity.player;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -28,10 +28,20 @@ public class SpigotPlayerData extends SpigotEntityData implements PlayerServerDa
     }
 
     @Override
+    public String getMinecraftName() {
+        return player.getName();
+    }
+
+    @Override
     public List<Item> getInventory() {
         ItemStack[] items = player.getInventory().getContents();
         return Arrays.stream(items)
                 .map(itemMapper::map)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isSneaking() {
+        return player.isSneaking();
     }
 }

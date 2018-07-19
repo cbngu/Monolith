@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.api.entity.player.service;
 
+import gg.warcraft.monolith.api.entity.player.Currency;
+
 import java.util.UUID;
 
 /**
@@ -10,10 +12,14 @@ import java.util.UUID;
  */
 public interface PlayerCommandService {
 
+    void addCurrency(UUID playerId, Currency currency, int amount);
+
+    void removeCurrency(UUID playerId, Currency currency, int amount);
+
     /**
      * @param playerId The id of the player to update. Can not be null.
      */
-    void updateTimePlayed(UUID playerId);
+    void update(UUID playerId);
 
     /**
      * @param playerId the id of the player. Can not be null.

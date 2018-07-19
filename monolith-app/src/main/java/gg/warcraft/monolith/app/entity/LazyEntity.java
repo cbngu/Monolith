@@ -1,7 +1,7 @@
 package gg.warcraft.monolith.app.entity;
 
 import gg.warcraft.monolith.api.entity.Entity;
-import gg.warcraft.monolith.api.entity.EntityData;
+import gg.warcraft.monolith.api.entity.EntityProfile;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.Equipment;
@@ -17,12 +17,12 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LazyEntity implements Entity {
-    private final Lazy<? extends EntityData> data;
+    private final Lazy<? extends EntityProfile> data;
     private final Lazy<? extends EntityServerData> serverData;
     private final Lazy<Attributes> attributes;
     private final Lazy<Status> status;
 
-    public LazyEntity(Supplier<? extends EntityData> dataSupplier,
+    public LazyEntity(Supplier<? extends EntityProfile> dataSupplier,
                       Supplier<? extends EntityServerData> serverDataSupplier,
                       Supplier<Attributes> attributesSupplier,
                       Supplier<Status> statusSupplier) {

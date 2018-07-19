@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.spigot.entity.player.service;
+package gg.warcraft.monolith.spigot.entity.player;
 
 import org.bukkit.entity.Player;
 

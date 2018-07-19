@@ -1,15 +1,15 @@
 package gg.warcraft.monolith.app.entity;
 
-import gg.warcraft.monolith.api.entity.EntityData;
+import gg.warcraft.monolith.api.entity.EntityProfile;
 import gg.warcraft.monolith.api.entity.Team;
 
 import java.util.UUID;
 
-public class SimpleEntityData implements EntityData {
+public class SimpleEntityProfile implements EntityProfile {
     private final UUID entityId;
     private final Team team;
 
-    public SimpleEntityData(UUID entityId, Team team) {
+    public SimpleEntityProfile(UUID entityId, Team team) {
         this.entityId = entityId;
         this.team = team;
     }
