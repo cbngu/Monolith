@@ -8,6 +8,9 @@ import gg.warcraft.monolith.spigot.world.MaterialData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SpigotItemMapper {
     private final SpigotItemTypeMapper itemTypeMapper;
 
@@ -29,7 +32,11 @@ public class SpigotItemMapper {
 
     public Item map(ItemStack item) {
         ItemType type = itemTypeMapper.map(item.getType(), item.getData().getData());
-        ItemMeta meta = item.getItemMeta();
-        return new SimpleItem(type, meta.getDisplayName(), item.getAmount(), item.getDurability(), meta.getLore());
+        if (item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
+            return new SimpleItem(type, meta.getDisplayName(), item.getAmount(), item.getDurability(), lore);
+        }
+        return new SimpleItem(type, null, item.getAmount(), item.getDurability(), new ArrayList<>());
     }
 }
