@@ -9,6 +9,7 @@ import gg.warcraft.monolith.app.world.SimpleBlockLocation;
 import gg.warcraft.monolith.app.world.SimpleLocation;
 import gg.warcraft.monolith.app.world.SimpleOrientedLocation;
 import org.bukkit.entity.LivingEntity;
+import org.joml.Vector3f;
 
 public class SpigotLocationMapper {
     private final SpigotWorldMapper worldMapper;
@@ -52,23 +53,33 @@ public class SpigotLocationMapper {
 
     public OrientedLocation map(LivingEntity entity) {
         org.bukkit.Location location = entity.getLocation();
-        World world = worldMapper.map(location.getWorld());
-        float x = (float) location.getX();
-        float y = (float) location.getY();
-        float z = (float) location.getZ();
-        float pitch = location.getPitch();
-        float yaw = location.getYaw();
-        return new SimpleOrientedLocation(world, x, y, z, pitch, yaw);
+        Vector3f direction = new Vector3f(
+                (float) location.getDirection().getX(),
+                (float) location.getDirection().getY(),
+                (float) location.getDirection().getZ());
+        return new SimpleOrientedLocation(
+                worldMapper.map(location.getWorld()),
+                (float) location.getX(),
+                (float) location.getY(),
+                (float) location.getZ(),
+                location.getPitch(),
+                location.getYaw(),
+                direction);
     }
 
     public OrientedLocation mapEye(LivingEntity entity) {
         org.bukkit.Location location = entity.getEyeLocation();
-        World world = worldMapper.map(location.getWorld());
-        float x = (float) location.getX();
-        float y = (float) location.getY();
-        float z = (float) location.getZ();
-        float pitch = location.getPitch();
-        float yaw = location.getYaw();
-        return new SimpleOrientedLocation(world, x, y, z, pitch, yaw);
+        Vector3f direction = new Vector3f(
+                (float) location.getDirection().getX(),
+                (float) location.getDirection().getY(),
+                (float) location.getDirection().getZ());
+        return new SimpleOrientedLocation(
+                worldMapper.map(location.getWorld()),
+                (float) location.getX(),
+                (float) location.getY(),
+                (float) location.getZ(),
+                location.getPitch(),
+                location.getYaw(),
+                direction);
     }
 }

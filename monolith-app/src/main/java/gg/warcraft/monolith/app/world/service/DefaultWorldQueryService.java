@@ -3,7 +3,6 @@ package gg.warcraft.monolith.app.world.service;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
-import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
@@ -11,7 +10,6 @@ import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
 import gg.warcraft.monolith.app.world.SimpleBlockLocation;
 import gg.warcraft.monolith.app.world.SimpleLocation;
-import gg.warcraft.monolith.app.world.SimpleOrientedLocation;
 import gg.warcraft.monolith.app.world.SimpleWorld;
 import org.joml.Vector3ic;
 
@@ -32,12 +30,6 @@ public class DefaultWorldQueryService implements WorldQueryService {
     public Location getLocation(WorldType world, float x, float y, float z) {
         World actualWorld = new SimpleWorld(world);
         return new SimpleLocation(actualWorld, x, y, z);
-    }
-
-    @Override
-    public OrientedLocation getOrientedLocation(WorldType world, float x, float y, float z, float pitch, float yaw) {
-        World actualWorld = new SimpleWorld(world);
-        return new SimpleOrientedLocation(actualWorld, x, y, z, pitch, yaw);
     }
 
     @Override

@@ -2,7 +2,6 @@ package gg.warcraft.monolith.api.world.service;
 
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
-import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
@@ -30,17 +29,6 @@ public interface WorldQueryService {
      * @return The location in the given world at the specified coordinates.
      */
     Location getLocation(WorldType world, float x, float y, float z);
-
-    /**
-     * @param world The world.
-     * @param x     The X coordinate.
-     * @param y     The Y coordinate.
-     * @param z     The Z coordinate.
-     * @param pitch The pitch.
-     * @param yaw   The yaw.
-     * @return The location in the given world at the specified coordinates with the given orientation.
-     */
-    OrientedLocation getOrientedLocation(WorldType world, float x, float y, float z, float pitch, float yaw);
 
     /**
      * @param world The world.
@@ -92,4 +80,6 @@ public interface WorldQueryService {
      * @return The highest non-air block at the specified location.
      */
     Block getHighestBlockAt(BlockLocation location);
+
+
 }

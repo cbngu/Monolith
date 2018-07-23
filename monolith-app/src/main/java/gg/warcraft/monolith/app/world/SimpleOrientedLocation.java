@@ -3,17 +3,20 @@ package gg.warcraft.monolith.app.world;
 import com.google.common.base.MoreObjects;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
+import org.joml.Vector3f;
 
 import java.util.Objects;
 
 public class SimpleOrientedLocation extends SimpleLocation implements OrientedLocation {
     private final float pitch;
     private final float yaw;
+    private final Vector3f direction;
 
-    public SimpleOrientedLocation(World world, float x, float y, float z, float pitch, float yaw) {
+    public SimpleOrientedLocation(World world, float x, float y, float z, float pitch, float yaw, Vector3f direction) {
         super(world, x, y, z);
         this.pitch = pitch;
         this.yaw = yaw;
+        this.direction = direction;
     }
 
     @Override
@@ -24,6 +27,11 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
     @Override
     public float getYaw() {
         return yaw;
+    }
+
+    @Override
+    public Vector3f getDirection() {
+        return direction;
     }
 
     @Override
