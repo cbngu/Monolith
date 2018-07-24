@@ -11,7 +11,7 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     private final UUID playerId;
     private final long timeFirstConnected;
     private final Map<String, Integer> currencies;
-    private final Map<String, Integer> currenciesTotal;
+    private final Map<String, Integer> lifetimeCurrencies;
 
     private long timeConnected;
     private long timeLastSeen;
@@ -20,14 +20,14 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
 
     public SimplePlayerProfileCopyer(UUID playerId, long timeConnected, long timeFirstConnected, long timeLastSeen,
                                      long timePlayed, Map<String, Integer> currencies,
-                                     Map<String, Integer> currenciesTotal, Team team) {
+                                     Map<String, Integer> lifetimeCurrencies, Team team) {
         this.playerId = playerId;
         this.timeConnected = timeConnected;
         this.timeFirstConnected = timeFirstConnected;
         this.timeLastSeen = timeLastSeen;
         this.timePlayed = timePlayed;
         this.currencies = currencies;
-        this.currenciesTotal = currenciesTotal;
+        this.lifetimeCurrencies = lifetimeCurrencies;
         this.team = team;
     }
 
@@ -57,9 +57,9 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     }
 
     @Override
-    public PlayerProfileCopyer withCurrenciesTotal(Map<String, Integer> currenciesTotal) {
-        this.currenciesTotal.clear();
-        this.currenciesTotal.putAll(currenciesTotal);
+    public PlayerProfileCopyer withLifetimeCurrencies(Map<String, Integer> currenciesTotal) {
+        this.lifetimeCurrencies.clear();
+        this.lifetimeCurrencies.putAll(currenciesTotal);
         return this;
     }
 
@@ -72,6 +72,6 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     @Override
     public PlayerProfile copy() {
         return new SimplePlayerProfile(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, currenciesTotal, team);
+                currencies, lifetimeCurrencies, team);
     }
 }

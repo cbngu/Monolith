@@ -1,12 +1,17 @@
 package gg.warcraft.monolith.app.entity.player.service;
 
 import com.google.inject.Inject;
+import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.player.Currency;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
+import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyGainedEvent;
+import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyLostEvent;
 import gg.warcraft.monolith.api.entity.player.service.PlayerCommandService;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.util.ColorCode;
+import gg.warcraft.monolith.app.entity.player.event.SimplePlayerCurrencyGainedEvent;
+import gg.warcraft.monolith.app.entity.player.event.SimplePlayerCurrencyLostEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -14,12 +19,14 @@ import java.util.UUID;
 public class DefaultPlayerCommandService implements PlayerCommandService {
     private final PlayerProfileRepository playerProfileRepository;
     private final PlayerServerAdapter playerServerAdapter;
+    private final EventService eventService;
 
     @Inject
     public DefaultPlayerCommandService(PlayerProfileRepository playerProfileRepository,
-                                       PlayerServerAdapter playerServerAdapter) {
+                                       PlayerServerAdapter playerServerAdapter, EventService eventService) {
         this.playerProfileRepository = playerProfileRepository;
         this.playerServerAdapter = playerServerAdapter;
+        this.eventService = eventService;
     }
 
     @Override
@@ -29,19 +36,24 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
 
         Map<String, Integer> newCurrencies = profile.getCurrencies();
         int currentAmount = newCurrencies.getOrDefault(currencyName, 0);
-        int newAmount = currentAmount + amount;
-        newCurrencies.put(currencyName, newAmount);
+        int newCurrentAmount = currentAmount + amount;
+        newCurrencies.put(currencyName, newCurrentAmount);
 
-        Map<String, Integer> newCurrenciesTotal = profile.getCurrenciesTotal();
-        int currentAmountTotal = newCurrenciesTotal.getOrDefault(currencyName, 0);
-        int newAmountTotal = currentAmountTotal + amount;
-        newCurrenciesTotal.put(currencyName, newAmountTotal);
+        Map<String, Integer> newLifetimeCurrencies = profile.getLifetimeCurrencies();
+        int currentLifetimeAmount = newLifetimeCurrencies.getOrDefault(currencyName, 0);
+        int newLifetimeAmount = currentLifetimeAmount + amount;
+        newLifetimeCurrencies.put(currencyName, newLifetimeAmount);
 
         PlayerProfile newProfile = profile.getCopyer()
                 .withCurrencies(newCurrencies)
-                .withCurrenciesTotal(newCurrenciesTotal)
+                .withLifetimeCurrencies(newLifetimeCurrencies)
                 .copy();
         playerProfileRepository.save(newProfile);
+
+        PlayerCurrencyGainedEvent event = new SimplePlayerCurrencyGainedEvent(playerId, currencyName, amount,
+                newCurrentAmount, newLifetimeAmount);
+        eventService.publish(event);
+
     }
 
     @Override
@@ -55,12 +67,16 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
                     ", player doesn't have that much.");
         }
 
-        int newAmount = currentAmount - amount;
-        newCurrencies.put(currencyName, newAmount);
+        int newCurrentAmount = currentAmount - amount;
+        newCurrencies.put(currencyName, newCurrentAmount);
         PlayerProfile newProfile = profile.getCopyer()
                 .withCurrencies(newCurrencies)
                 .copy();
         playerProfileRepository.save(newProfile);
+
+        PlayerCurrencyLostEvent event = new SimplePlayerCurrencyLostEvent(playerId, currencyName, amount,
+                newCurrentAmount);
+        eventService.publish(event);
     }
 
     @Override

@@ -49,8 +49,8 @@ public class LazyPlayer extends LazyEntity implements Player {
     }
 
     @Override
-    public int getCurrencyTotal(String currency) {
-        return profile.get().getCurrenciesTotal().getOrDefault(currency, 0);
+    public int getLifetimeCurrency(String currency) {
+        return profile.get().getLifetimeCurrencies().getOrDefault(currency, 0);
     }
 
     @Override

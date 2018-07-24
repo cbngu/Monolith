@@ -39,9 +39,9 @@ public interface Player extends Entity {
 
     /**
      * @param currency The currency. Can not be null or empty.
-     * @return The total amount of the given currency this player has accumulated over time.
+     * @return The total amount of the given currency this player has accumulated over their lifetime on the server.
      */
-    int getCurrencyTotal(String currency);
+    int getLifetimeCurrency(String currency);
 
     /**
      * @return The Minecraft (account) name of this player. Never null or empty.

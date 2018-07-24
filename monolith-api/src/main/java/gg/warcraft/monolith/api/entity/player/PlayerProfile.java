@@ -35,7 +35,7 @@ public interface PlayerProfile extends EntityProfile {
 
     Map<String, Integer> getCurrencies();
 
-    Map<String, Integer> getCurrenciesTotal();
+    Map<String, Integer> getLifetimeCurrencies();
 
     PlayerProfileCopyer getCopyer();
 }

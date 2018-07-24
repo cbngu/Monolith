@@ -65,7 +65,7 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         long timeLastSeen = profile.getTimeLastSeen();
         long timePlayed = profile.getTimePlayed();
         Map<String, Integer> currencies = profile.getCurrencies();
-        Map<String, Integer> currenciesTotal = profile.getCurrenciesTotal();
+        Map<String, Integer> currenciesTotal = profile.getLifetimeCurrencies();
         Team team = profile.getTeam();
         return new PlayerProfileItem(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed, currencies,
                 currenciesTotal, team);
