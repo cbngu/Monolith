@@ -33,4 +33,6 @@ public interface WorldCommandService {
      * @param location The location to drop at.
      */
     void dropItemsAt(List<Item> items, Location location);
+
+    void strikeLightning(Location location, boolean ambient);
 }

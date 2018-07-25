@@ -91,4 +91,15 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
             player.sendBlockChange(spigotBlock.getLocation(), spigotBlock.getType(), spigotBlock.getData());
         }
     }
+
+    @Override
+    public void strikeLightning(Location location, boolean ambient) {
+        org.bukkit.Location spigotLocation = locationMapper.map(location);
+        World world = spigotLocation.getWorld();
+        if (ambient) {
+            world.strikeLightningEffect(spigotLocation);
+        } else {
+            world.strikeLightning(spigotLocation);
+        }
+    }
 }

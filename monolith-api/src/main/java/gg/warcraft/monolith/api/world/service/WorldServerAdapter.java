@@ -61,4 +61,6 @@ public interface WorldServerAdapter {
     void dropItemsAt(List<Item> items, Location location);
 
     void spoofBlock(Block fakeBlock, UUID playerId);
+
+    void strikeLightning(Location location, boolean ambient);
 }

@@ -33,4 +33,9 @@ public class DefaultWorldCommandService implements WorldCommandService {
     public void dropItemsAt(List<Item> items, Location location) {
         worldServerAdapter.dropItemsAt(items, location);
     }
+
+    @Override
+    public void strikeLightning(Location location, boolean ambient) {
+        worldServerAdapter.strikeLightning(location, ambient);
+    }
 }
