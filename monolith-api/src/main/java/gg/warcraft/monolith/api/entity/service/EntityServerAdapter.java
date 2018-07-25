@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.entity.service;
 
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
 import gg.warcraft.monolith.api.world.PotionEffectType;
@@ -49,7 +50,7 @@ public interface EntityServerAdapter {
 
     /**
      * @param entityId The id of the entity. Can not be null.
-     * @param effect   The potion effect to remove from the entity. Can not be null.
+     * @param type     The potion effect to remove from the entity. Can not be null.
      */
     void removePotionEffect(UUID entityId, PotionEffectType type);
 
@@ -70,4 +71,12 @@ public interface EntityServerAdapter {
      * @param location The location to teleport the entity to. Can not be null.
      */
     void teleport(UUID entityId, Location location);
+
+    /**
+     * Sets an entity on fire for a duration.
+     *
+     * @param entityId The id of the entity.
+     * @param duration The duration.
+     */
+    void burn(UUID entityId, Duration duration);
 }

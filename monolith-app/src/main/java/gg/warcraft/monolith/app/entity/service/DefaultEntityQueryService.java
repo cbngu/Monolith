@@ -10,7 +10,15 @@ import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.OrientedLocation;
+import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
+import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.entity.LazyEntity;
+import gg.warcraft.monolith.app.entity.SimpleEntityTarget;
+import org.joml.LineSegmentf;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,16 +29,20 @@ public class DefaultEntityQueryService implements EntityQueryService {
     private final AttributeQueryService attributeQueryService;
     private final StatusQueryService statusQueryService;
     private final EntityServerAdapter entityServerAdapter;
+    private final WorldQueryService worldQueryService;
+    private final BlockTypeUtils blockTypeUtils;
 
     @Inject
     public DefaultEntityQueryService(EntityProfileRepository entityProfileRepository,
-                                     AttributeQueryService attributeQueryService,
-                                     StatusQueryService statusQueryService,
-                                     EntityServerAdapter entityServerAdapter) {
+                                     AttributeQueryService attributeQueryService, StatusQueryService statusQueryService,
+                                     EntityServerAdapter entityServerAdapter, WorldQueryService worldQueryService,
+                                     BlockTypeUtils blockTypeUtils) {
         this.entityProfileRepository = entityProfileRepository;
         this.attributeQueryService = attributeQueryService;
         this.statusQueryService = statusQueryService;
         this.entityServerAdapter = entityServerAdapter;
+        this.worldQueryService = worldQueryService;
+        this.blockTypeUtils = blockTypeUtils;
     }
 
     Entity getEntity(EntityServerData serverData) {
@@ -64,8 +76,44 @@ public class DefaultEntityQueryService implements EntityQueryService {
     }
 
     @Override
-    public EntityTarget getTarget(UUID entityId, float range) {
-        // TODO implement
-        return null;
+    public EntityTarget getTarget(UUID entityId, float range) { // TODO should this be in PlayerQueryService?
+        Entity player = getEntity(entityId);
+        OrientedLocation origin = player.getEyeLocation();
+        Vector3f direction = origin.getDirection();
+        Location target = origin;
+        Block block;
+        do {
+            target = target.add(direction);
+            block = worldQueryService.getBlockAt(target);
+            if (blockTypeUtils.getNonSolids().contains(block.getType())) {
+                break;
+            }
+        } while (origin.toVector().distance(target.toVector()) <= range);
+
+        float minX = Math.min(origin.getX(), target.getX());
+        float maxX = Math.max(origin.getX(), target.getX());
+        float minY = Math.min(origin.getY(), target.getY());
+        float maxY = Math.max(origin.getY(), target.getY());
+        float minZ = Math.min(origin.getZ(), target.getZ());
+        float maxZ = Math.max(origin.getZ(), target.getZ());
+
+        float deltaX = (maxX - minX) * 0.5f;
+        float deltaY = (maxY - minY) * 0.5f;
+        float deltaZ = (maxZ - minZ) * 0.5f;
+
+        float centerX = minX + deltaX;
+        float centerY = minY + deltaY;
+        float centerZ = minZ + deltaZ;
+
+        Location center = worldQueryService.getLocation(origin.getWorld().getType(), centerX, centerY, centerZ);
+        LineSegmentf intersectionLine = new LineSegmentf(origin.getX(), origin.getY(), origin.getZ(),
+                target.getX(), target.getY(), target.getZ());
+        List<Entity> entities = getNearbyEntities(center, deltaX, deltaY, deltaZ);
+        Entity closestIntersectedEntity;
+        for (Entity entity : entities) {
+            Vector2f result = new Vector2f();
+            entity.getBoundingBox().intersectLineSegment(intersectionLine, result);
+        }
+        return new SimpleEntityTarget(null, null); // TODO add values
     }
 }

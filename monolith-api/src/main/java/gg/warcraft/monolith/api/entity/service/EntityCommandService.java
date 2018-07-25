@@ -73,6 +73,14 @@ public interface EntityCommandService {
     void heal(UUID entityId, float amount);
 
     /**
+     * Sets an entity on fire for a duration.
+     *
+     * @param entityId The id of the entity.
+     * @param duration The duration.
+     */
+    void burn(UUID entityId, Duration duration);
+
+    /**
      * Prevents an entity from jumping for a duration.
      *
      * @param entityId The id of the entity.

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
+import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
 import gg.warcraft.monolith.api.world.PotionEffectType;
@@ -112,6 +113,16 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
             entity.remove();
+        }
+    }
+
+    @Override
+    public void burn(UUID entityId, Duration duration) {
+        Entity entity = server.getEntity(entityId);
+        if (entity != null) {
+            int currentTicks = entity.getFireTicks();
+            int newFireTicks = currentTicks + duration.inSeconds();
+            entity.setFireTicks(newFireTicks);
         }
     }
 }

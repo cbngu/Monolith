@@ -97,6 +97,11 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     }
 
     @Override
+    public void burn(UUID entityId, Duration duration) {
+        entityServerAdapter.burn(entityId, duration);
+    }
+
+    @Override
     public void heavy(UUID entityId, Duration duration) {
         Entity entity = entityQueryService.getEntity(entityId);
         if (entity == null) {
