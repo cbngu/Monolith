@@ -21,6 +21,10 @@ import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.JsonMapper;
 import gg.warcraft.monolith.api.core.PersistenceService;
 import gg.warcraft.monolith.api.core.YamlMapper;
+import gg.warcraft.monolith.api.effect.Effect;
+import gg.warcraft.monolith.api.effect.EffectFactory;
+import gg.warcraft.monolith.api.effect.EffectRenderer;
+import gg.warcraft.monolith.api.effect.EffectRendererFactory;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.EffectVectorsFactory;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService;
@@ -77,6 +81,10 @@ import gg.warcraft.monolith.app.config.service.GitHubConfigurationCommandService
 import gg.warcraft.monolith.app.config.service.LocalConfigurationCommandService;
 import gg.warcraft.monolith.app.core.GuavaEventService;
 import gg.warcraft.monolith.app.core.JedisPersistenceService;
+import gg.warcraft.monolith.app.effect.DynamicEffect;
+import gg.warcraft.monolith.app.effect.SimpleEffect;
+import gg.warcraft.monolith.app.effect.renderer.IterativeEffectRenderer;
+import gg.warcraft.monolith.app.effect.renderer.SimpleEffectRenderer;
 import gg.warcraft.monolith.app.effect.vectors.CircleVectors;
 import gg.warcraft.monolith.app.effect.vectors.DomeVectors;
 import gg.warcraft.monolith.app.effect.vectors.LineVectors;
@@ -226,6 +234,17 @@ public class AbstractMonolithModule extends AbstractModule {
                 .implement(EffectVectors.class, Names.named("ring"), RingVectors.class)
                 .implement(EffectVectors.class, Names.named("sphere"), SphereVectors.class)
                 .build(EffectVectorsFactory.class));
+
+        install(new FactoryModuleBuilder()
+                .implement(EffectRenderer.class, Names.named("simple"), SimpleEffectRenderer.class)
+                .implement(EffectRenderer.class, Names.named("iterative"), IterativeEffectRenderer.class)
+                .build(EffectRendererFactory.class));
+
+        install(new FactoryModuleBuilder()
+                .implement(Effect.class, Names.named("simple"), SimpleEffect.class)
+                .implement(Effect.class, Names.named("timed"), SimpleEffect.class)
+                .implement(Effect.class, Names.named("dynamic"), DynamicEffect.class)
+                .build(EffectFactory.class));
     }
 
     private void configureEntity() {

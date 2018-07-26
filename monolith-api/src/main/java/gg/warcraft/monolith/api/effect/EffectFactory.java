@@ -28,7 +28,7 @@ public interface EffectFactory {
      * @return A new {@code Effect}. Never null.
      */
     @Named("simple")
-    Effect createEffect(Supplier<Location> location);
+    Effect createSimpleEffect(Supplier<Location> location);
 
     /**
      * Creates a new timed {@code Effect}.
@@ -41,5 +41,18 @@ public interface EffectFactory {
      * @return A new timed {@code Effect}. Never null.
      */
     @Named("timed")
-    Effect createEffect(Supplier<Location> location, Duration period);
+    Effect createTimedEffect(Supplier<Location> location, Duration period);
+
+    /**
+     * Creates a new dynamic {@code Effect}.
+     * <p>
+     * A dynamic {@code Effect} will call the provided runnable each time before calling all of its renderers. This
+     * allows for dynamic updating of the effect without having to schedule a new task for it.
+     *
+     * @param location The location supplier.
+     * @param runnable The runnable.
+     * @return A new dynamic {@code Effect}. Never null.
+     */
+    @Named("dynamic")
+    Effect createDynamicEffect(Supplier<Location> location, Runnable runnable);
 }
