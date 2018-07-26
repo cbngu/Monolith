@@ -2,6 +2,8 @@ package gg.warcraft.monolith.api.world.service;
 
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.Sound;
+import gg.warcraft.monolith.api.world.SoundCategory;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.Sign;
@@ -33,6 +35,8 @@ public interface WorldCommandService {
      * @param location The location to drop at.
      */
     void dropItemsAt(List<Item> items, Location location);
+
+    void playSound(Location location, Sound sound, SoundCategory category, float volume, float pitch);
 
     void strikeLightning(Location location, boolean ambient);
 }
