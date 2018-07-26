@@ -61,6 +61,11 @@ public class SpigotEntityData implements EntityServerData {
     }
 
     @Override
+    public float getHealth() {
+        return (float) entity.getHealth();
+    }
+
+    @Override
     public Equipment getEquipment() {
         Item helmet = itemMapper.map(entity.getEquipment().getHelmet());
         Item chest = itemMapper.map(entity.getEquipment().getChestplate());

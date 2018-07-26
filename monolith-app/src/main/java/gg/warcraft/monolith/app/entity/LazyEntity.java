@@ -58,6 +58,11 @@ public class LazyEntity implements Entity {
     }
 
     @Override
+    public float getHealth() {
+        return serverData.get().getHealth();
+    }
+
+    @Override
     public Team getTeam() {
         return data.get().getTeam();
     }

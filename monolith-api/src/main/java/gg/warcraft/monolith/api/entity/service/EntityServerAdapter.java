@@ -67,10 +67,10 @@ public interface EntityServerAdapter {
     void removeEntity(UUID entityId);
 
     /**
-     * @param entityId The id of the entity. Can not be null.
-     * @param location The location to teleport the entity to. Can not be null.
+     * @param entityId The id of the entity to damage. Can not be null.
+     * @param amount   The damage amount.
      */
-    void teleport(UUID entityId, Location location);
+    void damage(UUID entityId, float amount);
 
     /**
      * Sets an entity on fire for a duration.
@@ -79,4 +79,10 @@ public interface EntityServerAdapter {
      * @param duration The duration.
      */
     void burn(UUID entityId, Duration duration);
+
+    /**
+     * @param entityId The id of the entity. Can not be null.
+     * @param location The location to teleport the entity to. Can not be null.
+     */
+    void teleport(UUID entityId, Location location);
 }

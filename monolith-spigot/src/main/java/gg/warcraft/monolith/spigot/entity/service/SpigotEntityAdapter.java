@@ -92,15 +92,6 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     @Override
-    public void teleport(UUID entityId, Location location) {
-        Entity entity = server.getEntity(entityId);
-        if (entity != null) {
-            org.bukkit.Location newLocation = locationMapper.map(location);
-            entity.teleport(newLocation);
-        }
-    }
-
-    @Override
     public UUID spawnEntity(EntityType type, Location spawnLocation) {
         org.bukkit.entity.EntityType spigotEntityType = entityTypeMapper.map(type);
         org.bukkit.Location spigotSpawnLocation = locationMapper.map(spawnLocation);
@@ -117,12 +108,30 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     @Override
+    public void damage(UUID entityId, float amount) {
+        Entity entity = server.getEntity(entityId);
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            livingEntity.damage(amount);
+        }
+    }
+
+    @Override
     public void burn(UUID entityId, Duration duration) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
             int currentTicks = entity.getFireTicks();
             int newFireTicks = currentTicks + duration.inSeconds();
             entity.setFireTicks(newFireTicks);
+        }
+    }
+
+    @Override
+    public void teleport(UUID entityId, Location location) {
+        Entity entity = server.getEntity(entityId);
+        if (entity != null) {
+            org.bukkit.Location newLocation = locationMapper.map(location);
+            entity.teleport(newLocation);
         }
     }
 }

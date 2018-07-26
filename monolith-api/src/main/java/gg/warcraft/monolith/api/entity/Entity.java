@@ -39,6 +39,11 @@ public interface Entity {
     Vector3f getVelocity();
 
     /**
+     * @return The health of this entity.
+     */
+    float getHealth();
+
+    /**
      * @return The team of this entity. Can be null.
      */
     Team getTeam();

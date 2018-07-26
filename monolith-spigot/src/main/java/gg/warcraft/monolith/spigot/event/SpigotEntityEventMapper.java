@@ -4,14 +4,14 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
 import gg.warcraft.monolith.api.entity.event.EntityInteractEvent;
-import gg.warcraft.monolith.api.entity.event.EntityPreDeathEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreFatalDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreInteractEvent;
 import gg.warcraft.monolith.api.entity.player.Player;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityDeathEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityInteractEvent;
-import gg.warcraft.monolith.app.entity.event.SimpleEntityPreDeathEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreFatalDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreInteractEvent;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
@@ -88,11 +88,11 @@ public class SpigotEntityEventMapper implements Listener {
         if (event.getEntity() instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) event.getEntity();
             if (event.getDamage() > livingEntity.getHealth()) {
-                EntityPreDeathEvent entityPreDeathEvent =
-                        new SimpleEntityPreDeathEvent(livingEntity.getUniqueId(), false);
-                eventService.publish(entityPreDeathEvent);
+                EntityPreFatalDamageEvent entityPreFatalDamageEvent =
+                        new SimpleEntityPreFatalDamageEvent(livingEntity.getUniqueId(), false);
+                eventService.publish(entityPreFatalDamageEvent);
 
-                if (entityPreDeathEvent.isCancelled() && !entityPreDeathEvent.isExplicitlyAllowed()) {
+                if (entityPreFatalDamageEvent.isCancelled() && !entityPreFatalDamageEvent.isExplicitlyAllowed()) {
                     event.setDamage(livingEntity.getHealth() - 1);
                 }
             }
@@ -115,7 +115,7 @@ public class SpigotEntityEventMapper implements Listener {
 //        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
 //                .map(itemMapper::map)
 //                .collect(Collectors.toList());
-        // TODO wrap up implementation
+        // TODO wrap up implementation, give EntityPreDeathEvent alternativeDrops like block event?
         event.getDrops().clear();
 //        event.getDrops().addAll(spigotDrops);
     }

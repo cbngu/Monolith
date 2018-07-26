@@ -1,7 +1,12 @@
 package gg.warcraft.monolith.app.entity.service;
 
+import gg.warcraft.monolith.api.combat.CombatValue;
+import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.event.EntityDamageEvent;
+import gg.warcraft.monolith.api.entity.event.EntityHealthChangedEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
 import gg.warcraft.monolith.api.entity.service.EntityCommandService;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
@@ -15,6 +20,9 @@ import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityDamageEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityHealthChangedEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreDamageEvent;
 import gg.warcraft.monolith.app.world.SimplePotionEffect;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -28,6 +36,7 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     private final EntityQueryService entityQueryService;
     private final EntityServerAdapter entityServerAdapter;
     private final WorldQueryService worldQueryService;
+    private final EventService eventService;
     private final BlockUtils blockUtils;
     private final BlockTypeUtils blockTypeUtils;
     private final TimeUtils timeUtils;
@@ -37,11 +46,12 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     final Map<Float, Float> leapStrength;
 
     public AbstractEntityCommandService(EntityQueryService entityQueryService, EntityServerAdapter entityServerAdapter,
-                                        WorldQueryService worldQueryService, BlockUtils blockUtils,
-                                        BlockTypeUtils blockTypeUtils, TimeUtils timeUtils) {
+                                        WorldQueryService worldQueryService, EventService eventService,
+                                        BlockUtils blockUtils, BlockTypeUtils blockTypeUtils, TimeUtils timeUtils) {
         this.entityQueryService = entityQueryService;
         this.entityServerAdapter = entityServerAdapter;
         this.worldQueryService = worldQueryService;
+        this.eventService = eventService;
         this.blockUtils = blockUtils;
         this.blockTypeUtils = blockTypeUtils;
         this.timeUtils = timeUtils;
@@ -81,18 +91,34 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     }
 
     @Override
-    public void damage(UUID entityId, float amount) {
-        // TODO publish EntityPreDamageEvent
-        // TODO damage entity depending on damage in event
-        // TODO publish EntityDamageEvent
-        throw new IllegalStateException("Method not implemented");
+    public void damage(UUID entityId, CombatValue amount) {
+        CombatValue damage = amount;
+        EntityPreDamageEvent entityPreDamageEvent = new SimpleEntityPreDamageEvent(entityId, damage, false);
+        eventService.publish(entityPreDamageEvent);
+        if (entityPreDamageEvent.isCancelled()) {
+            return;
+        }
+
+        Entity previousEntity = entityQueryService.getEntity(entityId);
+        float previousHealth = previousEntity.getHealth();
+
+        damage = entityPreDamageEvent.getDamage();
+        entityServerAdapter.damage(entityId, damage.getModifiedValue());
+
+        EntityDamageEvent entityDamageEvent = new SimpleEntityDamageEvent(entityId, damage);
+        eventService.publish(entityDamageEvent);
+
+        Entity newEntity = entityQueryService.getEntity(entityId);
+        float newHealth = newEntity.getHealth();
+        if (newHealth != previousHealth) {
+            EntityHealthChangedEvent entityHealthChangedEvent =
+                    new SimpleEntityHealthChangedEvent(entityId, previousHealth, newHealth);
+            eventService.publish(entityHealthChangedEvent);
+        }
     }
 
     @Override
-    public void heal(UUID entityId, float amount) {
-        // TODO publish EntityPreHealEvent
-        // TODO heal entity depending on healing in event
-        // TODO publish EntityHealEvent
+    public void heal(UUID entityId, CombatValue amount) {
         throw new IllegalStateException("Method not implemented");
     }
 

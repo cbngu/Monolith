@@ -34,6 +34,11 @@ public interface EntityServerData {
     Vector3f getVelocity();
 
     /**
+     * @return The health of this entity.
+     */
+    float getHealth();
+
+    /**
      * @return The equipment the entity is currently wearing. Never null.
      */
     Equipment getEquipment();

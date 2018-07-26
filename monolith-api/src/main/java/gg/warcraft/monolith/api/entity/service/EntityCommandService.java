@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.api.entity.service;
 
+import gg.warcraft.monolith.api.combat.CombatValue;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.util.Duration;
@@ -64,13 +65,13 @@ public interface EntityCommandService {
      * @param entityId The id of the entity. Can not be null.
      * @param amount   The amount of damage the entity should take.
      */
-    void damage(UUID entityId, float amount);
+    void damage(UUID entityId, CombatValue amount);
 
     /**
      * @param entityId The id of the entity. Can not be null.
      * @param amount   The amount of healing the entity should take.
      */
-    void heal(UUID entityId, float amount);
+    void heal(UUID entityId, CombatValue amount);
 
     /**
      * Sets an entity on fire for a duration.

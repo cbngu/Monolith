@@ -7,4 +7,6 @@ import java.util.List;
 public interface EntityDeathEvent extends EntityEvent {
 
     List<Item> getDrops();
+
+    void setDrops(List<Item> drops);
 }

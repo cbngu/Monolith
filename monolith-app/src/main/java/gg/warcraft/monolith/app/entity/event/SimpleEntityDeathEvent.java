@@ -19,4 +19,10 @@ public class SimpleEntityDeathEvent extends SimpleEntityEvent implements EntityD
     public List<Item> getDrops() {
         return new ArrayList<>(drops);
     }
+
+    @Override
+    public void setDrops(List<Item> drops) {
+        throw new IllegalStateException("Not implemented");
+        // TODO do we want this?
+    }
 }

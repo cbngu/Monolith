@@ -14,6 +14,7 @@ import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
 import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler;
+import gg.warcraft.monolith.app.entity.status.handler.StatusEffectHandler;
 import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotInventoryEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotPlayerEventMapper;
@@ -47,6 +48,12 @@ public class MonolithPlugin extends JavaPlugin {
     }
 
     void initializeMonolithHandlers() {
+        CommandExecutedHandler commandExecutedHandler = injector.getInstance(CommandExecutedHandler.class);
+        eventService.subscribe(commandExecutedHandler);
+
+        StatusEffectHandler statusEffectHandler = injector.getInstance(StatusEffectHandler.class);
+        eventService.subscribe(statusEffectHandler);
+
         PlayerProfileInitializationHandler playerProfileInitializationHandler =
                 injector.getInstance(PlayerProfileInitializationHandler.class);
         eventService.subscribe(playerProfileInitializationHandler);
@@ -54,9 +61,6 @@ public class MonolithPlugin extends JavaPlugin {
         PlayerProfileUpdateHandler playerProfileUpdateHandler =
                 injector.getInstance(PlayerProfileUpdateHandler.class);
         taskService.runEachTick(playerProfileUpdateHandler);
-
-        CommandExecutedHandler commandExecutedHandler = injector.getInstance(CommandExecutedHandler.class);
-        eventService.subscribe(commandExecutedHandler);
     }
 
     void initializeSpigotEventMappers() {

@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.app.entity.service;
 
 import com.google.inject.Inject;
+import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.EntityProfile;
 import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
@@ -20,8 +21,10 @@ public class DefaultEntityCommandService extends AbstractEntityCommandService {
     @Inject
     public DefaultEntityCommandService(EntityProfileRepository entityProfileRepository, EntityQueryService entityQueryService,
                                        EntityServerAdapter entityServerAdapter, WorldQueryService worldQueryService,
-                                       BlockUtils blockUtils, BlockTypeUtils blockTypeUtils, TimeUtils timeUtils) {
-        super(entityQueryService, entityServerAdapter, worldQueryService, blockUtils, blockTypeUtils, timeUtils);
+                                       EventService eventService, BlockUtils blockUtils, BlockTypeUtils blockTypeUtils,
+                                       TimeUtils timeUtils) {
+        super(entityQueryService, entityServerAdapter, worldQueryService, eventService, blockUtils, blockTypeUtils,
+                timeUtils);
         this.entityProfileRepository = entityProfileRepository;
     }
 
