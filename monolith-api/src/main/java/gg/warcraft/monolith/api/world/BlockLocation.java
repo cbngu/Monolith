@@ -30,11 +30,6 @@ public interface BlockLocation {
     int getZ();
 
     /**
-     * @return This location as a 3D int vector. Never null.
-     */
-    Vector3i toVector();
-
-    /**
      * @param x The X scalar.
      * @param y The Y scalar.
      * @param z The Z scalar.
@@ -87,4 +82,14 @@ public interface BlockLocation {
      * @return A new location with the given scalars as its coordinates. Never null.
      */
     BlockLocation with(int x, int y, int z);
+
+    /**
+     * @return This location as a 3D int vector. Never null.
+     */
+    Vector3i toVector();
+
+    /**
+     * @return This block location as a floating point location. Never null.
+     */
+    Location toLocation();
 }

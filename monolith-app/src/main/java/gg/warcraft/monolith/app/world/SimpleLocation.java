@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.app.world;
 
 import com.google.common.base.MoreObjects;
+import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.World;
 import org.joml.Vector3f;
@@ -39,11 +40,6 @@ public class SimpleLocation implements Location {
     @Override
     public float getZ() {
         return z;
-    }
-
-    @Override
-    public Vector3f toVector() {
-        return new Vector3f(x, y, z);
     }
 
     @Override
@@ -127,5 +123,15 @@ public class SimpleLocation implements Location {
                 .add("y", getY())
                 .add("z", getZ())
                 .toString();
+    }
+
+    @Override
+    public Vector3f toVector() {
+        return new Vector3f(x, y, z);
+    }
+
+    @Override
+    public BlockLocation toBlockLocation() {
+        return new SimpleBlockLocation(world, (int) x, (int) y, (int) z);
     }
 }

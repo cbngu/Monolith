@@ -29,11 +29,6 @@ public interface Location {
     float getZ();
 
     /**
-     * @return This location as a 3D int vector. Never null.
-     */
-    Vector3f toVector();
-
-    /**
      * @param x The X scalar.
      * @param y The Y scalar.
      * @param z The Z scalar.
@@ -86,4 +81,14 @@ public interface Location {
      * @return A new location with the given scalars as its coordinates. Never null.
      */
     Location with(float x, float y, float z);
+
+    /**
+     * @return This location as a 3D int vector. Never null.
+     */
+    Vector3f toVector();
+
+    /**
+     * @return This location as a block location. Never null.
+     */
+    BlockLocation toBlockLocation();
 }
