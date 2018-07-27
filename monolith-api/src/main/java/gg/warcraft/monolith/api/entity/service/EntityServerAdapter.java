@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.entity.service;
 
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
@@ -53,6 +54,12 @@ public interface EntityServerAdapter {
      * @param type     The potion effect to remove from the entity. Can not be null.
      */
     void removePotionEffect(UUID entityId, PotionEffectType type);
+
+    /**
+     * @param entityId  The id of the entity. Can not be null.
+     * @param attribute The generic attribute to force an update for. Can not be null.
+     */
+    void updateGenericAttribute(UUID entityId, GenericAttribute attribute);
 
     /**
      * @param type          The type of entity to spawn. Can not be null.

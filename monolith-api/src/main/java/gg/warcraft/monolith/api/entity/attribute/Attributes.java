@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Attributes represent the state of all attribute modifiers currently attached to an entity.
  */
-public interface Attributes {
+public interface Attributes extends AttributeModifier.Observer {
 
     /**
      * @return The id of the entity this attributes belongs to. Never null.

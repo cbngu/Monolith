@@ -1,6 +1,8 @@
 package gg.warcraft.monolith.api.entity.attribute.service;
 
+import gg.warcraft.monolith.api.entity.attribute.Attribute;
 import gg.warcraft.monolith.api.entity.attribute.AttributeModifier;
+import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
 
 import java.util.UUID;
 
@@ -13,14 +15,22 @@ import java.util.UUID;
 public interface AttributeCommandService {
 
     /**
-     * @param modifier The attribute modifier to add to the entity. Can not be null.
-     * @param entityId The id of the entity. Can not be null.
+     * @param entityId     The id of the entity. Can not be null.
+     * @param attribute    The attribute of the modifier. Can not be null.
+     * @param initialValue The initial value of the modifier.
+     * @return The new attribute modifier. Never null.
      */
-    void addAttributeModifier(AttributeModifier modifier, UUID entityId);
+    AttributeModifier addAttributeModifier(UUID entityId, Attribute attribute, float initialValue);
 
     /**
-     * @param modifier The modifier to remove from the entity. Can not be null.
      * @param entityId The id of the entity. Can not be null.
+     * @param modifier The modifier to remove from the entity. Can not be null.
      */
-    void removeAttributeModifier(AttributeModifier modifier, UUID entityId);
+    void removeAttributeModifier(UUID entityId, AttributeModifier modifier);
+
+    /**
+     * @param entityId  The id of the entity. Can not be null.
+     * @param attribute The generic attribute to force an update for. Can not be null.
+     */
+    void updateGenericAttribute(UUID entityId, GenericAttribute attribute);
 }

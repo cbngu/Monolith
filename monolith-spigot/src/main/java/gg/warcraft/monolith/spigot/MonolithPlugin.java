@@ -12,6 +12,7 @@ import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.PlayerCommandSender;
 import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
 import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
+import gg.warcraft.monolith.app.entity.attribute.handler.AttributesInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler;
 import gg.warcraft.monolith.app.entity.status.handler.StatusEffectHandler;
@@ -50,6 +51,10 @@ public class MonolithPlugin extends JavaPlugin {
     void initializeMonolithHandlers() {
         CommandExecutedHandler commandExecutedHandler = injector.getInstance(CommandExecutedHandler.class);
         eventService.subscribe(commandExecutedHandler);
+
+        AttributesInitializationHandler attributesInitializationHandler =
+                injector.getInstance(AttributesInitializationHandler.class);
+        eventService.subscribe(attributesInitializationHandler);
 
         StatusEffectHandler statusEffectHandler = injector.getInstance(StatusEffectHandler.class);
         eventService.subscribe(statusEffectHandler);

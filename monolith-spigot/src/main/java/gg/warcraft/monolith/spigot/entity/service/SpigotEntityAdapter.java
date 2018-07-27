@@ -3,16 +3,22 @@ package gg.warcraft.monolith.spigot.entity.service;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.attribute.Attributes;
+import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
+import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.PotionEffect;
 import gg.warcraft.monolith.api.world.PotionEffectType;
+import gg.warcraft.monolith.spigot.entity.GenericAttributeMapper;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
 import org.bukkit.GameMode;
 import org.bukkit.Server;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,17 +31,23 @@ import java.util.stream.Collectors;
 
 public class SpigotEntityAdapter implements EntityServerAdapter {
     private final Server server;
+    private final AttributeQueryService attributeQueryService;
     private final SpigotEntityTypeMapper entityTypeMapper;
     private final SpigotLocationMapper locationMapper;
     private final SpigotEntityDataFactory entityDataFactory;
+    private final GenericAttributeMapper genericAttributeMapper;
 
     @Inject
-    public SpigotEntityAdapter(Server server, SpigotEntityTypeMapper entityTypeMapper,
-                               SpigotLocationMapper locationMapper, SpigotEntityDataFactory entityDataFactory) {
+    public SpigotEntityAdapter(Server server, AttributeQueryService attributeQueryService,
+                               SpigotEntityTypeMapper entityTypeMapper, SpigotLocationMapper locationMapper,
+                               SpigotEntityDataFactory entityDataFactory,
+                               GenericAttributeMapper genericAttributeMapper) {
         this.server = server;
+        this.attributeQueryService = attributeQueryService;
         this.entityTypeMapper = entityTypeMapper;
         this.locationMapper = locationMapper;
         this.entityDataFactory = entityDataFactory;
+        this.genericAttributeMapper = genericAttributeMapper;
     }
 
     EntityServerData createEntityServerData(LivingEntity entity) {
@@ -88,6 +100,22 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
         if (entity != null) {
             // TODO: implement
             throw new IllegalStateException("Failed to remove potion effect: method not implemented.");
+        }
+    }
+
+    @Override
+    public void updateGenericAttribute(UUID entityId, GenericAttribute attribute) {
+        Entity entity = server.getEntity(entityId);
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            Attributes attributes = attributeQueryService.getAttributes(entityId);
+            float monolithValue = attributes.getValue(attribute);
+            if (monolithValue != 0) {
+                Attribute spigotAttribute = genericAttributeMapper.map(attribute);
+                AttributeInstance spigotAttributeInstance = livingEntity.getAttribute(spigotAttribute);
+                double defaultValue = spigotAttributeInstance.getDefaultValue();
+                spigotAttributeInstance.setBaseValue(defaultValue + monolithValue);
+            }
         }
     }
 

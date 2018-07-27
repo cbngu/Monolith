@@ -7,8 +7,8 @@ import java.util.UUID;
 /**
  * This repository is injectable, however you generally have no need for it. Use the command and query services instead.
  * <p>
- * If you feel you absolutely have to use this repository it can be used to forgo the command service and save an {@code
- * AttributeModifier} to the Monolith domain directly. This repository does no safety checks whatsoever.
+ * If you feel you absolutely have to use this repository it can be used to forgo the command service and save a
+ * player's {@code Attributes} to the Monolith domain directly. This repository does no safety checks whatsoever.
  */
 public interface AttributeRepository {
 

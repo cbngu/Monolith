@@ -22,4 +22,12 @@ public interface AttributeModifier {
      * @param value The value to set this modifier to.
      */
     void setValue(float value);
+
+    void addObserver(Observer observer);
+
+    void removeObserver(Observer observer);
+
+    interface Observer {
+        void onChange(AttributeModifier modifier);
+    }
 }
