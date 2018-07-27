@@ -9,6 +9,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import gg.warcraft.monolith.api.MonolithPluginUtils;
+import gg.warcraft.monolith.api.combat.CombatValue;
+import gg.warcraft.monolith.api.combat.CombatValueFactory;
 import gg.warcraft.monolith.api.command.CommandSender;
 import gg.warcraft.monolith.api.command.Console;
 import gg.warcraft.monolith.api.command.service.CommandCommandService;
@@ -70,6 +72,7 @@ import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingQueryService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingRepository;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
+import gg.warcraft.monolith.app.combat.LazyCombatValue;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.service.DefaultCommandCommandService;
 import gg.warcraft.monolith.app.command.service.DefaultCommandQueryService;
@@ -163,6 +166,7 @@ public class AbstractMonolithModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        configureCombat();
         configureCommand();
         configureConfiguration();
         configureCore();
@@ -173,6 +177,12 @@ public class AbstractMonolithModule extends AbstractModule {
         configurePersistence();
         configureUtil();
         configureWorld();
+    }
+
+    private void configureCombat() {
+        install(new FactoryModuleBuilder()
+                .implement(CombatValue.class, LazyCombatValue.class)
+                .build(CombatValueFactory.class));
     }
 
     private void configureCommand() {
