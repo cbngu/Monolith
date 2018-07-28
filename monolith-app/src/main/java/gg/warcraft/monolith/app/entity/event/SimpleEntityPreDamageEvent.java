@@ -1,9 +1,9 @@
 package gg.warcraft.monolith.app.entity.event;
 
-import gg.warcraft.monolith.api.combat.CombatValue;
-import gg.warcraft.monolith.api.combat.CombatValueModifier;
+import gg.warcraft.monolith.api.combat.value.CombatValue;
+import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
 import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
-import gg.warcraft.monolith.app.combat.LazyCombatValue;
+import gg.warcraft.monolith.app.combat.value.LazyCombatValue;
 
 import java.util.List;
 import java.util.UUID;

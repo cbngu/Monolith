@@ -2,7 +2,7 @@ package gg.warcraft.monolith.api.entity.player.service;
 
 import gg.warcraft.monolith.api.entity.player.Player;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,7 +23,7 @@ public interface PlayerQueryService {
     /**
      * @return The ids of all online players. Never null, but can be empty. Items are never null.
      */
-    Collection<? extends Player> getOnlinePlayers();
+    List<? extends Player> getOnlinePlayers();
 
     /**
      * @param minecraftName The Minecraft name. Can not be null.

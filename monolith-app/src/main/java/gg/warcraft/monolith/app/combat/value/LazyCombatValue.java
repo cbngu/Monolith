@@ -1,8 +1,8 @@
-package gg.warcraft.monolith.app.combat;
+package gg.warcraft.monolith.app.combat.value;
 
-import gg.warcraft.monolith.api.combat.CombatValue;
-import gg.warcraft.monolith.api.combat.CombatValueModifier;
-import gg.warcraft.monolith.api.combat.CombatValueModifierType;
+import gg.warcraft.monolith.api.combat.value.CombatValue;
+import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
+import gg.warcraft.monolith.api.combat.value.CombatValueModifierType;
 import gg.warcraft.monolith.api.util.Lazy;
 
 import java.util.ArrayList;

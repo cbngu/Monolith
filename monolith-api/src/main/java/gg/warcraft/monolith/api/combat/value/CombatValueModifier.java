@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.combat;
+package gg.warcraft.monolith.api.combat.value;
 
 public interface CombatValueModifier {
 

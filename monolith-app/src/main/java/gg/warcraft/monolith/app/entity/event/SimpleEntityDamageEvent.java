@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.app.entity.event;
 
-import gg.warcraft.monolith.api.combat.CombatValue;
+import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.entity.event.EntityDamageEvent;
 
 import java.util.UUID;

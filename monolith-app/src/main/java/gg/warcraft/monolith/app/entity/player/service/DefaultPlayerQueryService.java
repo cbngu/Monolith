@@ -9,7 +9,7 @@ import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.app.entity.player.LazyPlayer;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,7 +39,7 @@ public class DefaultPlayerQueryService implements PlayerQueryService {
     }
 
     @Override
-    public Collection<? extends Player> getOnlinePlayers() {
+    public List<? extends Player> getOnlinePlayers() {
         return playerServerAdapter.getOnlinePlayers().stream()
                 .map(this::getPlayer)
                 .collect(Collectors.toList());
