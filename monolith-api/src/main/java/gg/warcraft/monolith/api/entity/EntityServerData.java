@@ -19,6 +19,11 @@ public interface EntityServerData {
     EntityType getType();
 
     /**
+     * @return The name of this entity. Never null or empty.
+     */
+    String getName();
+
+    /**
      * @return The location of the entity. Never null.
      */
     OrientedLocation getLocation();

@@ -43,6 +43,11 @@ public class LazyEntity implements Entity {
     }
 
     @Override
+    public String getName() {
+        return serverData.get().getName();
+    }
+
+    @Override
     public OrientedLocation getLocation() {
         return serverData.get().getLocation();
     }

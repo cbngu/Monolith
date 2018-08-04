@@ -44,11 +44,6 @@ public interface Player extends Entity {
     int getLifetimeCurrency(String currency);
 
     /**
-     * @return The Minecraft (account) name of this player. Never null or empty.
-     */
-    String getMinecraftName();
-
-    /**
      * @return All items in the inventory of this player. Never null, but can be empty. Items are never null.
      */
     List<Item> getInventory();

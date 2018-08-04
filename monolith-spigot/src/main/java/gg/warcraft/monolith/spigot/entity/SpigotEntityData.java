@@ -45,6 +45,11 @@ public class SpigotEntityData implements EntityServerData {
     }
 
     @Override
+    public String getName() {
+        return entity.getName();
+    }
+
+    @Override
     public OrientedLocation getLocation() {
         return locationMapper.map(entity);
     }

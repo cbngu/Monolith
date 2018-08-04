@@ -53,7 +53,6 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
         PlayerCurrencyGainedEvent event = new SimplePlayerCurrencyGainedEvent(playerId, currencyName, amount,
                 newCurrentAmount, newLifetimeAmount);
         eventService.publish(event);
-
     }
 
     @Override

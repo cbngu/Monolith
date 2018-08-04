@@ -54,11 +54,6 @@ public class LazyPlayer extends LazyEntity implements Player {
     }
 
     @Override
-    public String getMinecraftName() {
-        return serverData.get().getMinecraftName();
-    }
-
-    @Override
     public List<Item> getInventory() {
         return serverData.get().getInventory();
     }
