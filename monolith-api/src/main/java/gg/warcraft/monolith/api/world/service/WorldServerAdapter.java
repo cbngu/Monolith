@@ -9,6 +9,7 @@ import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.Sign;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.UUID;
@@ -67,4 +68,6 @@ public interface WorldServerAdapter {
     void playSound(Location location, Sound sound, SoundCategory category, float volume, float pitch);
 
     void strikeLightning(Location location, boolean ambient);
+
+    UUID createArrow(UUID shooterId, Location location, Vector3f direction, float speed, float spread);
 }

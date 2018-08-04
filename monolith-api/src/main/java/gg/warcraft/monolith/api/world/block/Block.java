@@ -16,4 +16,8 @@ public interface Block {
      * @return The location of this block. Never null.
      */
     BlockLocation getLocation();
+
+    Block withType(BlockType type);
+
+    Block withLocation(BlockLocation location);
 }

@@ -10,8 +10,10 @@ import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.Sign;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
+import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.UUID;
 
 public class DefaultWorldCommandService implements WorldCommandService {
     private final WorldServerAdapter worldServerAdapter;
@@ -44,5 +46,10 @@ public class DefaultWorldCommandService implements WorldCommandService {
     @Override
     public void strikeLightning(Location location, boolean ambient) {
         worldServerAdapter.strikeLightning(location, ambient);
+    }
+
+    @Override
+    public UUID createArrow(UUID shooterId, Location location, Vector3f direction, float speed, float spread) {
+        return worldServerAdapter.createArrow(shooterId, location, direction, speed, spread);
     }
 }

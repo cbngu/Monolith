@@ -25,6 +25,6 @@ public class SimpleEntityPreDamageEvent extends SimpleEntityPreEvent implements 
     public void addModifier(CombatValueModifier modifier) {
         List<CombatValueModifier> newModifiers = damage.getModifiers();
         newModifiers.add(modifier);
-        damage = new LazyCombatValue(damage.getBaseValue(), newModifiers);
+        damage = new LazyCombatValue(damage.getBaseValue(), newModifiers, damage.getSource());
     }
 }

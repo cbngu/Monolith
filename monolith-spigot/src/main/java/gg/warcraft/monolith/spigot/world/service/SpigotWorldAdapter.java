@@ -18,8 +18,13 @@ import gg.warcraft.monolith.spigot.world.SpigotSoundMapper;
 import gg.warcraft.monolith.spigot.world.SpigotWorldMapper;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.Vector;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.UUID;
@@ -119,5 +124,19 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
         } else {
             world.strikeLightning(spigotLocation);
         }
+    }
+
+    @Override
+    public UUID createArrow(UUID shooterId, Location location, Vector3f direction, float speed, float spread) {
+        org.bukkit.Location spigotLocation = locationMapper.map(location);
+        World spigotWorld = spigotLocation.getWorld();
+        Vector spigotDirection = new Vector(direction.x(), direction.y(), direction.z());
+        Arrow arrow = spigotWorld.spawnArrow(spigotLocation, spigotDirection, speed, spread);
+
+        Entity shooter = server.getEntity(shooterId);
+        if (shooter instanceof ProjectileSource) {
+            arrow.setShooter((ProjectileSource) shooter);
+        }
+        return arrow.getUniqueId();
     }
 }

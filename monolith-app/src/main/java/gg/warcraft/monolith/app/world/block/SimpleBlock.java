@@ -27,6 +27,16 @@ public class SimpleBlock implements Block {
     }
 
     @Override
+    public Block withType(BlockType type) {
+        return new SimpleBlock(type, location);
+    }
+
+    @Override
+    public Block withLocation(BlockLocation location) {
+        return new SimpleBlock(type, location);
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) {
             return false;

@@ -8,7 +8,6 @@ import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusRepository;
 import gg.warcraft.monolith.app.entity.status.SimpleStatus;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,22 +24,23 @@ public class DefaultStatusCommandService implements StatusCommandService {
     @Override
     public void addStatusEffect(StatusEffect effect, UUID entityId) {
         Status status = repository.getStatus(entityId);
-        Set<StatusEffect> effects = status.getEffects();
-        if (!effects.contains(effect)) {
-            Set<StatusEffect> newEffects = new HashSet<>(effects);
+        Set<StatusEffect> newEffects = status.getEffects();
+        if (!newEffects.contains(effect)) {
             newEffects.add(effect);
             Status newStatus = new SimpleStatus(entityId, newEffects);
             repository.save(newStatus);
-            taskService.runLater(() -> removeStatusEffect(effect, entityId), effect.getDuration());
+
+            if (effect.getDuration() != null) {
+                taskService.runLater(() -> removeStatusEffect(effect, entityId), effect.getDuration());
+            }
         }
     }
 
     @Override
     public void removeStatusEffect(StatusEffect effect, UUID entityId) {
         Status status = repository.getStatus(entityId);
-        Set<StatusEffect> effects = status.getEffects();
-        if (effects.contains(effect)) {
-            Set<StatusEffect> newEffects = new HashSet<>(effects);
+        Set<StatusEffect> newEffects = status.getEffects();
+        if (newEffects.contains(effect)) {
             newEffects.remove(effect);
             Status newStatus = new SimpleStatus(entityId, newEffects);
             repository.save(newStatus);

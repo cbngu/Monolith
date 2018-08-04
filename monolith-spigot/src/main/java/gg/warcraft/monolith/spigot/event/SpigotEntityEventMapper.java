@@ -53,11 +53,8 @@ public class SpigotEntityEventMapper implements Listener {
                 new SimpleEntityPreInteractEvent(entityId, playerId, itemInClickHand, interactLocation, false);
         eventService.publish(entityPreInteractEvent);
 
-        if (entityPreInteractEvent.isExplicitlyAllowed()) {
-            event.setCancelled(false);
-        } else if (entityPreInteractEvent.isCancelled()) {
-            event.setCancelled(true);
-        }
+        boolean isCancelled = entityPreInteractEvent.isCancelled() && !entityPreInteractEvent.isExplicitlyAllowed();
+        event.setCancelled(isCancelled);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
