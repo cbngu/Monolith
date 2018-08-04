@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.api.combat.value;
 
+import gg.warcraft.monolith.api.combat.CombatSource;
+
 import java.util.List;
 
 public interface CombatValue {
@@ -9,4 +11,6 @@ public interface CombatValue {
     List<CombatValueModifier> getModifiers();
 
     float getModifiedValue();
+
+    CombatSource getSource();
 }

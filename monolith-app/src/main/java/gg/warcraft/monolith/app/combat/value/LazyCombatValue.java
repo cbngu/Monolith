@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.combat.value;
 
+import gg.warcraft.monolith.api.combat.CombatSource;
 import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
 import gg.warcraft.monolith.api.combat.value.CombatValueModifierType;
@@ -12,11 +13,13 @@ public class LazyCombatValue implements CombatValue {
     private final float baseValue;
     private final List<CombatValueModifier> modifiers;
     private final Lazy<Float> modifiedValue;
+    private final CombatSource source;
 
-    public LazyCombatValue(float baseValue, List<CombatValueModifier> modifiers) {
+    public LazyCombatValue(float baseValue, List<CombatValueModifier> modifiers, CombatSource source) {
         this.baseValue = baseValue;
         this.modifiers = modifiers;
         this.modifiedValue = new Lazy<>(this::computeModifiedValue);
+        this.source = source;
     }
 
     float computeModifiedValue() {
@@ -52,5 +55,10 @@ public class LazyCombatValue implements CombatValue {
     @Override
     public float getModifiedValue() {
         return modifiedValue.get();
+    }
+
+    @Override
+    public CombatSource getSource() {
+        return source;
     }
 }
