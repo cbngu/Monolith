@@ -15,10 +15,12 @@ import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
 import gg.warcraft.monolith.app.entity.attribute.handler.AttributesInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler;
+import gg.warcraft.monolith.app.entity.player.hiding.handler.PlayerHidingHandler;
 import gg.warcraft.monolith.app.entity.status.handler.StatusEffectHandler;
 import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotInventoryEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotPlayerEventMapper;
+import gg.warcraft.monolith.spigot.event.SpigotProjectileEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotWorldEventMapper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -66,6 +68,9 @@ public class MonolithPlugin extends JavaPlugin {
         PlayerProfileUpdateHandler playerProfileUpdateHandler =
                 injector.getInstance(PlayerProfileUpdateHandler.class);
         taskService.runEachTick(playerProfileUpdateHandler);
+
+        PlayerHidingHandler playerHidingHandler = injector.getInstance(PlayerHidingHandler.class);
+        eventService.subscribe(playerHidingHandler);
     }
 
     void initializeSpigotEventMappers() {
@@ -79,6 +84,9 @@ public class MonolithPlugin extends JavaPlugin {
 
         SpigotPlayerEventMapper playerEventMapper = injector.getInstance(SpigotPlayerEventMapper.class);
         pluginManager.registerEvents(playerEventMapper, this);
+
+        SpigotProjectileEventMapper projectileEventMapper = injector.getInstance(SpigotProjectileEventMapper.class);
+        pluginManager.registerEvents(projectileEventMapper, this);
 
         SpigotWorldEventMapper worldEventMapper = injector.getInstance(SpigotWorldEventMapper.class);
         pluginManager.registerEvents(worldEventMapper, this);

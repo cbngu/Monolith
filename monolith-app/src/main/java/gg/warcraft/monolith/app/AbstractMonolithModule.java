@@ -32,6 +32,9 @@ import gg.warcraft.monolith.api.effect.EffectVectorsFactory;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeRepository;
+import gg.warcraft.monolith.api.entity.player.hiding.PlayerHidingCommandService;
+import gg.warcraft.monolith.api.entity.player.hiding.PlayerHidingQueryService;
+import gg.warcraft.monolith.api.entity.player.hiding.PlayerHidingRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerCommandService;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
@@ -98,6 +101,9 @@ import gg.warcraft.monolith.app.effect.vectors.SphereVectors;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeCommandService;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeQueryService;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeRepository;
+import gg.warcraft.monolith.app.entity.player.hiding.DefaultPlayerHidingCommandService;
+import gg.warcraft.monolith.app.entity.player.hiding.DefaultPlayerHidingQueryService;
+import gg.warcraft.monolith.app.entity.player.hiding.DefaultPlayerHidingRepository;
 import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerCommandService;
 import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerProfileRepository;
 import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerQueryService;
@@ -265,6 +271,10 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(StatusCommandService.class).to(DefaultStatusCommandService.class);
         bind(StatusQueryService.class).to(DefaultStatusQueryService.class);
         bind(StatusRepository.class).to(DefaultStatusRepository.class);
+
+        bind(PlayerHidingCommandService.class).to(DefaultPlayerHidingCommandService.class);
+        bind(PlayerHidingQueryService.class).to(DefaultPlayerHidingQueryService.class);
+        bind(PlayerHidingRepository.class).to(DefaultPlayerHidingRepository.class);
 
         switch (entityService) {
             case "DEFAULT":
