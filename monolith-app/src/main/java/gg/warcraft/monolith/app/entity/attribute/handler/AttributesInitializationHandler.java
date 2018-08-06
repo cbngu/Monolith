@@ -37,5 +37,7 @@ public class AttributesInitializationHandler {
 
             attributeCommandService.addAttributeModifier(playerId, GenericAttribute.MAX_HEALTH, baseHealth);
         }
+
+        // TODO add modifiers for serverside generic attributes
     }
 }

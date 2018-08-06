@@ -68,6 +68,11 @@ public interface EntityCommandService {
     void damage(UUID entityId, CombatValue amount);
 
     /**
+     * @param entityId The id of the entity to kill. Can not be null.
+     */
+    void kill(UUID entityId);
+
+    /**
      * @param entityId The id of the entity. Can not be null.
      * @param amount   The amount of healing the entity should take.
      */

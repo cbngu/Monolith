@@ -22,4 +22,9 @@ public interface StatusRepository {
      * @param status The status to save. Can not be null.
      */
     void save(Status status);
+
+    /**
+     * @param entityId The id of the entity. Can not be null.
+     */
+    void delete(UUID entityId);
 }

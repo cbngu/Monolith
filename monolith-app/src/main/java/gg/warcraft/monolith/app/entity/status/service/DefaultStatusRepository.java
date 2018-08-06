@@ -27,4 +27,9 @@ public class DefaultStatusRepository implements StatusRepository {
     public void save(Status status) {
         statuses.put(status.getEntityId(), status);
     }
+
+    @Override
+    public void delete(UUID entityId) {
+        statuses.remove(entityId);
+    }
 }

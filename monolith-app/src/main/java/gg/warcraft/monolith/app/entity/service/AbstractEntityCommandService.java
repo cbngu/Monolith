@@ -4,6 +4,7 @@ import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
 import gg.warcraft.monolith.api.entity.event.EntityDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityHealthChangedEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
@@ -110,11 +111,19 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
 
         Entity newEntity = entityQueryService.getEntity(entityId);
         float newHealth = newEntity.getHealth();
-        if (newHealth != previousHealth) {
-            EntityHealthChangedEvent entityHealthChangedEvent =
-                    new SimpleEntityHealthChangedEvent(entityId, previousHealth, newHealth);
+        if (newHealth != previousHealth) { // FIXME should this in the event mappers instead? atm it will only trigger of Monolith health changes
+            float maxHealth = newEntity.getAttributes().getValue(GenericAttribute.MAX_HEALTH);
+            float previousPercentHealth = previousHealth / maxHealth;
+            float newPercentHealth = newHealth / maxHealth;
+            EntityHealthChangedEvent entityHealthChangedEvent = new SimpleEntityHealthChangedEvent(entityId,
+                    previousHealth, previousPercentHealth, newHealth, newPercentHealth);
             eventService.publish(entityHealthChangedEvent);
         }
+    }
+
+    @Override
+    public void kill(UUID entityId) {
+        entityServerAdapter.kill(entityId);
     }
 
     @Override

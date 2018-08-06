@@ -35,29 +35,34 @@ public interface TimeUtils {
     Duration createDurationInMillis(int millis);
 
     /**
-     * @param millis The duration in ticks.
+     * @param ticks The duration in ticks.
      * @return A new {@code Duration} for the specified ticks. Never null.
      */
     Duration createDurationInTicks(int ticks);
 
     /**
-     * @param millis The duration in seconds.
+     * @param seconds The duration in seconds.
      * @return A new {@code Duration} for the specified seconds. Never null.
      */
     Duration createDurationInSeconds(int seconds);
 
     /**
-     * @return A {@code Duration} for one millisecond. Never null.
+     * @return A {@code Duration} of 0. Never null.
+     */
+    Duration immediately();
+
+    /**
+     * @return A {@code Duration} of one millisecond. Never null.
      */
     Duration oneMilli();
 
     /**
-     * @return A {@code Duration} for one tick. Never null.
+     * @return A {@code Duration} of one tick. Never null.
      */
     Duration oneTick();
 
     /**
-     * @return A {@code Duration} for one second. Never null.
+     * @return A {@code Duration} of one second. Never null.
      */
     Duration oneSecond();
 }

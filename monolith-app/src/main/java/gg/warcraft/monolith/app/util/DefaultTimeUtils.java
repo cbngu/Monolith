@@ -4,11 +4,13 @@ import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.util.TimeUtils;
 
 public class DefaultTimeUtils implements TimeUtils {
+    private final Duration immediately;
     private final Duration oneMilli;
     private final Duration oneTick;
     private final Duration oneSecond;
 
     public DefaultTimeUtils() {
+        this.immediately = createDurationInTicks(0);
         this.oneMilli = createDurationInMillis(1);
         this.oneTick = createDurationInTicks(1);
         this.oneSecond = createDurationInSeconds(1);
@@ -44,6 +46,11 @@ public class DefaultTimeUtils implements TimeUtils {
     @Override
     public Duration createDurationInSeconds(int seconds) {
         return new SimpleDuration(Duration.Type.SECONDS, seconds);
+    }
+
+    @Override
+    public Duration immediately() {
+        return immediately;
     }
 
     @Override

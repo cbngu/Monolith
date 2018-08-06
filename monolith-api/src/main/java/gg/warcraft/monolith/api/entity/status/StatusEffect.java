@@ -25,6 +25,16 @@ public interface StatusEffect {
     Duration getDuration();
 
     /**
+     * Returns the type of this effect.
+     * <p>
+     * A type helps identify groups of effects down the line. For example team based passives can be flagged as such and
+     * easily replaced when a player changes teams.
+     *
+     * @return The type of this effect. Can be null, but not empty.
+     */
+    String getType();
+
+    /**
      * @param event The event representing the damage the entity this status effect belongs to is about to take. Never
      *              null.
      */

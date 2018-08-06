@@ -80,6 +80,11 @@ public interface EntityServerAdapter {
     void damage(UUID entityId, float amount);
 
     /**
+     * @param entityId The id of the entity to kill. Can not be null.
+     */
+    void kill(UUID entityId);
+
+    /**
      * Sets an entity on fire for a duration.
      *
      * @param entityId The id of the entity.

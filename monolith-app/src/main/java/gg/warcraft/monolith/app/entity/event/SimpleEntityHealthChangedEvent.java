@@ -6,12 +6,17 @@ import java.util.UUID;
 
 public class SimpleEntityHealthChangedEvent extends SimpleEntityEvent implements EntityHealthChangedEvent {
     private final float previousHealth;
+    private final float previousPercentHealth;
     private final float newHealth;
+    private final float newPercentHealth;
 
-    public SimpleEntityHealthChangedEvent(UUID entityId, float previousHealth, float newHealth) {
+    public SimpleEntityHealthChangedEvent(UUID entityId, float previousHealth, float previousPercentHealth,
+                                          float newHealth, float newPercentHealth) {
         super(entityId);
         this.previousHealth = previousHealth;
+        this.previousPercentHealth = previousPercentHealth;
         this.newHealth = newHealth;
+        this.newPercentHealth = newPercentHealth;
     }
 
     @Override
@@ -20,7 +25,17 @@ public class SimpleEntityHealthChangedEvent extends SimpleEntityEvent implements
     }
 
     @Override
+    public float getPreviousPercentHealth() {
+        return previousPercentHealth;
+    }
+
+    @Override
     public float getNewHealth() {
         return newHealth;
+    }
+
+    @Override
+    public float getNewPercentHealth() {
+        return newPercentHealth;
     }
 }

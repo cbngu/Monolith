@@ -145,6 +145,15 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     @Override
+    public void kill(UUID entityId) {
+        Entity entity = server.getEntity(entityId);
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            livingEntity.setHealth(0);
+        }
+    }
+
+    @Override
     public void burn(UUID entityId, Duration duration) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
