@@ -55,7 +55,9 @@ public class SimpleEffect implements Effect {
 
     @Override
     public void cancel() {
-        task.cancel();
+        if (!task.isCancelled()) {
+            task.cancel();
+        }
     }
 
     public void cancel(Duration delay) {
