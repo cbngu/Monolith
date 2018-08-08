@@ -41,7 +41,7 @@ public interface BlockLocation {
      * @param x The X scalar.
      * @param y The Y scalar.
      * @param z The Z scalar.
-     * @return A new location that is the result of subtracting the given scalars to this location. Never null.
+     * @return A new location that is the result of subtracting the given scalars from this location. Never null.
      */
     BlockLocation sub(int x, int y, int z);
 
@@ -53,9 +53,21 @@ public interface BlockLocation {
 
     /**
      * @param vector The vector.
-     * @return A new location that is the result of subtracting the given vector to this location. Never null.
+     * @return A new location that is the result of subtracting the given vector from this location. Never null.
      */
     BlockLocation sub(Vector3ic vector);
+
+    /**
+     * @param location The location.
+     * @return A new location that is the result of adding the given location to this location. Never null.
+     */
+    BlockLocation add(BlockLocation location);
+
+    /**
+     * @param location The location.
+     * @return A new location that is the result of subtracting the given location from this location. Never null.
+     */
+    BlockLocation sub(BlockLocation location);
 
     /**
      * @param x The X scalar.

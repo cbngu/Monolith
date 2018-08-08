@@ -75,6 +75,22 @@ public class SimpleBlockLocation implements BlockLocation {
     }
 
     @Override
+    public BlockLocation add(BlockLocation location) {
+        int newX = x + location.getX();
+        int newY = y + location.getY();
+        int newZ = z + location.getZ();
+        return new SimpleBlockLocation(world, newX, newY, newZ);
+    }
+
+    @Override
+    public BlockLocation sub(BlockLocation location) {
+        int newX = x - location.getX();
+        int newY = y - location.getY();
+        int newZ = z - location.getZ();
+        return new SimpleBlockLocation(world, newX, newY, newZ);
+    }
+
+    @Override
     public BlockLocation withX(int x) {
         return new SimpleBlockLocation(world, x, y, z);
     }

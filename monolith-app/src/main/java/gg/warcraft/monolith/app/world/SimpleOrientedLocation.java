@@ -1,21 +1,48 @@
 package gg.warcraft.monolith.app.world;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.Objects;
 
 public class SimpleOrientedLocation extends SimpleLocation implements OrientedLocation {
     private final float pitch;
     private final float yaw;
-    private final Vector3f direction;
+    private final Vector3fc direction;
 
-    public SimpleOrientedLocation(World world, float x, float y, float z, float pitch, float yaw, Vector3f direction) {
+    public SimpleOrientedLocation(World world, float x, float y, float z, float pitch, float yaw, Vector3fc direction) {
         super(world, x, y, z);
         this.pitch = pitch;
         this.yaw = yaw;
+        this.direction = direction;
+    }
+
+    public SimpleOrientedLocation(World world, float x, float y, float z, float pitch, float yaw) {
+        super(world, x, y, z);
+        Preconditions.checkArgument(pitch >= -90);
+        Preconditions.checkArgument(pitch <= 90);
+        Preconditions.checkArgument(yaw >= -180);
+        Preconditions.checkArgument(yaw < 180);
+
+        this.pitch = pitch;
+        this.yaw = yaw;
+        double pitchRadians = Math.toRadians(pitch);
+        double yawRadians = Math.toRadians(yaw);
+        double cosYaw = Math.cos(yawRadians);
+        double directionX = -Math.sin(yawRadians);
+        double directionY = -(cosYaw * Math.sin(pitchRadians));
+        double directionZ = cosYaw * Math.cos(pitchRadians);
+        this.direction = new Vector3f((float) directionX, (float) directionY, (float) directionZ);
+    }
+
+    public SimpleOrientedLocation(World world, float x, float y, float z, Vector3fc direction) {
+        super(world, x, y, z);
+        this.pitch = 0; // TODO calculate
+        this.yaw = 0; // TODO calculate
         this.direction = direction;
     }
 
@@ -31,7 +58,7 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
 
     @Override
     public Vector3f getDirection() {
-        return direction;
+        return new Vector3f(direction);
     }
 
     @Override

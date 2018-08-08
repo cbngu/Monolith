@@ -3,6 +3,7 @@ package gg.warcraft.monolith.app.world;
 import com.google.common.base.MoreObjects;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -75,6 +76,22 @@ public class SimpleLocation implements Location {
     }
 
     @Override
+    public Location add(Location location) {
+        float newX = x + location.getX();
+        float newY = y + location.getY();
+        float newZ = z + location.getZ();
+        return new SimpleLocation(world, newX, newY, newZ);
+    }
+
+    @Override
+    public Location sub(Location location) {
+        float newX = x - location.getX();
+        float newY = y - location.getY();
+        float newZ = z - location.getZ();
+        return new SimpleLocation(world, newX, newY, newZ);
+    }
+
+    @Override
     public Location withX(float x) {
         return new SimpleLocation(world, x, y, z);
     }
@@ -92,6 +109,16 @@ public class SimpleLocation implements Location {
     @Override
     public Location with(float x, float y, float z) {
         return new SimpleLocation(world, x, y, z);
+    }
+
+    @Override
+    public OrientedLocation withOrientation(float pitch, float yaw) {
+        return new SimpleOrientedLocation(world, x, y, z, pitch, yaw);
+    }
+
+    @Override
+    public OrientedLocation withDirection(Vector3fc direction) {
+        return new SimpleOrientedLocation(world, x, y, z, direction);
     }
 
     @Override
