@@ -10,6 +10,7 @@ import gg.warcraft.monolith.api.effect.Particle;
 import gg.warcraft.monolith.api.effect.ParticleFactory;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
+import gg.warcraft.monolith.api.entity.player.hiding.PlayerHidingServerAdapter;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.menu.service.MenuServerAdapter;
@@ -25,6 +26,7 @@ import gg.warcraft.monolith.spigot.entity.SpigotEntityData;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
 import gg.warcraft.monolith.spigot.entity.player.SpigotPlayerData;
 import gg.warcraft.monolith.spigot.entity.player.SpigotPlayerDataFactory;
+import gg.warcraft.monolith.spigot.entity.player.hiding.SpigotPlayerHidingAdapter;
 import gg.warcraft.monolith.spigot.entity.player.service.SpigotPlayerAdapter;
 import gg.warcraft.monolith.spigot.entity.service.SpigotEntityAdapter;
 import gg.warcraft.monolith.spigot.menu.service.SpigotMenuAdapter;
@@ -50,11 +52,12 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
 
     public SpigotMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                 String persistenceService, String redisHost, int redisPort,
-                                String entityService, WorldType buildRepositoryWorld,
+                                String entityService, String playerService, WorldType buildRepositoryWorld,
                                 Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner,
                                 Plugin plugin, String overworldName, String theNetherName, String theEndName) {
         super(configurationService, gitHubAccount, gitHubRepository, persistenceService, redisHost, redisPort,
-                entityService, buildRepositoryWorld, buildRepositoryMinimumCorner, buildRepositoryMaximumCorner);
+                entityService, playerService, buildRepositoryWorld, buildRepositoryMinimumCorner,
+                buildRepositoryMaximumCorner);
         this.plugin = plugin;
         this.overworldName = overworldName;
         this.theNetherName = theNetherName;
@@ -103,6 +106,7 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     private void configureEntity() {
         bind(EntityServerAdapter.class).to(SpigotEntityAdapter.class);
         bind(PlayerServerAdapter.class).to(SpigotPlayerAdapter.class);
+        bind(PlayerHidingServerAdapter.class).to(SpigotPlayerHidingAdapter.class);
 
         install(new FactoryModuleBuilder()
                 .implement(EntityServerData.class, SpigotEntityData.class)

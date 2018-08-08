@@ -9,8 +9,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import gg.warcraft.monolith.api.MonolithPluginUtils;
-import gg.warcraft.monolith.api.combat.value.CombatValue;
-import gg.warcraft.monolith.api.combat.value.CombatValueFactory;
 import gg.warcraft.monolith.api.command.CommandSender;
 import gg.warcraft.monolith.api.command.Console;
 import gg.warcraft.monolith.api.command.service.CommandCommandService;
@@ -75,7 +73,6 @@ import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingQueryService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingRepository;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
-import gg.warcraft.monolith.app.combat.value.LazyCombatValue;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.service.DefaultCommandCommandService;
 import gg.warcraft.monolith.app.command.service.DefaultCommandQueryService;
@@ -150,13 +147,14 @@ public class AbstractMonolithModule extends AbstractModule {
     private final String gitHubAccount;
     private final String gitHubRepository;
     private final String entityService;
+    private final String playerService;
     private final WorldType buildRepositoryWorld;
     private final Vector3ic buildRepositoryMinimumCorner;
     private final Vector3ic buildRepositoryMaximumCorner;
 
     public AbstractMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                   String persistenceService, String redisHost, int redisPort,
-                                  String entityService, WorldType buildRepositoryWorld,
+                                  String entityService, String playerService, WorldType buildRepositoryWorld,
                                   Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner) {
         this.configurationService = configurationService;
         this.gitHubAccount = gitHubAccount;
@@ -165,6 +163,7 @@ public class AbstractMonolithModule extends AbstractModule {
         this.redisHost = redisHost;
         this.redisPort = redisPort;
         this.entityService = entityService;
+        this.playerService = playerService;
         this.buildRepositoryWorld = buildRepositoryWorld;
         this.buildRepositoryMinimumCorner = buildRepositoryMinimumCorner;
         this.buildRepositoryMaximumCorner = buildRepositoryMaximumCorner;
@@ -172,7 +171,6 @@ public class AbstractMonolithModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        configureCombat();
         configureCommand();
         configureConfiguration();
         configureCore();
@@ -183,12 +181,6 @@ public class AbstractMonolithModule extends AbstractModule {
         configurePersistence();
         configureUtil();
         configureWorld();
-    }
-
-    private void configureCombat() {
-        install(new FactoryModuleBuilder()
-                .implement(CombatValue.class, LazyCombatValue.class)
-                .build(CombatValueFactory.class));
     }
 
     private void configureCommand() {
@@ -281,7 +273,16 @@ public class AbstractMonolithModule extends AbstractModule {
                 bind(EntityCommandService.class).to(DefaultEntityCommandService.class);
                 bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
                 bind(EntityProfileRepository.class).to(DefaultEntityProfileRepository.class);
+                break;
+            case "CUSTOM":
+                // do nothing, the implementing server should provide bindings
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal entity service in Monolith configuration: " + entityService);
+        }
 
+        switch (playerService) {
+            case "DEFAULT":
                 bind(PlayerCommandService.class).to(DefaultPlayerCommandService.class);
                 bind(PlayerQueryService.class).to(DefaultPlayerQueryService.class);
                 bind(PlayerProfileRepository.class).to(DefaultPlayerProfileRepository.class);
@@ -290,7 +291,7 @@ public class AbstractMonolithModule extends AbstractModule {
                 // do nothing, the implementing server should provide bindings
                 break;
             default:
-                throw new IllegalArgumentException("Illegal entity service in Monolith configuration: " + entityService);
+                throw new IllegalArgumentException("Illegal player service in Monolith configuration: " + entityService);
         }
     }
 

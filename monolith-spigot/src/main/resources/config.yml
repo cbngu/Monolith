@@ -70,11 +70,12 @@ redisHost: 127.0.0.1
 redisPort: 6379
 
 
-# ENTITY SERVICE
+# ENTITY SERVICES
 # Options: [DEFAULT, CUSTOM]
 # ------------------------------------------------------------
 #
 entityService: DEFAULT
+playerService: DEFAULT
 
 
 # WORLD SERVICE

@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.effect.renderer;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.effect.EffectRenderer;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.Particle;
@@ -9,7 +11,8 @@ public class SimpleEffectRenderer implements EffectRenderer {
     private final Particle particle;
     private final EffectVectors vectors;
 
-    public SimpleEffectRenderer(Particle particle, EffectVectors vectors) {
+    @Inject
+    public SimpleEffectRenderer(@Assisted Particle particle, @Assisted EffectVectors vectors) {
         this.particle = particle;
         this.vectors = vectors;
     }

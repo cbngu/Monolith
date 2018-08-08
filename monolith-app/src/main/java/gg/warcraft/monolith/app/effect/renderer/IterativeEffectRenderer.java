@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.effect.renderer;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.effect.EffectRenderer;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.Particle;
@@ -14,7 +16,8 @@ public class IterativeEffectRenderer implements EffectRenderer {
 
     private Iterator<Vector3fc> iterator;
 
-    public IterativeEffectRenderer(Particle particle, EffectVectors vectors) {
+    @Inject
+    public IterativeEffectRenderer(@Assisted Particle particle, @Assisted EffectVectors vectors) {
         this.particle = particle;
         this.vectors = vectors;
         this.iterator = vectors.iterator();
