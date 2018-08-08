@@ -54,6 +54,11 @@ public class LazyPlayer extends LazyEntity implements Player {
     }
 
     @Override
+    public String getData(String key) {
+        return profile.get().getData().get(key);
+    }
+
+    @Override
     public List<Item> getInventory() {
         return serverData.get().getInventory();
     }

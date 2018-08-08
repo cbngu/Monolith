@@ -18,7 +18,7 @@ import gg.warcraft.monolith.app.entity.LazyEntity;
 import gg.warcraft.monolith.app.entity.SimpleEntityTarget;
 import org.joml.LineSegmentf;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.util.List;
 import java.util.UUID;
@@ -79,7 +79,7 @@ public class DefaultEntityQueryService implements EntityQueryService {
     public EntityTarget getTarget(UUID entityId, float range) { // TODO should this be in PlayerQueryService?
         Entity player = getEntity(entityId);
         OrientedLocation origin = player.getEyeLocation();
-        Vector3f direction = origin.getDirection();
+        Vector3fc direction = origin.getDirection();
         Location target = origin;
         Block block;
         do {

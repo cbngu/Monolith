@@ -39,10 +39,11 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         long timeLastSeen = item.getTimeLastSeen();
         long timePlayed = item.getTimePlayed();
         Map<String, Integer> currencies = item.getCurrencies();
-        Map<String, Integer> currenciesTotal = item.getCurrenciesTotal();
+        Map<String, Integer> lifetimeCurrencies = item.getLifetimeCurrencies();
+        Map<String, String> data = item.getData();
         Team team = item.getTeam();
         return new SimplePlayerProfile(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, currenciesTotal, team);
+                currencies, lifetimeCurrencies, data, team);
     }
 
     @Override
@@ -65,10 +66,11 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         long timeLastSeen = profile.getTimeLastSeen();
         long timePlayed = profile.getTimePlayed();
         Map<String, Integer> currencies = profile.getCurrencies();
-        Map<String, Integer> currenciesTotal = profile.getLifetimeCurrencies();
+        Map<String, Integer> lifetimeCurrencies = profile.getLifetimeCurrencies();
+        Map<String, String> data = profile.getData();
         Team team = profile.getTeam();
         return new PlayerProfileItem(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed, currencies,
-                currenciesTotal, team);
+                lifetimeCurrencies, data, team);
     }
 
     @Override

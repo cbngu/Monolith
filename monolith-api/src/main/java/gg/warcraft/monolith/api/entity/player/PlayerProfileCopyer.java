@@ -16,6 +16,8 @@ public interface PlayerProfileCopyer {
 
     PlayerProfileCopyer withLifetimeCurrencies(Map<String, Integer> lifetimeCurrencies);
 
+    PlayerProfileCopyer withData(Map<String, String> data);
+
     PlayerProfileCopyer withTeam(Team team);
 
     PlayerProfile copy();

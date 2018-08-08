@@ -9,6 +9,7 @@ import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyLostEvent;
 import gg.warcraft.monolith.api.entity.player.service.PlayerCommandService;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
+import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.util.ColorCode;
 import gg.warcraft.monolith.app.entity.player.event.SimplePlayerCurrencyGainedEvent;
 import gg.warcraft.monolith.app.entity.player.event.SimplePlayerCurrencyLostEvent;
@@ -76,6 +77,11 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
         PlayerCurrencyLostEvent event = new SimplePlayerCurrencyLostEvent(playerId, currencyName, amount,
                 newCurrentAmount);
         eventService.publish(event);
+    }
+
+    @Override
+    public boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory) {
+        return playerServerAdapter.giveItem(playerId, item, dropOnFullInventory);
     }
 
     @Override

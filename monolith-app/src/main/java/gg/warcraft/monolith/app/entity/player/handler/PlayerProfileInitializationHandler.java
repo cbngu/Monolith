@@ -24,8 +24,8 @@ public class PlayerProfileInitializationHandler {
         long now = System.currentTimeMillis();
         PlayerProfile profile = playerProfileRepository.get(playerId);
         if (profile == null) {
-            PlayerProfile newProfile =
-                    new SimplePlayerProfile(playerId, now, now, now, 0, new HashMap<>(), new HashMap<>(), null);
+            PlayerProfile newProfile = new SimplePlayerProfile(playerId, now, now, now, 0, new HashMap<>(),
+                    new HashMap<>(), new HashMap<>(), null);
             playerProfileRepository.save(newProfile);
         } else {
             PlayerProfile newProfile = profile.getCopyer()

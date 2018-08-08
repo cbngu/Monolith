@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.api.entity.player.service;
 
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
+import gg.warcraft.monolith.api.item.Item;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -24,6 +25,8 @@ public interface PlayerServerAdapter {
      * @return The ids of all online players. Never null, but can be empty. Items are never null.
      */
     Collection<UUID> getOnlinePlayers();
+
+    boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory);
 
     /**
      * @param minecraftName The Minecraft name. Can not be null.

@@ -40,4 +40,6 @@ public class AttributesInitializationHandler {
 
         // TODO add modifiers for serverside generic attributes
     }
+
+    // TODO do we want to delete attributes on player disconnect?
 }

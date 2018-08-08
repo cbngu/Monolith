@@ -14,7 +14,8 @@ public class PlayerProfileItem {
     private final long timeLastSeen;
     private final long timePlayed;
     private final Map<String, Integer> currencies;
-    private final Map<String, Integer> currenciesTotal;
+    private final Map<String, Integer> lifetimeCurrencies;
+    private final Map<String, String> data;
     private final Team team;
 
     @JsonCreator
@@ -24,7 +25,8 @@ public class PlayerProfileItem {
                              @JsonProperty("timeLastSeen") long timeLastSeen,
                              @JsonProperty("timePlayed") long timePlayed,
                              @JsonProperty("currencies") Map<String, Integer> currencies,
-                             @JsonProperty("currenciesTotal") Map<String, Integer> currenciesTotal,
+                             @JsonProperty("lifetimeCurrencies") Map<String, Integer> lifetimeCurrencies,
+                             @JsonProperty("data") Map<String, String> data,
                              @JsonProperty("team") Team team) {
         this.playerId = playerId;
         this.timeConnected = timeConnected;
@@ -32,7 +34,8 @@ public class PlayerProfileItem {
         this.timeLastSeen = timeLastSeen;
         this.timePlayed = timePlayed;
         this.currencies = currencies;
-        this.currenciesTotal = currenciesTotal;
+        this.lifetimeCurrencies = lifetimeCurrencies;
+        this.data = data;
         this.team = team;
     }
 
@@ -60,8 +63,12 @@ public class PlayerProfileItem {
         return currencies;
     }
 
-    public Map<String, Integer> getCurrenciesTotal() {
-        return currenciesTotal;
+    public Map<String, Integer> getLifetimeCurrencies() {
+        return lifetimeCurrencies;
+    }
+
+    public Map<String, String> getData() {
+        return data;
     }
 
     public Team getTeam() {

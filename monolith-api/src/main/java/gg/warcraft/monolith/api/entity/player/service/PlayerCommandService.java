@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.api.entity.player.service;
 
 import gg.warcraft.monolith.api.entity.player.Currency;
+import gg.warcraft.monolith.api.item.Item;
 
 import java.util.UUID;
 
@@ -15,6 +16,8 @@ public interface PlayerCommandService {
     void addCurrency(UUID playerId, Currency currency, int amount);
 
     void removeCurrency(UUID playerId, Currency currency, int amount);
+
+    boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory);
 
     /**
      * @param playerId The id of the player to update. Can not be null.

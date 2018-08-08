@@ -17,10 +17,11 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
     private final long timePlayed;
     private final Map<String, Integer> currencies;
     private final Map<String, Integer> lifetimeCurrencies;
+    private final Map<String, String> data;
 
     public SimplePlayerProfile(UUID playerId, long timeConnected, long timeFirstConnected, long timeLastSeen,
                                long timePlayed, Map<String, Integer> currencies,
-                               Map<String, Integer> lifetimeCurrencies, Team team) {
+                               Map<String, Integer> lifetimeCurrencies, Map<String, String> data, Team team) {
         super(playerId, team);
         this.playerId = playerId;
         this.timeConnected = timeConnected;
@@ -29,6 +30,7 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
         this.timePlayed = timePlayed;
         this.currencies = currencies;
         this.lifetimeCurrencies = lifetimeCurrencies;
+        this.data = data;
     }
 
     @Override
@@ -67,8 +69,13 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
     }
 
     @Override
+    public Map<String, String> getData() {
+        return data;
+    }
+
+    @Override
     public PlayerProfileCopyer getCopyer() {
         return new SimplePlayerProfileCopyer(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, lifetimeCurrencies, getTeam());
+                currencies, lifetimeCurrencies, data, getTeam());
     }
 }
