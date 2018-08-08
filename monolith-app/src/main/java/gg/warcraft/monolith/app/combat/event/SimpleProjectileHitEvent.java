@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.app.combat.event;
 
+import gg.warcraft.monolith.api.combat.ProjectileType;
 import gg.warcraft.monolith.api.combat.event.ProjectileHitEvent;
 import gg.warcraft.monolith.api.world.block.Block;
 
@@ -9,8 +10,8 @@ public class SimpleProjectileHitEvent extends SimpleProjectileEvent implements P
     private final Block block;
     private final UUID entityId;
 
-    public SimpleProjectileHitEvent(UUID projectileId, Block block, UUID entityId) {
-        super(projectileId);
+    public SimpleProjectileHitEvent(UUID projectileId, ProjectileType projectileType, Block block, UUID entityId) {
+        super(projectileId, projectileType);
         this.block = block;
         this.entityId = entityId;
     }
