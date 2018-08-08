@@ -8,11 +8,6 @@ import java.util.List;
 public interface PlayerServerData extends EntityServerData {
 
     /**
-     * @return The Minecraft name of the player. Never null or empty.
-     */
-    String getMinecraftName();
-
-    /**
      * @return All items in the inventory of this player. Never null, but can be empty. Items are never null.
      */
     List<Item> getInventory();

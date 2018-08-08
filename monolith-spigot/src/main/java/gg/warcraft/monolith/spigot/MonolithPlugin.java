@@ -107,6 +107,7 @@ public class MonolithPlugin extends JavaPlugin {
 
         String entityService = localConfig.getString("entityService");
         String playerService = localConfig.getString("playerService");
+        float baseHealth = (float) localConfig.getDouble("baseHealth");
 
         String buildRepositoryWorldString = localConfig.getString("buildRepository.world");
         WorldType buildRepositoryWorld = WorldType.valueOf(buildRepositoryWorldString);
@@ -126,7 +127,7 @@ public class MonolithPlugin extends JavaPlugin {
         AbstractModule spigotMonolithModule = new SpigotMonolithModule(
                 configurationService, gitHubAccount, gitHubRepository,
                 persistenceService, redisHost, redisPort,
-                entityService, playerService, buildRepositoryWorld,
+                entityService, playerService, baseHealth, buildRepositoryWorld,
                 buildRepositoryMinimumCorner, buildRepositoryMaximumCorner,
                 this, overworldName, netherName, theEndName);
         Monolith.registerModule(spigotMonolithModule);

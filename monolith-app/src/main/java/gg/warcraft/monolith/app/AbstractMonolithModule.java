@@ -85,6 +85,7 @@ import gg.warcraft.monolith.app.config.service.LocalConfigurationCommandService;
 import gg.warcraft.monolith.app.core.GuavaEventService;
 import gg.warcraft.monolith.app.core.JedisPersistenceService;
 import gg.warcraft.monolith.app.effect.DynamicEffect;
+import gg.warcraft.monolith.app.effect.PeriodicEffect;
 import gg.warcraft.monolith.app.effect.SimpleEffect;
 import gg.warcraft.monolith.app.effect.renderer.IterativeEffectRenderer;
 import gg.warcraft.monolith.app.effect.renderer.SimpleEffectRenderer;
@@ -148,14 +149,16 @@ public class AbstractMonolithModule extends AbstractModule {
     private final String gitHubRepository;
     private final String entityService;
     private final String playerService;
+    private final float baseHealth;
     private final WorldType buildRepositoryWorld;
     private final Vector3ic buildRepositoryMinimumCorner;
     private final Vector3ic buildRepositoryMaximumCorner;
 
     public AbstractMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                   String persistenceService, String redisHost, int redisPort,
-                                  String entityService, String playerService, WorldType buildRepositoryWorld,
-                                  Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner) {
+                                  String entityService, String playerService, float baseHealth,
+                                  WorldType buildRepositoryWorld, Vector3ic buildRepositoryMinimumCorner,
+                                  Vector3ic buildRepositoryMaximumCorner) {
         this.configurationService = configurationService;
         this.gitHubAccount = gitHubAccount;
         this.gitHubRepository = gitHubRepository;
@@ -164,6 +167,7 @@ public class AbstractMonolithModule extends AbstractModule {
         this.redisPort = redisPort;
         this.entityService = entityService;
         this.playerService = playerService;
+        this.baseHealth = baseHealth;
         this.buildRepositoryWorld = buildRepositoryWorld;
         this.buildRepositoryMinimumCorner = buildRepositoryMinimumCorner;
         this.buildRepositoryMaximumCorner = buildRepositoryMaximumCorner;
@@ -250,7 +254,7 @@ public class AbstractMonolithModule extends AbstractModule {
 
         install(new FactoryModuleBuilder()
                 .implement(Effect.class, Names.named("simple"), SimpleEffect.class)
-                .implement(Effect.class, Names.named("timed"), SimpleEffect.class)
+                .implement(Effect.class, Names.named("periodic"), PeriodicEffect.class)
                 .implement(Effect.class, Names.named("dynamic"), DynamicEffect.class)
                 .build(EffectFactory.class));
     }
@@ -267,6 +271,8 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(PlayerHidingCommandService.class).to(DefaultPlayerHidingCommandService.class);
         bind(PlayerHidingQueryService.class).to(DefaultPlayerHidingQueryService.class);
         bind(PlayerHidingRepository.class).to(DefaultPlayerHidingRepository.class);
+
+        bind(Float.class).annotatedWith(Names.named("BaseHealth")).toInstance(baseHealth);
 
         switch (entityService) {
             case "DEFAULT":

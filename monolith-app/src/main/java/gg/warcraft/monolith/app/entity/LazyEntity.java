@@ -17,16 +17,16 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LazyEntity implements Entity {
-    private final Lazy<? extends EntityProfile> data;
+    private final Lazy<? extends EntityProfile> profile;
     private final Lazy<? extends EntityServerData> serverData;
     private final Lazy<Attributes> attributes;
     private final Lazy<Status> status;
 
-    public LazyEntity(Supplier<? extends EntityProfile> dataSupplier,
+    public LazyEntity(Supplier<? extends EntityProfile> profileSupplier,
                       Supplier<? extends EntityServerData> serverDataSupplier,
                       Supplier<Attributes> attributesSupplier,
                       Supplier<Status> statusSupplier) {
-        this.data = new Lazy<>(dataSupplier);
+        this.profile = new Lazy<>(profileSupplier);
         this.serverData = new Lazy<>(serverDataSupplier);
         this.attributes = new Lazy<>(attributesSupplier);
         this.status = new Lazy<>(statusSupplier);
@@ -69,7 +69,7 @@ public class LazyEntity implements Entity {
 
     @Override
     public Team getTeam() {
-        return data.get().getTeam();
+        return profile.get().getTeam();
     }
 
     @Override

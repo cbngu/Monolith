@@ -139,7 +139,7 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
                 .map(this::initializeBuild)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        logger.info("Initialized " + builds.size() + " builds in build repository at " + buildRepositoryBoundingBox);
+        logger.info("Initialized " + builds.size() + " builds in build repository");
         builds.forEach(buildRepository::save);
     }
 }

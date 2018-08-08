@@ -4,9 +4,11 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.item.Item;
+import gg.warcraft.monolith.spigot.entity.player.SpigotOfflinePlayerData;
 import gg.warcraft.monolith.spigot.entity.player.SpigotPlayerDataFactory;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,10 +34,16 @@ public class SpigotPlayerAdapter implements PlayerServerAdapter {
     @Override
     public PlayerServerData getPlayerServerData(UUID playerId) {
         Player player = server.getPlayer(playerId);
-        if (player == null) {
-            return null;
+        if (player != null) {
+            return playerDataFactory.create(player);
         }
-        return playerDataFactory.create(player);
+
+        OfflinePlayer offlinePlayer = server.getOfflinePlayer(playerId);
+        if (offlinePlayer != null) {
+            return new SpigotOfflinePlayerData(offlinePlayer);
+        }
+
+        return null;
     }
 
     @Override

@@ -2,6 +2,7 @@ package gg.warcraft.monolith.spigot.entity.player;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityData;
@@ -28,8 +29,8 @@ public class SpigotPlayerData extends SpigotEntityData implements PlayerServerDa
     }
 
     @Override
-    public String getMinecraftName() {
-        return player.getName();
+    public EntityType getType() {
+        return EntityType.PLAYER;
     }
 
     @Override

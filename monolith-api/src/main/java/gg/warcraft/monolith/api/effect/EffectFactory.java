@@ -31,17 +31,17 @@ public interface EffectFactory {
     Effect createSimpleEffect(Supplier<Location> location);
 
     /**
-     * Creates a new timed {@code Effect}.
+     * Creates a new periodic {@code Effect}.
      * <p>
-     * A timed {@code Effect} will call all of its effect renderers to display their particles at the location
+     * A periodic {@code Effect} will call all of its effect renderers to display their particles at the location
      * currently provided by the supplier once every period.
      *
      * @param location The location supplier.
      * @param period   The period.
      * @return A new timed {@code Effect}. Never null.
      */
-    @Named("timed")
-    Effect createTimedEffect(Supplier<Location> location, Duration period);
+    @Named("periodic")
+    Effect createPeriodicEffect(Supplier<Location> location, Duration period);
 
     /**
      * Creates a new dynamic {@code Effect}.

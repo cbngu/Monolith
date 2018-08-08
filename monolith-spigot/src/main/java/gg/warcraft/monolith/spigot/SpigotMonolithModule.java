@@ -52,11 +52,12 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
 
     public SpigotMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                 String persistenceService, String redisHost, int redisPort,
-                                String entityService, String playerService, WorldType buildRepositoryWorld,
-                                Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner,
+                                String entityService, String playerService, float baseHealth,
+                                WorldType buildRepositoryWorld, Vector3ic buildRepositoryMinimumCorner,
+                                Vector3ic buildRepositoryMaximumCorner,
                                 Plugin plugin, String overworldName, String theNetherName, String theEndName) {
         super(configurationService, gitHubAccount, gitHubRepository, persistenceService, redisHost, redisPort,
-                entityService, playerService, buildRepositoryWorld, buildRepositoryMinimumCorner,
+                entityService, playerService, baseHealth, buildRepositoryWorld, buildRepositoryMinimumCorner,
                 buildRepositoryMaximumCorner);
         this.plugin = plugin;
         this.overworldName = overworldName;
