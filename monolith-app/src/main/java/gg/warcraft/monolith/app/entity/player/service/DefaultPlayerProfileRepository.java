@@ -50,6 +50,10 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
     public PlayerProfile get(UUID playerId) {
         String profileKey = createProfileKey(playerId);
         String profileJson = persistenceService.get(profileKey);
+        if (profileJson == null) {
+            return null;
+        }
+
         try {
             PlayerProfileItem profileItem = jsonMapper.readValue(profileJson, PlayerProfileItem.class);
             return mapItemToProfile(profileItem);

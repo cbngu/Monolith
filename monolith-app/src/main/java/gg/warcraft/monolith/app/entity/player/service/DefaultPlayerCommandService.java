@@ -93,6 +93,11 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
         // TODO also make sure this doesn't do anything when the player is offline, add isOnline to PlayerServerData
         // TODO player can log off but still be in the iterator of the updater
         PlayerProfile profile = playerProfileRepository.get(playerId);
+        if (profile == null) {
+            System.out.println("Failed to update profile for player with id " + playerId + ", profile was null");
+            return;
+        }
+
         long newTimeLastSeen = System.currentTimeMillis();
         long newTimePlayed = profile.getTimePlayed() + (newTimeLastSeen - profile.getTimeLastSeen());
         PlayerProfile newProfile = profile.getCopyer()

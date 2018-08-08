@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import gg.warcraft.monolith.api.Monolith;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.TaskService;
+import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.build.service.BlockBuildCommandService;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
@@ -65,9 +66,9 @@ public class MonolithPlugin extends JavaPlugin {
                 injector.getInstance(PlayerProfileInitializationHandler.class);
         eventService.subscribe(playerProfileInitializationHandler);
 
-        PlayerProfileUpdateHandler playerProfileUpdateHandler =
-                injector.getInstance(PlayerProfileUpdateHandler.class);
-        taskService.runEachTick(playerProfileUpdateHandler);
+        PlayerProfileUpdateHandler playerProfileUpdateHandler = injector.getInstance(PlayerProfileUpdateHandler.class);
+        TimeUtils timeUtils = injector.getInstance(TimeUtils.class);
+        taskService.runTask(playerProfileUpdateHandler, timeUtils.oneTick(), timeUtils.createDurationInSeconds(1));
 
         PlayerHidingHandler playerHidingHandler = injector.getInstance(PlayerHidingHandler.class);
         eventService.subscribe(playerHidingHandler);
