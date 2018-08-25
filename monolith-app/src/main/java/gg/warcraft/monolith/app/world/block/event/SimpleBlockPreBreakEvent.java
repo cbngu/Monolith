@@ -2,13 +2,14 @@ package gg.warcraft.monolith.app.world.block.event;
 
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.event.AbstractBlockPreEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPreBreakEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SimpleBlockPreBreakEvent extends SimpleBlockPreEvent implements BlockPreBreakEvent {
+public class SimpleBlockPreBreakEvent extends AbstractBlockPreEvent implements BlockPreBreakEvent {
     private List<Item> alternativeDrops;
     private final UUID playerId;
 

@@ -1,12 +1,13 @@
 package gg.warcraft.monolith.app.combat.event;
 
 import gg.warcraft.monolith.api.combat.ProjectileType;
+import gg.warcraft.monolith.api.combat.event.AbstractProjectilePreEvent;
 import gg.warcraft.monolith.api.combat.event.ProjectilePreHitEvent;
 import gg.warcraft.monolith.api.world.block.Block;
 
 import java.util.UUID;
 
-public class SimpleProjectilePreHitEvent extends SimpleProjectilePreEvent implements ProjectilePreHitEvent {
+public class SimpleProjectilePreHitEvent extends AbstractProjectilePreEvent implements ProjectilePreHitEvent {
     private final Block block;
     private final UUID entityId;
 

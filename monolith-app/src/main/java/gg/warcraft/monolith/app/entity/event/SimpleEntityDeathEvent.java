@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.entity.event;
 
+import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.event.AbstractEntityEvent;
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
 import gg.warcraft.monolith.api.item.Item;
 
@@ -7,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SimpleEntityDeathEvent extends SimpleEntityEvent implements EntityDeathEvent {
+public class SimpleEntityDeathEvent extends AbstractEntityEvent implements EntityDeathEvent {
     private final List<Item> drops;
 
-    public SimpleEntityDeathEvent(UUID entityId, List<Item> drops) {
-        super(entityId);
+    public SimpleEntityDeathEvent(UUID entityId, EntityType entityType, List<Item> drops) {
+        super(entityId, entityType);
         this.drops = drops;
     }
 

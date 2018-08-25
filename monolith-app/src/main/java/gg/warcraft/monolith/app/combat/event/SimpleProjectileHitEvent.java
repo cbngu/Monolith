@@ -1,12 +1,13 @@
 package gg.warcraft.monolith.app.combat.event;
 
 import gg.warcraft.monolith.api.combat.ProjectileType;
+import gg.warcraft.monolith.api.combat.event.AbstractProjectileEvent;
 import gg.warcraft.monolith.api.combat.event.ProjectileHitEvent;
 import gg.warcraft.monolith.api.world.block.Block;
 
 import java.util.UUID;
 
-public class SimpleProjectileHitEvent extends SimpleProjectileEvent implements ProjectileHitEvent {
+public class SimpleProjectileHitEvent extends AbstractProjectileEvent implements ProjectileHitEvent {
     private final Block block;
     private final UUID entityId;
 

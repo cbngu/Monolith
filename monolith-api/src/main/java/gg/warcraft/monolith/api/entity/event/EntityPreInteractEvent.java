@@ -9,7 +9,7 @@ public interface EntityPreInteractEvent extends EntityPreEvent {
 
     UUID getPlayerId();
 
-    Item getItemInClickHand(); // TODO remove 'Click' from wording?
+    Item getItemInHand();
 
     Location getInteractLocation();
 }

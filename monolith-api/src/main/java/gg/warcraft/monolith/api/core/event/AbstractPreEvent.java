@@ -1,12 +1,12 @@
-package gg.warcraft.monolith.app.core;
+package gg.warcraft.monolith.api.core.event;
 
 import gg.warcraft.monolith.api.core.PreEvent;
 
-public class SimplePreEvent implements PreEvent {
+public abstract class AbstractPreEvent implements PreEvent {
     private boolean cancelled;
     private boolean explicitlyAllowed;
 
-    public SimplePreEvent(boolean cancelled) {
+    public AbstractPreEvent(boolean cancelled) {
         this.cancelled = cancelled;
     }
 

@@ -1,17 +1,14 @@
-package gg.warcraft.monolith.app.combat.event;
+package gg.warcraft.monolith.api.combat.event;
 
 import gg.warcraft.monolith.api.combat.ProjectileType;
-import gg.warcraft.monolith.api.combat.event.ProjectilePreEvent;
-import gg.warcraft.monolith.app.core.SimplePreEvent;
 
 import java.util.UUID;
 
-public class SimpleProjectilePreEvent extends SimplePreEvent implements ProjectilePreEvent {
+public abstract class AbstractProjectileEvent implements ProjectileEvent {
     private final UUID projectileId;
     private final ProjectileType projectileType;
 
-    public SimpleProjectilePreEvent(UUID projectileId, ProjectileType projectileType, boolean cancelled) {
-        super(cancelled);
+    public AbstractProjectileEvent(UUID projectileId, ProjectileType projectileType) {
         this.projectileId = projectileId;
         this.projectileType = projectileType;
     }

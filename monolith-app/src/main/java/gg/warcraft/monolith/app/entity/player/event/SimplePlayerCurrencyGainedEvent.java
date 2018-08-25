@@ -1,10 +1,11 @@
 package gg.warcraft.monolith.app.entity.player.event;
 
+import gg.warcraft.monolith.api.entity.player.event.AbstractPlayerEvent;
 import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyGainedEvent;
 
 import java.util.UUID;
 
-public class SimplePlayerCurrencyGainedEvent extends SimplePlayerEvent implements PlayerCurrencyGainedEvent {
+public class SimplePlayerCurrencyGainedEvent extends AbstractPlayerEvent implements PlayerCurrencyGainedEvent {
     private final String currency;
     private final int amount;
     private final int newCurrent;

@@ -9,9 +9,9 @@ public interface BlockPreInteractEvent extends BlockPreEvent {
 
     BlockInteraction getInteraction();
 
-    BlockFace getClickedBlockFace();
+    BlockFace getFace();
 
-    Item getItemInClickHand();
+    Item getItemInHand();
 
     UUID getPlayerId();
 }

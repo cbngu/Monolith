@@ -1,11 +1,12 @@
 package gg.warcraft.monolith.app.world.block.event;
 
 import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.event.AbstractBlockEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPlaceEvent;
 
 import java.util.UUID;
 
-public class SimpleBlockPlaceEvent extends SimpleBlockEvent implements BlockPlaceEvent {
+public class SimpleBlockPlaceEvent extends AbstractBlockEvent implements BlockPlaceEvent {
     private Block placedBlock;
     private Block placedAgainst;
     private final UUID playerId;

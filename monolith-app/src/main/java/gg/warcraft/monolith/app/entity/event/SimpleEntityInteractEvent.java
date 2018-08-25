@@ -1,18 +1,21 @@
 package gg.warcraft.monolith.app.entity.event;
 
+import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.event.AbstractEntityEvent;
 import gg.warcraft.monolith.api.entity.event.EntityInteractEvent;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
 
 import java.util.UUID;
 
-public class SimpleEntityInteractEvent extends SimpleEntityEvent implements EntityInteractEvent {
+public class SimpleEntityInteractEvent extends AbstractEntityEvent implements EntityInteractEvent {
     private final UUID playerId;
     private final Item itemInClickHand;
     private final Location interactLocation;
 
-    public SimpleEntityInteractEvent(UUID entityId, UUID playerId, Item itemInClickHand, Location interactLocation) {
-        super(entityId);
+    public SimpleEntityInteractEvent(UUID entityId, EntityType entityType, UUID playerId, Item itemInClickHand,
+                                     Location interactLocation) {
+        super(entityId, entityType);
         this.playerId = playerId;
         this.itemInClickHand = itemInClickHand;
         this.interactLocation = interactLocation;
@@ -24,7 +27,7 @@ public class SimpleEntityInteractEvent extends SimpleEntityEvent implements Enti
     }
 
     @Override
-    public Item getItemInClickHand() {
+    public Item getItemInHand() {
         return itemInClickHand;
     }
 

@@ -3,23 +3,24 @@ package gg.warcraft.monolith.app.world.block.event;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
+import gg.warcraft.monolith.api.world.block.event.AbstractBlockEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockInteractEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockInteraction;
 
 import java.util.UUID;
 
-public class SimpleBlockInteractEvent extends SimpleBlockEvent implements BlockInteractEvent {
+public class SimpleBlockInteractEvent extends AbstractBlockEvent implements BlockInteractEvent {
     private final BlockInteraction interaction;
-    private final BlockFace clickedFace;
-    private final Item itemInClickHand;
+    private final BlockFace face;
+    private final Item itemInHand;
     private final UUID playerId;
 
-    public SimpleBlockInteractEvent(Block block, BlockInteraction interaction, BlockFace clickedFace,
-                                    Item itemInClickHand, UUID playerId) {
+    public SimpleBlockInteractEvent(Block block, BlockInteraction interaction, BlockFace face, Item itemInHand,
+                                    UUID playerId) {
         super(block);
         this.interaction = interaction;
-        this.clickedFace = clickedFace;
-        this.itemInClickHand = itemInClickHand;
+        this.face = face;
+        this.itemInHand = itemInHand;
         this.playerId = playerId;
     }
 
@@ -29,13 +30,13 @@ public class SimpleBlockInteractEvent extends SimpleBlockEvent implements BlockI
     }
 
     @Override
-    public BlockFace getClickedBlockFace() {
-        return clickedFace;
+    public BlockFace getFace() {
+        return face;
     }
 
     @Override
-    public Item getItemInClickHand() {
-        return itemInClickHand;
+    public Item getItemInHand() {
+        return itemInHand;
     }
 
     @Override
