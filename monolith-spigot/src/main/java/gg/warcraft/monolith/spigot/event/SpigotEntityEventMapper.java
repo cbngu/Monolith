@@ -2,10 +2,13 @@ package gg.warcraft.monolith.spigot.event;
 
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.core.EventService;
+import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
 import gg.warcraft.monolith.api.entity.event.EntityInteractEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreFatalDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreInteractEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreSpawnEvent;
+import gg.warcraft.monolith.api.entity.event.EntitySpawnEvent;
 import gg.warcraft.monolith.api.entity.player.Player;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.Location;
@@ -13,8 +16,12 @@ import gg.warcraft.monolith.app.entity.event.SimpleEntityDeathEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityInteractEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreFatalDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreInteractEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreSpawnEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntitySpawnEvent;
+import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotLocationMapper;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,49 +36,73 @@ import java.util.stream.Collectors;
 
 public class SpigotEntityEventMapper implements Listener {
     private final EventService eventService;
+    private final SpigotEntityTypeMapper entityTypeMapper;
     private final SpigotItemMapper itemMapper;
     private final SpigotLocationMapper locationMapper;
 
     @Inject
-    public SpigotEntityEventMapper(EventService eventService, SpigotItemMapper itemMapper,
-                                   SpigotLocationMapper locationMapper) {
+    public SpigotEntityEventMapper(EventService eventService, SpigotEntityTypeMapper entityTypeMapper,
+                                   SpigotItemMapper itemMapper, SpigotLocationMapper locationMapper) {
         this.eventService = eventService;
+        this.entityTypeMapper = entityTypeMapper;
         this.itemMapper = itemMapper;
         this.locationMapper = locationMapper;
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onEntityPreSpawnEvent(org.bukkit.event.entity.EntitySpawnEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(event.getEntityType());
+        Location location = locationMapper.map(entity.getLocation());
+        EntityPreSpawnEvent entityPreSpawnEvent =
+                new SimpleEntityPreSpawnEvent(entityId, entityType, location, event.isCancelled());
+        eventService.publish(entityPreSpawnEvent);
+
+        boolean isCancelled = entityPreSpawnEvent.isCancelled() && !entityPreSpawnEvent.isExplicitlyAllowed();
+        event.setCancelled(isCancelled);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntitySpawnEvent(org.bukkit.event.entity.EntitySpawnEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(event.getEntityType());
+        Location location = locationMapper.map(entity.getLocation());
+        EntitySpawnEvent entitySpawnEvent = new SimpleEntitySpawnEvent(entityId, entityType, location);
+        eventService.publish(entitySpawnEvent);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityPreInteractEvent(PlayerInteractAtEntityEvent event) {
         org.bukkit.entity.Player player = event.getPlayer();
         UUID entityId = event.getRightClicked().getUniqueId();
+        EntityType entityType = entityTypeMapper.map(event.getRightClicked().getType());
         UUID playerId = player.getUniqueId();
         Item itemInClickHand = event.getHand() == EquipmentSlot.HAND
                 ? itemMapper.map(player.getEquipment().getItemInMainHand())
                 : itemMapper.map(player.getEquipment().getItemInOffHand());
         Location interactLocation = locationMapper.map(event.getClickedPosition().toLocation(player.getWorld()));
-        EntityPreInteractEvent entityPreInteractEvent =
-                new SimpleEntityPreInteractEvent(entityId, playerId, itemInClickHand, interactLocation, false);
+        EntityPreInteractEvent entityPreInteractEvent = new SimpleEntityPreInteractEvent(entityId, entityType, playerId,
+                itemInClickHand, interactLocation, event.isCancelled());
         eventService.publish(entityPreInteractEvent);
 
         boolean isCancelled = entityPreInteractEvent.isCancelled() && !entityPreInteractEvent.isExplicitlyAllowed();
         event.setCancelled(isCancelled);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityInteractEvent(PlayerInteractAtEntityEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         org.bukkit.entity.Player player = event.getPlayer();
         UUID entityId = event.getRightClicked().getUniqueId(); // FIXME do we only want this for livingentities? Gonna need a new event for others
+        EntityType entityType = entityTypeMapper.map(event.getRightClicked().getType());
         UUID playerId = player.getUniqueId();
         Item itemInClickHand = event.getHand() == EquipmentSlot.HAND
                 ? itemMapper.map(player.getEquipment().getItemInMainHand())
                 : itemMapper.map(player.getEquipment().getItemInOffHand());
         Location interactLocation = locationMapper.map(event.getClickedPosition().toLocation(player.getWorld()));
         EntityInteractEvent entityInteractEvent =
-                new SimpleEntityInteractEvent(entityId, playerId, itemInClickHand, interactLocation);
+                new SimpleEntityInteractEvent(entityId, entityType, playerId, itemInClickHand, interactLocation);
         eventService.publish(entityInteractEvent);
     }
 
@@ -85,8 +116,10 @@ public class SpigotEntityEventMapper implements Listener {
         if (event.getEntity() instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) event.getEntity();
             if (event.getDamage() > livingEntity.getHealth()) {
+                UUID entityId = livingEntity.getUniqueId();
+                EntityType entityType = entityTypeMapper.map(livingEntity.getType());
                 EntityPreFatalDamageEvent entityPreFatalDamageEvent =
-                        new SimpleEntityPreFatalDamageEvent(livingEntity.getUniqueId(), false);
+                        new SimpleEntityPreFatalDamageEvent(entityId, entityType, event.isCancelled());
                 eventService.publish(entityPreFatalDamageEvent);
 
                 if (entityPreFatalDamageEvent.isCancelled() && !entityPreFatalDamageEvent.isExplicitlyAllowed()) {
@@ -103,10 +136,11 @@ public class SpigotEntityEventMapper implements Listener {
         }
 
         UUID entityId = event.getEntity().getUniqueId();
+        EntityType entityType = entityTypeMapper.map(event.getEntityType());
         List<Item> drops = event.getDrops().stream()
                 .map(itemMapper::map)
                 .collect(Collectors.toList());
-        EntityDeathEvent entityDeathEvent = new SimpleEntityDeathEvent(entityId, drops);
+        EntityDeathEvent entityDeathEvent = new SimpleEntityDeathEvent(entityId, entityType, drops);
         eventService.publish(entityDeathEvent);
 
 //        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
