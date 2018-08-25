@@ -71,13 +71,9 @@ redisPort: 6379
 
 
 # ENTITY SERVICES
-# Entity service options: [DEFAULT, CUSTOM]
-# Player service options: [DEFAULT, CUSTOM]
 # Base health options: number
 # ------------------------------------------------------------
 #
-entityService: DEFAULT
-playerService: DEFAULT
 baseHealth: 20
 
 
