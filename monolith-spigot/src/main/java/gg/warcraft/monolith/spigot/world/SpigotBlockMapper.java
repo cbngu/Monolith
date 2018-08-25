@@ -32,6 +32,10 @@ public class SpigotBlockMapper {
     }
 
     public Block map(org.bukkit.block.Block block) {
+        if (block == null) {
+            return null;
+        }
+
         BlockType type = blockTypeMapper.map(block.getType(), block.getData());
         BlockLocation location = locationMapper.map(block);
         switch (block.getType()) {

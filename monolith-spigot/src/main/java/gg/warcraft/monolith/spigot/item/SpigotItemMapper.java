@@ -31,7 +31,12 @@ public class SpigotItemMapper {
     }
 
     public Item map(ItemStack item) {
-        ItemType type = itemTypeMapper.map(item.getType(), item.getData().getData());
+        if (item == null) {
+            return null;
+        }
+
+        byte data = item.getData() != null ? item.getData().getData() : 0;
+        ItemType type = itemTypeMapper.map(item.getType(), data);
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
             List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
