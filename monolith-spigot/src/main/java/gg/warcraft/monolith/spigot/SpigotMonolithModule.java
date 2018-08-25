@@ -22,6 +22,9 @@ import gg.warcraft.monolith.app.effect.particle.QueuedParticle;
 import gg.warcraft.monolith.spigot.command.SpigotCommandAdapter;
 import gg.warcraft.monolith.spigot.core.SpigotAuthorizationService;
 import gg.warcraft.monolith.spigot.core.SpigotTaskService;
+import gg.warcraft.monolith.spigot.effect.particle.ColorParticle;
+import gg.warcraft.monolith.spigot.effect.particle.SimpleParticle;
+import gg.warcraft.monolith.spigot.effect.particle.SpeedParticle;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityData;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
 import gg.warcraft.monolith.spigot.entity.player.SpigotPlayerData;
@@ -30,9 +33,6 @@ import gg.warcraft.monolith.spigot.entity.player.hiding.SpigotPlayerHidingAdapte
 import gg.warcraft.monolith.spigot.entity.player.service.SpigotPlayerAdapter;
 import gg.warcraft.monolith.spigot.entity.service.SpigotEntityAdapter;
 import gg.warcraft.monolith.spigot.menu.service.SpigotMenuAdapter;
-import gg.warcraft.monolith.spigot.particle.ColorParticle;
-import gg.warcraft.monolith.spigot.particle.SimpleParticle;
-import gg.warcraft.monolith.spigot.particle.SpeedParticle;
 import gg.warcraft.monolith.spigot.world.Overworld;
 import gg.warcraft.monolith.spigot.world.TheEnd;
 import gg.warcraft.monolith.spigot.world.TheNether;
@@ -52,13 +52,11 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
 
     public SpigotMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                 String persistenceService, String redisHost, int redisPort,
-                                String entityService, String playerService, float baseHealth,
-                                WorldType buildRepositoryWorld, Vector3ic buildRepositoryMinimumCorner,
-                                Vector3ic buildRepositoryMaximumCorner,
+                                float baseHealth, WorldType buildRepositoryWorld,
+                                Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner,
                                 Plugin plugin, String overworldName, String theNetherName, String theEndName) {
         super(configurationService, gitHubAccount, gitHubRepository, persistenceService, redisHost, redisPort,
-                entityService, playerService, baseHealth, buildRepositoryWorld, buildRepositoryMinimumCorner,
-                buildRepositoryMaximumCorner);
+                baseHealth, buildRepositoryWorld, buildRepositoryMinimumCorner, buildRepositoryMaximumCorner);
         this.plugin = plugin;
         this.overworldName = overworldName;
         this.theNetherName = theNetherName;

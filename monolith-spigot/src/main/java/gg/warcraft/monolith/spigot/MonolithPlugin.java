@@ -14,6 +14,7 @@ import gg.warcraft.monolith.app.command.PlayerCommandSender;
 import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
 import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
 import gg.warcraft.monolith.app.entity.attribute.handler.AttributesInitializationHandler;
+import gg.warcraft.monolith.app.entity.handler.EntityProfileInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler;
 import gg.warcraft.monolith.app.entity.player.hiding.handler.PlayerHidingHandler;
@@ -62,6 +63,10 @@ public class MonolithPlugin extends JavaPlugin {
         StatusEffectHandler statusEffectHandler = injector.getInstance(StatusEffectHandler.class);
         eventService.subscribe(statusEffectHandler);
 
+        EntityProfileInitializationHandler entityProfileInitializationHandler =
+                injector.getInstance(EntityProfileInitializationHandler.class);
+        eventService.subscribe(entityProfileInitializationHandler);
+
         PlayerProfileInitializationHandler playerProfileInitializationHandler =
                 injector.getInstance(PlayerProfileInitializationHandler.class);
         eventService.subscribe(playerProfileInitializationHandler);
@@ -106,8 +111,6 @@ public class MonolithPlugin extends JavaPlugin {
         String redisHost = localConfig.getString("redisHost");
         int redisPort = localConfig.getInt("redisPort");
 
-        String entityService = localConfig.getString("entityService");
-        String playerService = localConfig.getString("playerService");
         float baseHealth = (float) localConfig.getDouble("baseHealth");
 
         String buildRepositoryWorldString = localConfig.getString("buildRepository.world");
@@ -128,7 +131,7 @@ public class MonolithPlugin extends JavaPlugin {
         AbstractModule spigotMonolithModule = new SpigotMonolithModule(
                 configurationService, gitHubAccount, gitHubRepository,
                 persistenceService, redisHost, redisPort,
-                entityService, playerService, baseHealth, buildRepositoryWorld,
+                baseHealth, buildRepositoryWorld,
                 buildRepositoryMinimumCorner, buildRepositoryMaximumCorner,
                 this, overworldName, netherName, theEndName);
         Monolith.registerModule(spigotMonolithModule);
