@@ -14,6 +14,8 @@ import gg.warcraft.monolith.api.world.block.event.BlockPlaceEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPreBreakEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPreInteractEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPrePlaceEvent;
+import gg.warcraft.monolith.api.world.block.event.BlockPreTriggerEvent;
+import gg.warcraft.monolith.api.world.block.event.BlockTriggerEvent;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockBreakEvent;
@@ -22,6 +24,8 @@ import gg.warcraft.monolith.app.world.block.event.SimpleBlockPlaceEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockPreBreakEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockPreInteractEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockPrePlaceEvent;
+import gg.warcraft.monolith.app.world.block.event.SimpleBlockPreTriggerEvent;
+import gg.warcraft.monolith.app.world.block.event.SimpleBlockTriggerEvent;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.SpigotBlockFaceMapper;
 import gg.warcraft.monolith.spigot.world.SpigotBlockMapper;
@@ -123,12 +127,8 @@ public class SpigotWorldEventMapper implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlaceEvent(org.bukkit.event.block.BlockPlaceEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Block block = blockMapper.map(event.getBlock());
         Block placedBlock = blockMapper.map(event.getBlockPlaced());
         Block placedAgainst = blockMapper.map(event.getBlockAgainst());
@@ -138,19 +138,29 @@ public class SpigotWorldEventMapper implements Listener {
     }
 
     void onBlockPreInteractEvent(PlayerInteractEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Block block = blockMapper.map(event.getClickedBlock());
         BlockFace clickedFace = blockFaceMapper.map(event.getBlockFace());
         BlockInteraction interaction = BlockInteraction.valueOf(event.getAction().name());
         Item itemInClickHand = itemMapper.map(event.getItem());
         UUID playerId = event.getPlayer().getUniqueId();
-        boolean isCancelled = event.isCancelled();
+        boolean wasCancelled = event.isCancelled();
         BlockPreInteractEvent blockPreInteractEvent = new SimpleBlockPreInteractEvent(block, interaction, clickedFace,
-                itemInClickHand, playerId, isCancelled);
+                itemInClickHand, playerId, wasCancelled);
         eventService.publish(blockPreInteractEvent);
+
+        boolean isCancelled = blockPreInteractEvent.isCancelled() && !blockPreInteractEvent.isExplicitlyAllowed();
+        event.setCancelled(isCancelled);
+    }
+
+    void onBlockPreTriggerEvent(PlayerInteractEvent event) {
+        Block block = blockMapper.map(event.getClickedBlock());
+        UUID playerId = event.getPlayer().getUniqueId();
+        boolean wasCancelled = event.isCancelled();
+        BlockPreTriggerEvent blockPreTriggerEvent = new SimpleBlockPreTriggerEvent(block, playerId, wasCancelled);
+        eventService.publish(blockPreTriggerEvent);
+
+        boolean isCancelled = blockPreTriggerEvent.isCancelled() && !blockPreTriggerEvent.isExplicitlyAllowed();
+        event.setCancelled(isCancelled);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -160,21 +170,15 @@ public class SpigotWorldEventMapper implements Listener {
             case RIGHT_CLICK_BLOCK:
             case LEFT_CLICK_AIR:
             case RIGHT_CLICK_AIR:
-                if (event.hasBlock()) {
-                    onBlockPreInteractEvent(event);
-                }
+                onBlockPreInteractEvent(event);
                 break;
             case PHYSICAL:
-                // TODO: implement BlockTriggerEvent
+                onBlockPreTriggerEvent(event);
                 break;
         }
     }
 
     void onBlockInteractEvent(PlayerInteractEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Block block = blockMapper.map(event.getClickedBlock());
         BlockFace clickedFace = blockFaceMapper.map(event.getBlockFace());
         BlockInteraction interaction = BlockInteraction.valueOf(event.getAction().name());
@@ -185,19 +189,24 @@ public class SpigotWorldEventMapper implements Listener {
         eventService.publish(blockInteractEvent);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    void onBlockTriggerEvent(PlayerInteractEvent event) {
+        Block block = blockMapper.map(event.getClickedBlock());
+        UUID playerId = event.getPlayer().getUniqueId();
+        BlockTriggerEvent blockTriggerEvent = new SimpleBlockTriggerEvent(block, playerId);
+        eventService.publish(blockTriggerEvent);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         switch (event.getAction()) {
             case LEFT_CLICK_BLOCK:
             case RIGHT_CLICK_BLOCK:
-            case LEFT_CLICK_AIR: // TODO this enum needs work,
+            case LEFT_CLICK_AIR:
             case RIGHT_CLICK_AIR:
-                if (event.hasBlock()) {
-                    onBlockInteractEvent(event);
-                }
+                onBlockInteractEvent(event);
                 break;
             case PHYSICAL:
-                // TODO: implement BlockTriggerEvent
+                onBlockTriggerEvent(event);
                 break;
         }
     }
