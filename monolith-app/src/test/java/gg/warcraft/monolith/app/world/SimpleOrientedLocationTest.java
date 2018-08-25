@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class SimpleOrientedLocationTest {
-    private final float DELTA = 0.00001f;
+    private static final float DELTA = 1E-10f;
 
     @Test
     public void constructor_shouldCalculateCorrectDirectionLookingUp() {
@@ -25,6 +25,42 @@ public class SimpleOrientedLocationTest {
         Assert.assertEquals(expectedDirection.x(), direction.x(), DELTA);
         Assert.assertEquals(expectedDirection.y(), direction.y(), DELTA);
         Assert.assertEquals(expectedDirection.z(), direction.z(), DELTA);
+    }
+
+    @Test
+    public void constructor_shouldCalculateCorrectPitchYawLookingUp() {
+        // Given
+        Vector3fc direction = new Vector3f(0, 1, 0);
+
+        float expectedPitch = -90;
+        float expectedYaw = 0;
+
+        // When
+        OrientedLocation location = new SimpleOrientedLocation(null, 0, 0, 0, direction);
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
+
+        // Then
+        Assert.assertEquals(expectedPitch, pitch, DELTA);
+        Assert.assertEquals(expectedYaw, yaw, DELTA);
+    }
+
+    @Test
+    public void constructor_shouldCorrectNonNormalizedDirectionLookingUp() {
+        // Given
+        Vector3fc direction = new Vector3f(0, 5, 0);
+
+        float expectedPitch = -90;
+        float expectedYaw = 0;
+
+        // When
+        OrientedLocation location = new SimpleOrientedLocation(null, 0, 0, 0, direction);
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
+
+        // Then
+        Assert.assertEquals(expectedPitch, pitch, DELTA);
+        Assert.assertEquals(expectedYaw, yaw, DELTA);
     }
 
     @Test
@@ -46,6 +82,24 @@ public class SimpleOrientedLocationTest {
     }
 
     @Test
+    public void constructor_shouldCalculateCorrectPitchYawLookingDown() {
+        // Given
+        Vector3fc direction = new Vector3f(0, -1, 0);
+
+        float expectedPitch = 90;
+        float expectedYaw = 0;
+
+        // When
+        OrientedLocation location = new SimpleOrientedLocation(null, 0, 0, 0, direction);
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
+
+        // Then
+        Assert.assertEquals(expectedPitch, pitch, DELTA);
+        Assert.assertEquals(expectedYaw, yaw, DELTA);
+    }
+
+    @Test
     public void constructor_shouldCalculateCorrectDirectionLookingNorth() {
         // Given
         float pitch = 0;
@@ -61,6 +115,24 @@ public class SimpleOrientedLocationTest {
         Assert.assertEquals(expectedDirection.x(), direction.x(), DELTA);
         Assert.assertEquals(expectedDirection.y(), direction.y(), DELTA);
         Assert.assertEquals(expectedDirection.z(), direction.z(), DELTA);
+    }
+
+    @Test
+    public void constructor_shouldCalculateCorrectPitchYawLookingNorth() {
+        // Given
+        Vector3fc direction = new Vector3f(0, 0, -1);
+
+        float expectedPitch = 0;
+        float expectedYaw = 180;
+
+        // When
+        OrientedLocation location = new SimpleOrientedLocation(null, 0, 0, 0, direction);
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
+
+        // Then
+        Assert.assertEquals(expectedPitch, pitch, DELTA);
+        Assert.assertEquals(expectedYaw, yaw, DELTA);
     }
 
     @Test
@@ -82,6 +154,24 @@ public class SimpleOrientedLocationTest {
     }
 
     @Test
+    public void constructor_shouldCalculateCorrectPitchYawLookingEast() {
+        // Given
+        Vector3fc direction = new Vector3f(1, 0, 0);
+
+        float expectedPitch = 0;
+        float expectedYaw = -90;
+
+        // When
+        OrientedLocation location = new SimpleOrientedLocation(null, 0, 0, 0, direction);
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
+
+        // Then
+        Assert.assertEquals(expectedPitch, pitch, DELTA);
+        Assert.assertEquals(expectedYaw, yaw, DELTA);
+    }
+
+    @Test
     public void constructor_shouldCalculateCorrectDirectionLookingSouth() {
         // Given
         float pitch = 0;
@@ -97,6 +187,24 @@ public class SimpleOrientedLocationTest {
         Assert.assertEquals(expectedDirection.x(), direction.x(), DELTA);
         Assert.assertEquals(expectedDirection.y(), direction.y(), DELTA);
         Assert.assertEquals(expectedDirection.z(), direction.z(), DELTA);
+    }
+
+    @Test
+    public void constructor_shouldCalculateCorrectPitchYawLookingSouth() {
+        // Given
+        Vector3fc direction = new Vector3f(0, 0, 1);
+
+        float expectedPitch = 0;
+        float expectedYaw = 0;
+
+        // When
+        OrientedLocation location = new SimpleOrientedLocation(null, 0, 0, 0, direction);
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
+
+        // Then
+        Assert.assertEquals(expectedPitch, pitch, DELTA);
+        Assert.assertEquals(expectedYaw, yaw, DELTA);
     }
 
     @Test
@@ -117,8 +225,26 @@ public class SimpleOrientedLocationTest {
         Assert.assertEquals(expectedDirection.z(), direction.z(), DELTA);
     }
 
+    @Test
+    public void constructor_shouldCalculateCorrectPitchYawLookingWest() {
+        // Given
+        Vector3fc direction = new Vector3f(-1, 0, 0);
+
+        float expectedPitch = 0;
+        float expectedYaw = 90;
+
+        // When
+        OrientedLocation location = new SimpleOrientedLocation(null, 0, 0, 0, direction);
+        float pitch = location.getPitch();
+        float yaw = location.getYaw();
+
+        // Then
+        Assert.assertEquals(expectedPitch, pitch, DELTA);
+        Assert.assertEquals(expectedYaw, yaw, DELTA);
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void constructor_shouldCRejectOutOfRangePositivePitch() {
+    public void constructor_shouldRejectOutOfRangePositivePitch() {
         // Given
         float pitch = 90.1f;
         float yaw = 0;
@@ -128,7 +254,7 @@ public class SimpleOrientedLocationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructor_shouldCRejectOutOfRangeNegativePitch() {
+    public void constructor_shouldRejectOutOfRangeNegativePitch() {
         // Given
         float pitch = -90.1f;
         float yaw = 0;
@@ -138,7 +264,7 @@ public class SimpleOrientedLocationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructor_shouldCRejectOutOfRangePositiveYaw() {
+    public void constructor_shouldRejectOutOfRangePositiveYaw() {
         // Given
         float pitch = 0;
         float yaw = 180;
@@ -148,7 +274,7 @@ public class SimpleOrientedLocationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructor_shouldCRejectOutOfRangeNegativeYaw() {
+    public void constructor_shouldRejectOutOfRangeNegativeYaw() {
         // Given
         float pitch = 0;
         float yaw = -180.1f;

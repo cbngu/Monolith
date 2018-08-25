@@ -41,8 +41,15 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
 
     public SimpleOrientedLocation(World world, float x, float y, float z, Vector3fc direction) {
         super(world, x, y, z);
-        this.pitch = 0; // TODO calculate
-        this.yaw = 0; // TODO calculate
+        Vector3fc normalizedDirection = direction.normalize(new Vector3f());
+        double dirX = normalizedDirection.x();
+        double dirY = normalizedDirection.y();
+        double dirZ = normalizedDirection.z();
+        double pitchRadians = Math.asin(-dirY);
+        double yawRadians = Math.atan2(dirX, dirZ);
+        this.pitch = (float) Math.toDegrees(pitchRadians);
+        float unboundYaw = (float) -Math.toDegrees(yawRadians);
+        this.yaw = unboundYaw == -180 ? 180 : unboundYaw;
         this.direction = direction;
     }
 
