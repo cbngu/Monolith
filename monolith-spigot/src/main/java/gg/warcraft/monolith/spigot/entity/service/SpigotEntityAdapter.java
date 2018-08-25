@@ -1,6 +1,8 @@
 package gg.warcraft.monolith.spigot.entity.service;
 
 import com.google.inject.Inject;
+import gg.warcraft.monolith.api.combat.PotionEffect;
+import gg.warcraft.monolith.api.combat.PotionEffectType;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
@@ -9,8 +11,7 @@ import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
-import gg.warcraft.monolith.api.world.PotionEffect;
-import gg.warcraft.monolith.api.world.PotionEffectType;
+import gg.warcraft.monolith.spigot.combat.SpigotPotionEffectTypeMapper;
 import gg.warcraft.monolith.spigot.entity.GenericAttributeMapper;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityDataFactory;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
@@ -35,18 +36,21 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     private final SpigotEntityTypeMapper entityTypeMapper;
     private final SpigotLocationMapper locationMapper;
     private final SpigotEntityDataFactory entityDataFactory;
+    private final SpigotPotionEffectTypeMapper potionEffectTypeMapper;
     private final GenericAttributeMapper genericAttributeMapper;
 
     @Inject
     public SpigotEntityAdapter(Server server, AttributeQueryService attributeQueryService,
                                SpigotEntityTypeMapper entityTypeMapper, SpigotLocationMapper locationMapper,
                                SpigotEntityDataFactory entityDataFactory,
+                               SpigotPotionEffectTypeMapper potionEffectTypeMapper,
                                GenericAttributeMapper genericAttributeMapper) {
         this.server = server;
         this.attributeQueryService = attributeQueryService;
         this.entityTypeMapper = entityTypeMapper;
         this.locationMapper = locationMapper;
         this.entityDataFactory = entityDataFactory;
+        this.potionEffectTypeMapper = potionEffectTypeMapper;
         this.genericAttributeMapper = genericAttributeMapper;
     }
 
@@ -88,18 +92,22 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     @Override
     public void addPotionEffect(UUID entityId, PotionEffect effect) {
         Entity entity = server.getEntity(entityId);
-        if (entity != null) {
-            // TODO: implement
-            throw new IllegalStateException("Failed to add potion effect: method not implemented.");
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            org.bukkit.potion.PotionEffectType spigotPotionEffectType = potionEffectTypeMapper.map(effect.getType());
+            org.bukkit.potion.PotionEffect spigotPotionEffect = new org.bukkit.potion.PotionEffect(
+                    spigotPotionEffectType, effect.getDuration().inTicks(), effect.getLevel() - 1);
+            livingEntity.addPotionEffect(spigotPotionEffect);
         }
     }
 
     @Override
     public void removePotionEffect(UUID entityId, PotionEffectType type) {
         Entity entity = server.getEntity(entityId);
-        if (entity != null) {
-            // TODO: implement
-            throw new IllegalStateException("Failed to remove potion effect: method not implemented.");
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            org.bukkit.potion.PotionEffectType spigotPotionEffectType = potionEffectTypeMapper.map(type);
+            livingEntity.removePotionEffect(spigotPotionEffectType);
         }
     }
 
