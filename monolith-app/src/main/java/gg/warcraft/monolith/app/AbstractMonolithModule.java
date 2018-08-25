@@ -9,6 +9,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import gg.warcraft.monolith.api.MonolithPluginUtils;
+import gg.warcraft.monolith.api.combat.CombatFactory;
+import gg.warcraft.monolith.api.combat.CombatSource;
+import gg.warcraft.monolith.api.combat.PotionEffect;
+import gg.warcraft.monolith.api.combat.PotionEffectTypeUtils;
+import gg.warcraft.monolith.api.combat.value.CombatValue;
+import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
 import gg.warcraft.monolith.api.command.CommandSender;
 import gg.warcraft.monolith.api.command.Console;
 import gg.warcraft.monolith.api.command.service.CommandCommandService;
@@ -73,6 +79,11 @@ import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingQueryService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingRepository;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
+import gg.warcraft.monolith.app.combat.DefaultPotionEffectTypeUtils;
+import gg.warcraft.monolith.app.combat.SimpleCombatSource;
+import gg.warcraft.monolith.app.combat.SimplePotionEffect;
+import gg.warcraft.monolith.app.combat.value.LazyCombatValue;
+import gg.warcraft.monolith.app.combat.value.SimpleCombatValueModifier;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.service.DefaultCommandCommandService;
 import gg.warcraft.monolith.app.command.service.DefaultCommandQueryService;
@@ -147,8 +158,6 @@ public class AbstractMonolithModule extends AbstractModule {
     private final String configurationService;
     private final String gitHubAccount;
     private final String gitHubRepository;
-    private final String entityService;
-    private final String playerService;
     private final float baseHealth;
     private final WorldType buildRepositoryWorld;
     private final Vector3ic buildRepositoryMinimumCorner;
@@ -156,17 +165,14 @@ public class AbstractMonolithModule extends AbstractModule {
 
     public AbstractMonolithModule(String configurationService, String gitHubAccount, String gitHubRepository,
                                   String persistenceService, String redisHost, int redisPort,
-                                  String entityService, String playerService, float baseHealth,
-                                  WorldType buildRepositoryWorld, Vector3ic buildRepositoryMinimumCorner,
-                                  Vector3ic buildRepositoryMaximumCorner) {
+                                  float baseHealth, WorldType buildRepositoryWorld,
+                                  Vector3ic buildRepositoryMinimumCorner, Vector3ic buildRepositoryMaximumCorner) {
         this.configurationService = configurationService;
         this.gitHubAccount = gitHubAccount;
         this.gitHubRepository = gitHubRepository;
         this.persistenceService = persistenceService;
         this.redisHost = redisHost;
         this.redisPort = redisPort;
-        this.entityService = entityService;
-        this.playerService = playerService;
         this.baseHealth = baseHealth;
         this.buildRepositoryWorld = buildRepositoryWorld;
         this.buildRepositoryMinimumCorner = buildRepositoryMinimumCorner;
@@ -175,6 +181,7 @@ public class AbstractMonolithModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        configureCombat();
         configureCommand();
         configureConfiguration();
         configureCore();
@@ -185,6 +192,17 @@ public class AbstractMonolithModule extends AbstractModule {
         configurePersistence();
         configureUtil();
         configureWorld();
+    }
+
+    private void configureCombat() {
+        bind(PotionEffectTypeUtils.class).to(DefaultPotionEffectTypeUtils.class);
+
+        install(new FactoryModuleBuilder()
+                .implement(PotionEffect.class, Names.named("potion"), SimplePotionEffect.class)
+                .implement(CombatSource.class, Names.named("source"), SimpleCombatSource.class)
+                .implement(CombatValue.class, Names.named("value"), LazyCombatValue.class)
+                .implement(CombatValueModifier.class, Names.named("modifier"), SimpleCombatValueModifier.class)
+                .build(CombatFactory.class));
     }
 
     private void configureCommand() {
@@ -260,6 +278,14 @@ public class AbstractMonolithModule extends AbstractModule {
     }
 
     private void configureEntity() {
+        bind(EntityCommandService.class).to(DefaultEntityCommandService.class);
+        bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
+        bind(EntityProfileRepository.class).to(DefaultEntityProfileRepository.class);
+
+        bind(PlayerCommandService.class).to(DefaultPlayerCommandService.class);
+        bind(PlayerQueryService.class).to(DefaultPlayerQueryService.class);
+        bind(PlayerProfileRepository.class).to(DefaultPlayerProfileRepository.class);
+
         bind(AttributeCommandService.class).to(DefaultAttributeCommandService.class);
         bind(AttributeQueryService.class).to(DefaultAttributeQueryService.class);
         bind(AttributeRepository.class).to(DefaultAttributeRepository.class);
@@ -273,32 +299,6 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(PlayerHidingRepository.class).to(DefaultPlayerHidingRepository.class);
 
         bind(Float.class).annotatedWith(Names.named("BaseHealth")).toInstance(baseHealth);
-
-        switch (entityService) {
-            case "DEFAULT":
-                bind(EntityCommandService.class).to(DefaultEntityCommandService.class);
-                bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
-                bind(EntityProfileRepository.class).to(DefaultEntityProfileRepository.class);
-                break;
-            case "CUSTOM":
-                // do nothing, the implementing server should provide bindings
-                break;
-            default:
-                throw new IllegalArgumentException("Illegal entity service in Monolith configuration: " + entityService);
-        }
-
-        switch (playerService) {
-            case "DEFAULT":
-                bind(PlayerCommandService.class).to(DefaultPlayerCommandService.class);
-                bind(PlayerQueryService.class).to(DefaultPlayerQueryService.class);
-                bind(PlayerProfileRepository.class).to(DefaultPlayerProfileRepository.class);
-                break;
-            case "CUSTOM":
-                // do nothing, the implementing server should provide bindings
-                break;
-            default:
-                throw new IllegalArgumentException("Illegal player service in Monolith configuration: " + entityService);
-        }
     }
 
     private void configureItem() {

@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.world;
+package gg.warcraft.monolith.api.combat;
 
 /**
  * PotionEffectType serves as an abstraction layer between Monolith plugin code and the eventual server implementation the

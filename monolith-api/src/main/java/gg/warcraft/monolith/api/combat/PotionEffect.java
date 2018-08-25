@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.world;
+package gg.warcraft.monolith.api.combat;
 
 import gg.warcraft.monolith.api.util.Duration;
 

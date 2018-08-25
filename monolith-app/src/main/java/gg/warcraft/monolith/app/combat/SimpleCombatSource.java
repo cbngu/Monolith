@@ -1,16 +1,19 @@
 package gg.warcraft.monolith.app.combat;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.combat.CombatSource;
 
 import java.util.UUID;
 
 public class SimpleCombatSource implements CombatSource {
     private final String name;
-    private final UUID entityid;
+    private final UUID entityId;
 
-    public SimpleCombatSource(String name, UUID entityId) {
+    @Inject
+    public SimpleCombatSource(@Assisted String name, @Assisted UUID entityId) {
         this.name = name;
-        this.entityid = entityId;
+        this.entityId = entityId;
     }
 
     @Override
@@ -20,6 +23,6 @@ public class SimpleCombatSource implements CombatSource {
 
     @Override
     public UUID getEntityId() {
-        return entityid;
+        return entityId;
     }
 }

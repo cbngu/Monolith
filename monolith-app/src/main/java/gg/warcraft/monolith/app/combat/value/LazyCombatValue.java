@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.combat.value;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.combat.CombatSource;
 import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
@@ -15,7 +17,9 @@ public class LazyCombatValue implements CombatValue {
     private final Lazy<Float> modifiedValue;
     private final CombatSource source;
 
-    public LazyCombatValue(float baseValue, List<CombatValueModifier> modifiers, CombatSource source) {
+    @Inject
+    public LazyCombatValue(@Assisted float baseValue, @Assisted List<CombatValueModifier> modifiers,
+                           @Assisted CombatSource source) {
         this.baseValue = baseValue;
         this.modifiers = modifiers;
         this.modifiedValue = new Lazy<>(this::computeModifiedValue);
