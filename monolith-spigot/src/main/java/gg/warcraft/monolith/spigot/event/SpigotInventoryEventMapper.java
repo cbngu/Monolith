@@ -41,6 +41,7 @@ public class SpigotInventoryEventMapper implements Listener {
                     Click click = new SimpleClick(clickerId, event.isLeftClick(), event.isShiftClick());
                     button.getAction().accept(click);
                 }
+                // TODO publish Monolith menu click event
             }
         } else {
             // TODO publish Monolith inventory pre click event
@@ -53,6 +54,7 @@ public class SpigotInventoryEventMapper implements Listener {
         Menu menu = menuQueryService.getMenu(clickerId);
         if (menu != null) {
             menuRepository.delete(clickerId);
+            // TODO publish Monolith menu click event
         } else {
             // TODO publish Monolith inventory close event
         }

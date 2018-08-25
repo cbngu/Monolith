@@ -20,6 +20,6 @@ public class GenericAttributeModifierHandler {
     public void onPlayerConnectEvent(PlayerConnectEvent event) {
         Player player = server.getPlayer(event.getPlayerId());
         AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        // TODO attribute.
+        // TODO attribute
     }
 }
