@@ -86,12 +86,10 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
 
     @Override
     public void update(UUID playerId) {
-        // TODO also check Minecraft name in here?
-
         // TODO make sure this doesn't get called when the player just logs in, as their time last seen will be long ago
-
         // TODO also make sure this doesn't do anything when the player is offline, add isOnline to PlayerServerData
         // TODO player can log off but still be in the iterator of the updater
+
         PlayerProfile profile = playerProfileRepository.get(playerId);
         if (profile == null) {
             System.out.println("Failed to update profile for player with id " + playerId + ", profile was null");

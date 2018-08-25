@@ -8,5 +8,5 @@ public interface EntityProfileRepository {
 
     EntityProfile get(UUID entityId);
 
-    void save(EntityProfile data);
+    void save(EntityProfile profile);
 }

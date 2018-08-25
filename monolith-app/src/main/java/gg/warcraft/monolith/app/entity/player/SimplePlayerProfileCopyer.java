@@ -1,6 +1,5 @@
 package gg.warcraft.monolith.app.entity.player;
 
-import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.PlayerProfileCopyer;
 
@@ -17,11 +16,10 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     private long timeConnected;
     private long timeLastSeen;
     private long timePlayed;
-    private Team team;
 
     public SimplePlayerProfileCopyer(UUID playerId, long timeConnected, long timeFirstConnected, long timeLastSeen,
                                      long timePlayed, Map<String, Integer> currencies,
-                                     Map<String, Integer> lifetimeCurrencies, Map<String, String> data, Team team) {
+                                     Map<String, Integer> lifetimeCurrencies, Map<String, String> data) {
         this.playerId = playerId;
         this.timeConnected = timeConnected;
         this.timeFirstConnected = timeFirstConnected;
@@ -30,7 +28,6 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
         this.currencies = currencies;
         this.lifetimeCurrencies = lifetimeCurrencies;
         this.data = data;
-        this.team = team;
     }
 
     @Override
@@ -73,14 +70,8 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     }
 
     @Override
-    public PlayerProfileCopyer withTeam(Team team) {
-        this.team = team;
-        return this;
-    }
-
-    @Override
     public PlayerProfile copy() {
         return new SimplePlayerProfile(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, lifetimeCurrencies, data, team);
+                currencies, lifetimeCurrencies, data);
     }
 }

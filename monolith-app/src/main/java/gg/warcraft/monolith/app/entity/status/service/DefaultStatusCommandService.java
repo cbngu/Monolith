@@ -44,6 +44,8 @@ public class DefaultStatusCommandService implements StatusCommandService {
             newEffects.remove(effect);
             Status newStatus = new SimpleStatus(entityId, newEffects);
             repository.save(newStatus);
+
+            effect.onExpiry();
         }
     }
 }

@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.app.entity.service;
 
+import gg.warcraft.monolith.api.combat.PotionEffect;
+import gg.warcraft.monolith.api.combat.PotionEffectType;
 import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.Entity;
@@ -14,17 +16,15 @@ import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.Location;
-import gg.warcraft.monolith.api.world.PotionEffect;
-import gg.warcraft.monolith.api.world.PotionEffectType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
+import gg.warcraft.monolith.app.combat.SimplePotionEffect;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityHealthChangedEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreDamageEvent;
-import gg.warcraft.monolith.app.world.SimplePotionEffect;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-// TODO: this class is severely lacking tests
+// TODO this class is severely lacking tests
 public abstract class AbstractEntityCommandService implements EntityCommandService {
     private final EntityQueryService entityQueryService;
     private final EntityServerAdapter entityServerAdapter;
@@ -94,19 +94,20 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     @Override
     public void damage(UUID entityId, CombatValue amount) {
         CombatValue damage = amount;
-        EntityPreDamageEvent entityPreDamageEvent = new SimpleEntityPreDamageEvent(entityId, damage, false);
+        Entity entity = entityQueryService.getEntity(entityId);
+        EntityType entityType = entity.getType();
+        EntityPreDamageEvent entityPreDamageEvent = new SimpleEntityPreDamageEvent(entityId, entityType, damage, false);
         eventService.publish(entityPreDamageEvent);
         if (entityPreDamageEvent.isCancelled()) {
             return;
         }
 
-        Entity previousEntity = entityQueryService.getEntity(entityId);
-        float previousHealth = previousEntity.getHealth();
+        float previousHealth = entity.getHealth();
 
         damage = entityPreDamageEvent.getDamage();
         entityServerAdapter.damage(entityId, damage.getModifiedValue());
 
-        EntityDamageEvent entityDamageEvent = new SimpleEntityDamageEvent(entityId, damage);
+        EntityDamageEvent entityDamageEvent = new SimpleEntityDamageEvent(entityId, entityType, damage);
         eventService.publish(entityDamageEvent);
 
         Entity newEntity = entityQueryService.getEntity(entityId);
@@ -115,7 +116,7 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
             float maxHealth = newEntity.getAttributes().getValue(GenericAttribute.MAX_HEALTH);
             float previousPercentHealth = previousHealth / maxHealth;
             float newPercentHealth = newHealth / maxHealth;
-            EntityHealthChangedEvent entityHealthChangedEvent = new SimpleEntityHealthChangedEvent(entityId,
+            EntityHealthChangedEvent entityHealthChangedEvent = new SimpleEntityHealthChangedEvent(entityId, entityType,
                     previousHealth, previousPercentHealth, newHealth, newPercentHealth);
             eventService.publish(entityHealthChangedEvent);
         }

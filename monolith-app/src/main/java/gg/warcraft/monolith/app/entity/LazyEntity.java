@@ -69,7 +69,8 @@ public class LazyEntity implements Entity {
 
     @Override
     public Team getTeam() {
-        return profile.get().getTeam();
+        return null;
+        // TODO return profile.get().getData().get("team");
     }
 
     @Override

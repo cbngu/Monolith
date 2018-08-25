@@ -2,7 +2,6 @@ package gg.warcraft.monolith.app.entity.player.persistence;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gg.warcraft.monolith.api.entity.Team;
 
 import java.util.Map;
 import java.util.UUID;
@@ -16,7 +15,6 @@ public class PlayerProfileItem {
     private final Map<String, Integer> currencies;
     private final Map<String, Integer> lifetimeCurrencies;
     private final Map<String, String> data;
-    private final Team team;
 
     @JsonCreator
     public PlayerProfileItem(@JsonProperty("playerId") UUID playerId,
@@ -26,8 +24,7 @@ public class PlayerProfileItem {
                              @JsonProperty("timePlayed") long timePlayed,
                              @JsonProperty("currencies") Map<String, Integer> currencies,
                              @JsonProperty("lifetimeCurrencies") Map<String, Integer> lifetimeCurrencies,
-                             @JsonProperty("data") Map<String, String> data,
-                             @JsonProperty("team") Team team) {
+                             @JsonProperty("data") Map<String, String> data) {
         this.playerId = playerId;
         this.timeConnected = timeConnected;
         this.timeFirstConnected = timeFirstConnected;
@@ -36,7 +33,6 @@ public class PlayerProfileItem {
         this.currencies = currencies;
         this.lifetimeCurrencies = lifetimeCurrencies;
         this.data = data;
-        this.team = team;
     }
 
     public UUID getPlayerId() {
@@ -69,9 +65,5 @@ public class PlayerProfileItem {
 
     public Map<String, String> getData() {
         return data;
-    }
-
-    public Team getTeam() {
-        return team;
     }
 }

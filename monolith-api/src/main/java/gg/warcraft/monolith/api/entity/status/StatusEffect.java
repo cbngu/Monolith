@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.api.entity.status;
 
+import gg.warcraft.monolith.api.combat.CombatSource;
 import gg.warcraft.monolith.api.entity.event.EntityDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
 import gg.warcraft.monolith.api.entity.event.EntityHealthChangedEvent;
@@ -7,22 +8,10 @@ import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreFatalDamageEvent;
 import gg.warcraft.monolith.api.util.Duration;
 
-import java.util.UUID;
-
 /**
  * A StatusEffect is an effect that is currently, for better or for worse, affecting an {@code Entity}.
  */
-public interface StatusEffect {
-
-    /**
-     * @return The id of the entity this effect belongs to. Never null.
-     */
-    UUID getEntityId();
-
-    /**
-     * @return The duration of this effect. Can be null if it should not automatically expire.
-     */
-    Duration getDuration();
+public interface StatusEffect extends CombatSource {
 
     /**
      * Returns the type of this effect.
@@ -33,6 +22,11 @@ public interface StatusEffect {
      * @return The type of this effect. Can be null, but not empty.
      */
     String getType();
+
+    /**
+     * @return The duration of this effect. Can be null if it should not automatically expire.
+     */
+    Duration getDuration();
 
     /**
      * @param event The event representing the damage the entity this status effect belongs to is about to take. Never
@@ -72,7 +66,7 @@ public interface StatusEffect {
         // do nothing
     }
 
-    default void onExpiry() { // FIXME do we want this?
+    default void onExpiry() {
         // do nothing
     }
 }

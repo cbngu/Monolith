@@ -1,12 +1,11 @@
 package gg.warcraft.monolith.api.entity.service;
 
+import gg.warcraft.monolith.api.combat.PotionEffect;
+import gg.warcraft.monolith.api.combat.PotionEffectType;
 import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.entity.EntityType;
-import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
-import gg.warcraft.monolith.api.world.PotionEffect;
-import gg.warcraft.monolith.api.world.PotionEffectType;
 import org.joml.Vector3fc;
 
 import java.util.UUID;
@@ -27,9 +26,11 @@ public interface EntityCommandService {
 
     /**
      * @param entityId The id of the entity. Can not be null.
-     * @param team     The new team of the entity. Can not be null.
+     * @param data     The data to set. Can not be null or empty.
+     * @param value    The new value of the data. Can be null or empty, but either of these values will result in the
+     *                 data being removed from the entity.
      */
-    void setTeam(UUID entityId, Team team);
+    void setData(UUID entityId, String data, String value);
 
     /**
      * @param entityId The id of the entity. Can not be null.

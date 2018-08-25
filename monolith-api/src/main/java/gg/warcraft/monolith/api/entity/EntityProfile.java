@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.api.entity;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -13,7 +14,7 @@ public interface EntityProfile {
     UUID getEntityId();
 
     /**
-     * @return The team of the entity. Can be null.
+     * @return The persisted data of the entity. Never null, but can be empty.
      */
-    Team getTeam();
+    Map<String, String> getData();
 }

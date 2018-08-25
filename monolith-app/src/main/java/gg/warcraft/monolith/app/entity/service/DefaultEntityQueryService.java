@@ -16,6 +16,8 @@ import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.entity.LazyEntity;
 import gg.warcraft.monolith.app.entity.SimpleEntityTarget;
+import org.joml.AABBf;
+import org.joml.Intersectionf;
 import org.joml.LineSegmentf;
 import org.joml.Vector2f;
 import org.joml.Vector3fc;
@@ -77,8 +79,8 @@ public class DefaultEntityQueryService implements EntityQueryService {
 
     @Override
     public EntityTarget getTarget(UUID entityId, float range) { // TODO should this be in PlayerQueryService?
-        Entity player = getEntity(entityId);
-        OrientedLocation origin = player.getEyeLocation();
+        Entity entity = getEntity(entityId);
+        OrientedLocation origin = entity.getEyeLocation();
         Vector3fc direction = origin.getDirection();
         Location target = origin;
         Block block;
@@ -90,30 +92,33 @@ public class DefaultEntityQueryService implements EntityQueryService {
             }
         } while (origin.toVector().distance(target.toVector()) <= range);
 
-        float minX = Math.min(origin.getX(), target.getX());
-        float maxX = Math.max(origin.getX(), target.getX());
-        float minY = Math.min(origin.getY(), target.getY());
-        float maxY = Math.max(origin.getY(), target.getY());
-        float minZ = Math.min(origin.getZ(), target.getZ());
-        float maxZ = Math.max(origin.getZ(), target.getZ());
+        AABBf boundingBox = new AABBf(origin.toVector(), target.toVector());
+        boundingBox = boundingBox.correctBounds();
 
-        float deltaX = (maxX - minX) * 0.5f;
-        float deltaY = (maxY - minY) * 0.5f;
-        float deltaZ = (maxZ - minZ) * 0.5f;
+        float deltaX = (boundingBox.maxX - boundingBox.minX) * 0.5f;
+        float deltaY = (boundingBox.maxY - boundingBox.minY) * 0.5f;
+        float deltaZ = (boundingBox.maxZ - boundingBox.minZ) * 0.5f;
 
-        float centerX = minX + deltaX;
-        float centerY = minY + deltaY;
-        float centerZ = minZ + deltaZ;
+        float centerX = boundingBox.minX + deltaX;
+        float centerY = boundingBox.minY + deltaY;
+        float centerZ = boundingBox.minZ + deltaZ;
 
         Location center = worldQueryService.getLocation(origin.getWorld().getType(), centerX, centerY, centerZ);
-        LineSegmentf intersectionLine = new LineSegmentf(origin.getX(), origin.getY(), origin.getZ(),
-                target.getX(), target.getY(), target.getZ());
-        List<Entity> entities = getNearbyEntities(center, deltaX, deltaY, deltaZ);
-        Entity closestIntersectedEntity;
-        for (Entity entity : entities) {
-            Vector2f result = new Vector2f();
-            entity.getBoundingBox().intersectLineSegment(intersectionLine, result);
+        LineSegmentf intersectionLine = new LineSegmentf(origin.toVector(), target.toVector());
+        List<Entity> nearbyEntities = getNearbyEntities(center, deltaX, deltaY, deltaZ);
+        float closestIntersectionScalar = Float.MAX_VALUE;
+        Entity closestIntersectedEntity = null;
+        for (Entity nearbyEntity : nearbyEntities) {
+            Vector2f intersection = new Vector2f();
+            int result = nearbyEntity.getBoundingBox().intersectLineSegment(intersectionLine, intersection);
+            if (result != Intersectionf.OUTSIDE) {
+                if (intersection.x < closestIntersectionScalar) {
+                    closestIntersectionScalar = intersection.x;
+                    closestIntersectedEntity = nearbyEntity;
+                }
+            }
         }
-        return new SimpleEntityTarget(null, null); // TODO add values
+        // NOTE to add the location of intersection with entity use p(t) = p0 + t * (p1 - p0) where t is the closestIntersectionScalar
+        return new SimpleEntityTarget(closestIntersectedEntity, block);
     }
 }

@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import gg.warcraft.monolith.api.core.JsonMapper;
 import gg.warcraft.monolith.api.core.PersistenceService;
-import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.app.entity.player.SimplePlayerProfile;
@@ -41,9 +40,8 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         Map<String, Integer> currencies = item.getCurrencies();
         Map<String, Integer> lifetimeCurrencies = item.getLifetimeCurrencies();
         Map<String, String> data = item.getData();
-        Team team = item.getTeam();
         return new SimplePlayerProfile(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, lifetimeCurrencies, data, team);
+                currencies, lifetimeCurrencies, data);
     }
 
     @Override
@@ -72,9 +70,8 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         Map<String, Integer> currencies = profile.getCurrencies();
         Map<String, Integer> lifetimeCurrencies = profile.getLifetimeCurrencies();
         Map<String, String> data = profile.getData();
-        Team team = profile.getTeam();
         return new PlayerProfileItem(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed, currencies,
-                lifetimeCurrencies, data, team);
+                lifetimeCurrencies, data);
     }
 
     @Override
