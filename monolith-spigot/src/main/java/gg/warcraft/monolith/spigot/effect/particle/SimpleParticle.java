@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.spigot.particle;
+package gg.warcraft.monolith.spigot.effect.particle;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;

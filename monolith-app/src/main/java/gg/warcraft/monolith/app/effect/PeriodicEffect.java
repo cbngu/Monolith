@@ -26,7 +26,7 @@ public class PeriodicEffect implements Effect {
         this.taskService = taskService;
         this.location = location;
         this.renderers = new ArrayList<>();
-        this.task = taskService.runTask(this, timeUtils.oneTick(), period);
+        this.task = taskService.runTask(this, timeUtils.immediately(), period);
     }
 
     public Location getLocation() {

@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.spigot.particle;
+package gg.warcraft.monolith.spigot.effect.particle;
 
 import de.slikey.effectlib.util.ParticleEffect;
 import gg.warcraft.monolith.api.effect.ParticleType;
