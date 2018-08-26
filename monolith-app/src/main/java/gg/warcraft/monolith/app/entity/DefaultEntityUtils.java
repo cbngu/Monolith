@@ -59,6 +59,10 @@ public class DefaultEntityUtils implements EntityUtils {
         float closestIntersectionScalar = Float.MAX_VALUE;
         Entity closestIntersectedEntity = null;
         for (Entity nearbyEntity : nearbyEntities) {
+            if (ignore.test(nearbyEntity)) {
+                continue;
+            }
+
             Vector2f intersectionResult = new Vector2f();
             int result = nearbyEntity.getBoundingBox().intersectLineSegment(intersectionLine, intersectionResult);
             if (result != Intersectionf.OUTSIDE) {
