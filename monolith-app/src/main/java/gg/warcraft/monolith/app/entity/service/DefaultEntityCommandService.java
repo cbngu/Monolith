@@ -1,11 +1,13 @@
 package gg.warcraft.monolith.app.entity.service;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.EntityProfile;
 import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
+import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
@@ -18,8 +20,10 @@ import java.util.UUID;
 public class DefaultEntityCommandService extends AbstractEntityCommandService {
     private final EntityProfileRepository entityProfileRepository;
 
+
     @Inject
-    public DefaultEntityCommandService(EntityProfileRepository entityProfileRepository, EntityQueryService entityQueryService,
+    public DefaultEntityCommandService(EntityProfileRepository entityProfileRepository,
+                                       EntityQueryService entityQueryService,
                                        EntityServerAdapter entityServerAdapter, WorldQueryService worldQueryService,
                                        EventService eventService, BlockUtils blockUtils, BlockTypeUtils blockTypeUtils,
                                        TimeUtils timeUtils) {
@@ -29,15 +33,38 @@ public class DefaultEntityCommandService extends AbstractEntityCommandService {
     }
 
     @Override
-    public void setData(UUID entityId, String data, String value) {
-        EntityProfile entityProfile = entityProfileRepository.get(entityId);
-        Map<String, String> newEntityData = entityProfile.getData();
-        if (value != null && !value.isEmpty()) {
-            newEntityData.put(data, value);
-        } else {
-            newEntityData.remove(data);
+    public void setTeam(UUID entityId, Team team) {
+        EntityProfile profile = entityProfileRepository.get(entityId);
+        if (profile == null) {
+            throw new IllegalArgumentException("Failed to set team for non-existent non-player entity with id "
+                    + entityId + ", did you mean to use PlayerCommandService::setTeam?");
         }
-        EntityProfile newEntityProfile = new SimpleEntityProfile(entityProfile.getEntityId(), newEntityData);
-        entityProfileRepository.save(newEntityProfile);
+
+        EntityProfile newProfile = new SimpleEntityProfile(profile.getEntityId(), team.getName(), profile.getData());
+        entityProfileRepository.save(newProfile);
+    }
+
+    @Override
+    public void setData(UUID entityId, String data, String value) {
+        Preconditions.checkNotNull(data);
+        Preconditions.checkArgument(!data.isEmpty());
+        if (value != null) {
+            Preconditions.checkArgument(!value.isEmpty());
+        }
+
+        EntityProfile profile = entityProfileRepository.get(entityId);
+        if (profile == null) {
+            throw new IllegalArgumentException("Failed to set data for non-existent non-player entity with id "
+                    + entityId + ", did you mean to use PlayerCommandService::setData?");
+        }
+
+        Map<String, String> newData = profile.getData();
+        if (value != null) {
+            newData.put(data, value);
+        } else {
+            newData.remove(data);
+        }
+        EntityProfile newProfile = new SimpleEntityProfile(profile.getEntityId(), profile.getTeam(), newData);
+        entityProfileRepository.save(newProfile);
     }
 }

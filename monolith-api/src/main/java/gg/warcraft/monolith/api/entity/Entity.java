@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.entity;
 
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.status.Status;
+import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import org.joml.AABBf;
 import org.joml.Vector3f;
@@ -52,6 +53,12 @@ public interface Entity {
      * @return The team of this entity. Can be null.
      */
     Team getTeam();
+
+    /**
+     * @param key The data. Can not be null.
+     * @return The value of the data. Can be null, but never empty.
+     */
+    String getData(String key);
 
     /**
      * @return The attributes of this entity. Never null.

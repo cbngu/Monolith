@@ -1,4 +1,4 @@
-package gg.warcraft.monolith.api.entity;
+package gg.warcraft.monolith.api.entity.team;
 
 import gg.warcraft.monolith.api.util.ColorCode;
 import gg.warcraft.monolith.api.util.ColorHue;

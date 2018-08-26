@@ -16,10 +16,11 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     private long timeConnected;
     private long timeLastSeen;
     private long timePlayed;
+    private String team;
 
     public SimplePlayerProfileCopyer(UUID playerId, long timeConnected, long timeFirstConnected, long timeLastSeen,
                                      long timePlayed, Map<String, Integer> currencies,
-                                     Map<String, Integer> lifetimeCurrencies, Map<String, String> data) {
+                                     Map<String, Integer> lifetimeCurrencies, String team, Map<String, String> data) {
         this.playerId = playerId;
         this.timeConnected = timeConnected;
         this.timeFirstConnected = timeFirstConnected;
@@ -27,6 +28,7 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
         this.timePlayed = timePlayed;
         this.currencies = currencies;
         this.lifetimeCurrencies = lifetimeCurrencies;
+        this.team = team;
         this.data = data;
     }
 
@@ -63,6 +65,12 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     }
 
     @Override
+    public PlayerProfileCopyer withTeam(String team) {
+        this.team = team;
+        return this;
+    }
+
+    @Override
     public PlayerProfileCopyer withData(Map<String, String> data) {
         this.data.clear();
         this.data.putAll(data);
@@ -72,6 +80,6 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     @Override
     public PlayerProfile copy() {
         return new SimplePlayerProfile(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, lifetimeCurrencies, data);
+                currencies, lifetimeCurrencies, team, data);
     }
 }

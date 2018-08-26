@@ -33,9 +33,13 @@ import gg.warcraft.monolith.api.effect.EffectRenderer;
 import gg.warcraft.monolith.api.effect.EffectRendererFactory;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.EffectVectorsFactory;
+import gg.warcraft.monolith.api.entity.Entity;
+import gg.warcraft.monolith.api.entity.EntityFactory;
+import gg.warcraft.monolith.api.entity.EntityUtils;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeRepository;
+import gg.warcraft.monolith.api.entity.player.Player;
 import gg.warcraft.monolith.api.entity.player.hiding.PlayerHidingCommandService;
 import gg.warcraft.monolith.api.entity.player.hiding.PlayerHidingQueryService;
 import gg.warcraft.monolith.api.entity.player.hiding.PlayerHidingRepository;
@@ -48,6 +52,9 @@ import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusRepository;
+import gg.warcraft.monolith.api.entity.team.service.TeamCommandService;
+import gg.warcraft.monolith.api.entity.team.service.TeamQueryService;
+import gg.warcraft.monolith.api.entity.team.service.TeamRepository;
 import gg.warcraft.monolith.api.item.ItemBuilder;
 import gg.warcraft.monolith.api.item.ItemBuilderFactory;
 import gg.warcraft.monolith.api.item.ItemReader;
@@ -64,6 +71,8 @@ import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.DirectionUtils;
 import gg.warcraft.monolith.api.world.WorldType;
+import gg.warcraft.monolith.api.world.block.BlockIterator;
+import gg.warcraft.monolith.api.world.block.BlockIteratorFactory;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupCommandService;
@@ -107,9 +116,12 @@ import gg.warcraft.monolith.app.effect.vectors.OriginVector;
 import gg.warcraft.monolith.app.effect.vectors.PointVector;
 import gg.warcraft.monolith.app.effect.vectors.RingVectors;
 import gg.warcraft.monolith.app.effect.vectors.SphereVectors;
+import gg.warcraft.monolith.app.entity.DefaultEntityUtils;
+import gg.warcraft.monolith.app.entity.LazyEntity;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeCommandService;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeQueryService;
 import gg.warcraft.monolith.app.entity.attribute.service.DefaultAttributeRepository;
+import gg.warcraft.monolith.app.entity.player.LazyPlayer;
 import gg.warcraft.monolith.app.entity.player.hiding.DefaultPlayerHidingCommandService;
 import gg.warcraft.monolith.app.entity.player.hiding.DefaultPlayerHidingQueryService;
 import gg.warcraft.monolith.app.entity.player.hiding.DefaultPlayerHidingRepository;
@@ -122,6 +134,9 @@ import gg.warcraft.monolith.app.entity.service.DefaultEntityQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusCommandService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
+import gg.warcraft.monolith.app.entity.team.service.DefaultTeamCommandService;
+import gg.warcraft.monolith.app.entity.team.service.DefaultTeamQueryService;
+import gg.warcraft.monolith.app.entity.team.service.DefaultTeamRepository;
 import gg.warcraft.monolith.app.item.SimpleItemBuilder;
 import gg.warcraft.monolith.app.item.SimpleItemReader;
 import gg.warcraft.monolith.app.menu.SimpleButtonBuilder;
@@ -135,6 +150,7 @@ import gg.warcraft.monolith.app.util.DefaultTimeUtils;
 import gg.warcraft.monolith.app.world.DefaultDirectionUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockTypeUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockUtils;
+import gg.warcraft.monolith.app.world.block.SimpleBlockIterator;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupCommandService;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupQueryService;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupRepository;
@@ -294,11 +310,22 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(StatusQueryService.class).to(DefaultStatusQueryService.class);
         bind(StatusRepository.class).to(DefaultStatusRepository.class);
 
+        bind(TeamCommandService.class).to(DefaultTeamCommandService.class);
+        bind(TeamQueryService.class).to(DefaultTeamQueryService.class);
+        bind(TeamRepository.class).to(DefaultTeamRepository.class);
+
         bind(PlayerHidingCommandService.class).to(DefaultPlayerHidingCommandService.class);
         bind(PlayerHidingQueryService.class).to(DefaultPlayerHidingQueryService.class);
         bind(PlayerHidingRepository.class).to(DefaultPlayerHidingRepository.class);
 
+        bind(EntityUtils.class).to(DefaultEntityUtils.class);
+
         bind(Float.class).annotatedWith(Names.named("BaseHealth")).toInstance(baseHealth);
+
+        install(new FactoryModuleBuilder()
+                .implement(Entity.class, Names.named("entity"), LazyEntity.class)
+                .implement(Player.class, Names.named("player"), LazyPlayer.class)
+                .build(EntityFactory.class));
     }
 
     private void configureItem() {
@@ -378,5 +405,9 @@ public class AbstractMonolithModule extends AbstractModule {
         install(new FactoryModuleBuilder()
                 .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)
                 .build(BoundingBlockBoxFactory.class));
+
+        install(new FactoryModuleBuilder()
+                .implement(BlockIterator.class, SimpleBlockIterator.class)
+                .build(BlockIteratorFactory.class));
     }
 }

@@ -1,7 +1,6 @@
 package gg.warcraft.monolith.api.entity.service;
 
 import gg.warcraft.monolith.api.entity.Entity;
-import gg.warcraft.monolith.api.entity.EntityTarget;
 import gg.warcraft.monolith.api.world.Location;
 
 import java.util.List;
@@ -38,10 +37,4 @@ public interface EntityQueryService {
      * never null.
      */
     List<Entity> getNearbyEntities(Location location, float deltaX, float deltaY, float deltaZ);
-
-    /**
-     * @param entityId The id of the entity. Can not be null.
-     * @return The target of the entity. Never null.
-     */
-    EntityTarget getTarget(UUID entityId, float range);
 }

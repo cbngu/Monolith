@@ -9,4 +9,6 @@ public interface EntityProfileRepository {
     EntityProfile get(UUID entityId);
 
     void save(EntityProfile profile);
+
+    void delete(UUID entityId);
 }

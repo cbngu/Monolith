@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.api.entity.player.service;
 
 import gg.warcraft.monolith.api.entity.player.Currency;
+import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.item.Item;
 
 import java.util.UUID;
@@ -12,6 +13,20 @@ import java.util.UUID;
  * trigger an update of the total play time of a {@code Player}.
  */
 public interface PlayerCommandService {
+
+    /**
+     * @param playerId The id of the player. Can not be null.
+     * @param team     The new team of the player. Can be null.
+     */
+    void setTeam(UUID playerId, Team team);
+
+    /**
+     * @param playerId The id of the player. Can not be null.
+     * @param data     The data to set. Can not be null or empty.
+     * @param value    The new value of the data. Can be null or empty, but either of these values will result in the
+     *                 data being removed from the player.
+     */
+    void setData(UUID playerId, String data, String value);
 
     void addCurrency(UUID playerId, Currency currency, int amount);
 

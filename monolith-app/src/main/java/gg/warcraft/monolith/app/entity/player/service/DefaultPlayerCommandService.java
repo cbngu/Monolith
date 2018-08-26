@@ -9,6 +9,7 @@ import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyLostEvent;
 import gg.warcraft.monolith.api.entity.player.service.PlayerCommandService;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
+import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.util.ColorCode;
 import gg.warcraft.monolith.app.entity.player.event.SimplePlayerCurrencyGainedEvent;
@@ -28,6 +29,26 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
         this.playerProfileRepository = playerProfileRepository;
         this.playerServerAdapter = playerServerAdapter;
         this.eventService = eventService;
+    }
+
+    @Override
+    public void setTeam(UUID playerId, Team team) {
+        PlayerProfile profile = playerProfileRepository.get(playerId);
+        PlayerProfile newProfile = profile.getCopyer().withTeam(team.getName()).copy();
+        playerProfileRepository.save(newProfile);
+    }
+
+    @Override
+    public void setData(UUID playerId, String data, String value) {
+        PlayerProfile profile = playerProfileRepository.get(playerId);
+        Map<String, String> newData = profile.getData();
+        if (value != null && !value.isEmpty()) {
+            newData.put(data, value);
+        } else {
+            newData.remove(data);
+        }
+        PlayerProfile newProfile = profile.getCopyer().withData(newData).copy();
+        playerProfileRepository.save(newProfile);
     }
 
     @Override

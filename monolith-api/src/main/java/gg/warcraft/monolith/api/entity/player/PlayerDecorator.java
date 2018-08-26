@@ -2,9 +2,9 @@ package gg.warcraft.monolith.api.entity.player;
 
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.Equipment;
-import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.status.Status;
+import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import org.joml.AABBf;

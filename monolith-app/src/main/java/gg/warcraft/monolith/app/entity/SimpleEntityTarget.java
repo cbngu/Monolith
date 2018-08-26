@@ -1,25 +1,25 @@
 package gg.warcraft.monolith.app.entity;
 
-import gg.warcraft.monolith.api.entity.Entity;
+import gg.warcraft.monolith.api.entity.EntityIntersection;
 import gg.warcraft.monolith.api.entity.EntityTarget;
-import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.BlockIntersection;
 
 public class SimpleEntityTarget implements EntityTarget {
-    private final Entity entity;
-    private final Block block;
+    private final BlockIntersection blockIntersection;
+    private final EntityIntersection entityIntersection;
 
-    public SimpleEntityTarget(Entity entity, Block block) {
-        this.entity = entity;
-        this.block = block;
+    public SimpleEntityTarget(BlockIntersection blockIntersection, EntityIntersection entityIntersection) {
+        this.blockIntersection = blockIntersection;
+        this.entityIntersection = entityIntersection;
     }
 
     @Override
-    public Entity getEntity() {
-        return entity;
+    public BlockIntersection getBlockIntersection() {
+        return blockIntersection;
     }
 
     @Override
-    public Block getBlock() {
-        return block;
+    public EntityIntersection getEntityIntersection() {
+        return entityIntersection;
     }
 }

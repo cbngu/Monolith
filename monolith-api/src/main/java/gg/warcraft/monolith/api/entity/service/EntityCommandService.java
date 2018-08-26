@@ -4,6 +4,7 @@ import gg.warcraft.monolith.api.combat.PotionEffect;
 import gg.warcraft.monolith.api.combat.PotionEffectType;
 import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.world.Location;
 import org.joml.Vector3fc;
@@ -23,6 +24,12 @@ public interface EntityCommandService {
      * @param velocity The new velocity of the entity. Can not be null.
      */
     void setVelocity(UUID entityId, Vector3fc velocity);
+
+    /**
+     * @param entityId The id of the entity. Can not be null.
+     * @param team     The new team of the entity. Can be null.
+     */
+    void setTeam(UUID entityId, Team team);
 
     /**
      * @param entityId The id of the entity. Can not be null.

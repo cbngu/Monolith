@@ -1,10 +1,13 @@
 package gg.warcraft.monolith.app.entity.player;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.player.Player;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.status.Status;
+import gg.warcraft.monolith.api.entity.team.service.TeamQueryService;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.util.Lazy;
 import gg.warcraft.monolith.app.entity.LazyEntity;
@@ -16,9 +19,13 @@ public class LazyPlayer extends LazyEntity implements Player {
     private final Lazy<PlayerProfile> profile;
     private final Lazy<PlayerServerData> serverData;
 
-    public LazyPlayer(Supplier<PlayerProfile> profileSupplier, Supplier<PlayerServerData> serverDataSupplier,
-                      Supplier<Attributes> attributesSupplier, Supplier<Status> statusSupplier) {
-        super(profileSupplier, serverDataSupplier, attributesSupplier, statusSupplier);
+    @Inject
+    public LazyPlayer(TeamQueryService teamQueryService,
+                      @Assisted("profile") Supplier<PlayerProfile> profileSupplier,
+                      @Assisted("data") Supplier<PlayerServerData> serverDataSupplier,
+                      @Assisted("attributes") Supplier<Attributes> attributesSupplier,
+                      @Assisted("status") Supplier<Status> statusSupplier) {
+        super(teamQueryService, profileSupplier, serverDataSupplier, attributesSupplier, statusSupplier);
         this.profile = new Lazy<>(profileSupplier);
         this.serverData = new Lazy<>(serverDataSupplier);
     }
@@ -51,11 +58,6 @@ public class LazyPlayer extends LazyEntity implements Player {
     @Override
     public int getLifetimeCurrency(String currency) {
         return profile.get().getLifetimeCurrencies().getOrDefault(currency, 0);
-    }
-
-    @Override
-    public String getData(String key) {
-        return profile.get().getData().get(key);
     }
 
     @Override

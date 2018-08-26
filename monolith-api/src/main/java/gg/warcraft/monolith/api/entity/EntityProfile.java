@@ -14,6 +14,11 @@ public interface EntityProfile {
     UUID getEntityId();
 
     /**
+     * @return The name of the team of the entity. Can be null, but never empty.
+     */
+    String getTeam();
+
+    /**
      * @return The persisted data of the entity. Never null, but can be empty.
      */
     Map<String, String> getData();

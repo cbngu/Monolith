@@ -1,5 +1,7 @@
 package gg.warcraft.monolith.api.world.block;
 
+import gg.warcraft.monolith.api.world.Location;
+
 import java.util.Set;
 
 /**
@@ -65,4 +67,13 @@ public interface BlockUtils {
      * @return The block neighbouring this block at the given block face. Never null.
      */
     Block getRelative(Block block, BlockFace at);
+
+    /**
+     * @param origin The starting location. Can not be null.
+     * @param target The target location. Can not be null.
+     * @param ignore The block types to ignore. Can not be null, but can be empty.
+     * @return The closest block the ray starting at origin towards target intersected who's type is not in ignore.
+     * Can be null.
+     */
+    BlockIntersection intersectBlock(Location origin, Location target, Set<BlockType> ignore);
 }

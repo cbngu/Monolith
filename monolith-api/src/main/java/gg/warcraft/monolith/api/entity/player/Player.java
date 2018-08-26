@@ -43,8 +43,6 @@ public interface Player extends Entity {
      */
     int getLifetimeCurrency(String currency);
 
-    String getData(String key);
-
     /**
      * @return All items in the inventory of this player. Never null, but can be empty. Items are never null.
      */

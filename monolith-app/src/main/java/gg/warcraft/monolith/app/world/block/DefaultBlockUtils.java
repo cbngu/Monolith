@@ -2,8 +2,12 @@ package gg.warcraft.monolith.app.world.block;
 
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.BlockLocation;
+import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
+import gg.warcraft.monolith.api.world.block.BlockIntersection;
+import gg.warcraft.monolith.api.world.block.BlockIterator;
+import gg.warcraft.monolith.api.world.block.BlockIteratorFactory;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
@@ -14,10 +18,12 @@ import java.util.stream.Collectors;
 
 public class DefaultBlockUtils implements BlockUtils {
     private final WorldQueryService worldQueryService;
+    private final BlockIteratorFactory blockIteratorFactory;
 
     @Inject
-    public DefaultBlockUtils(WorldQueryService worldQueryService) {
+    public DefaultBlockUtils(WorldQueryService worldQueryService, BlockIteratorFactory blockIteratorFactory) {
         this.worldQueryService = worldQueryService;
+        this.blockIteratorFactory = blockIteratorFactory;
     }
 
     @Override
@@ -139,5 +145,18 @@ public class DefaultBlockUtils implements BlockUtils {
             default:
                 throw new IllegalArgumentException("Failed to get relative block for illegal block face " + at);
         }
+    }
+
+    @Override
+    public BlockIntersection intersectBlock(Location origin, Location target, Set<BlockType> ignore) {
+        BlockIterator blockIterator = blockIteratorFactory.createBlockIterator(origin, target);
+        while (blockIterator.hasNext()) {
+            Block currentBlock = blockIterator.next();
+            if (!ignore.contains(currentBlock.getType())) {
+                Location intersection = blockIterator.calculateIntersection();
+                return new SimpleBlockIntersection(currentBlock, null, intersection);
+            }
+        }
+        return null;
     }
 }

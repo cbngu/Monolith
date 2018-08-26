@@ -1,13 +1,16 @@
 package gg.warcraft.monolith.app.entity;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityProfile;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.Equipment;
-import gg.warcraft.monolith.api.entity.Team;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.status.Status;
+import gg.warcraft.monolith.api.entity.team.Team;
+import gg.warcraft.monolith.api.entity.team.service.TeamQueryService;
 import gg.warcraft.monolith.api.util.Lazy;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import org.joml.AABBf;
@@ -17,15 +20,19 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LazyEntity implements Entity {
+    private final TeamQueryService teamQueryService;
     private final Lazy<? extends EntityProfile> profile;
     private final Lazy<? extends EntityServerData> serverData;
     private final Lazy<Attributes> attributes;
     private final Lazy<Status> status;
 
-    public LazyEntity(Supplier<? extends EntityProfile> profileSupplier,
-                      Supplier<? extends EntityServerData> serverDataSupplier,
-                      Supplier<Attributes> attributesSupplier,
-                      Supplier<Status> statusSupplier) {
+    @Inject
+    public LazyEntity(TeamQueryService teamQueryService,
+                      @Assisted("profile") Supplier<? extends EntityProfile> profileSupplier,
+                      @Assisted("data") Supplier<? extends EntityServerData> serverDataSupplier,
+                      @Assisted("attributes") Supplier<Attributes> attributesSupplier,
+                      @Assisted("status") Supplier<Status> statusSupplier) {
+        this.teamQueryService = teamQueryService;
         this.profile = new Lazy<>(profileSupplier);
         this.serverData = new Lazy<>(serverDataSupplier);
         this.attributes = new Lazy<>(attributesSupplier);
@@ -69,8 +76,13 @@ public class LazyEntity implements Entity {
 
     @Override
     public Team getTeam() {
-        return null;
-        // TODO return profile.get().getData().get("team");
+        String team = profile.get().getTeam();
+        return teamQueryService.getTeam(team);
+    }
+
+    @Override
+    public String getData(String key) {
+        return profile.get().getData().get(key);
     }
 
     @Override
