@@ -13,8 +13,8 @@ import java.util.function.Supplier;
 public interface EntityFactory {
 
     @Named("entity")
-    Entity createEntity(@Assisted("profile") Supplier<EntityProfile> profileSupplier,
-                        @Assisted("data") Supplier<EntityServerData> serverDataSupplier,
+    Entity createEntity(@Assisted("profile") Supplier<? extends EntityProfile> profileSupplier,
+                        @Assisted("data") Supplier<? extends EntityServerData> serverDataSupplier,
                         @Assisted("attributes") Supplier<Attributes> attributesSupplier,
                         @Assisted("status") Supplier<Status> statusSupplier);
 
