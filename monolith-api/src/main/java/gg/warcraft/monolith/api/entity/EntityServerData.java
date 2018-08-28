@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.api.entity;
 
-import gg.warcraft.monolith.api.world.OrientedLocation;
+import gg.warcraft.monolith.api.world.location.OrientedLocation;
 import org.joml.AABBf;
 import org.joml.Vector3f;
 

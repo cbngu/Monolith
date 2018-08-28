@@ -1,7 +1,7 @@
 package gg.warcraft.monolith.api.world.block;
 
 import com.google.inject.assistedinject.Assisted;
-import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.location.Location;
 
 public interface BlockIteratorFactory {
 

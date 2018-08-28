@@ -1,10 +1,11 @@
-package gg.warcraft.monolith.api.world;
+package gg.warcraft.monolith.api.world.location;
 
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.name.Named;
 import gg.warcraft.monolith.api.config.BlockLocationConfiguration;
 import gg.warcraft.monolith.api.config.LocationConfiguration;
 import gg.warcraft.monolith.api.config.OrientedLocationConfiguration;
+import gg.warcraft.monolith.api.world.WorldType;
 import org.joml.Vector3fc;
 
 public interface LocationFactory {

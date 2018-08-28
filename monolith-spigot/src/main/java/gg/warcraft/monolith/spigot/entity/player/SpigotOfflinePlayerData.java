@@ -4,7 +4,7 @@ import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.Equipment;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.item.Item;
-import gg.warcraft.monolith.api.world.OrientedLocation;
+import gg.warcraft.monolith.api.world.location.OrientedLocation;
 import org.bukkit.OfflinePlayer;
 import org.joml.AABBf;
 import org.joml.Vector3f;

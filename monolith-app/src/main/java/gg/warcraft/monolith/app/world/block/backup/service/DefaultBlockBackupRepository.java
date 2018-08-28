@@ -3,16 +3,16 @@ package gg.warcraft.monolith.app.world.block.backup.service;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import gg.warcraft.monolith.api.core.PersistenceService;
-import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupRepository;
-import gg.warcraft.monolith.app.world.SimpleBlockLocation;
+import gg.warcraft.monolith.api.world.location.BlockLocation;
 import gg.warcraft.monolith.app.world.SimpleWorld;
 import gg.warcraft.monolith.app.world.block.backup.SimpleBlockBackup;
+import gg.warcraft.monolith.app.world.location.SimpleBlockLocation;
 
 import java.util.HashMap;
 import java.util.List;

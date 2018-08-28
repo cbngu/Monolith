@@ -16,7 +16,7 @@ import gg.warcraft.monolith.app.combat.event.SimpleProjectilePickupEvent;
 import gg.warcraft.monolith.app.combat.event.SimpleProjectilePreHitEvent;
 import gg.warcraft.monolith.app.combat.event.SimpleProjectilePreLaunchEvent;
 import gg.warcraft.monolith.app.combat.event.SimpleProjectilePrePickupEvent;
-import gg.warcraft.monolith.spigot.world.SpigotBlockMapper;
+import gg.warcraft.monolith.spigot.world.block.SpigotBlockMapper;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

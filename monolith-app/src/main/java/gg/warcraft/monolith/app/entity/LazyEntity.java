@@ -12,7 +12,7 @@ import gg.warcraft.monolith.api.entity.status.Status;
 import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.entity.team.service.TeamQueryService;
 import gg.warcraft.monolith.api.util.Lazy;
-import gg.warcraft.monolith.api.world.OrientedLocation;
+import gg.warcraft.monolith.api.world.location.OrientedLocation;
 import org.joml.AABBf;
 import org.joml.Vector3f;
 

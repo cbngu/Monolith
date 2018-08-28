@@ -1,7 +1,6 @@
 package gg.warcraft.monolith.api.world.service;
 
 import gg.warcraft.monolith.api.item.Item;
-import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.Sound;
 import gg.warcraft.monolith.api.world.SoundCategory;
 import gg.warcraft.monolith.api.world.World;
@@ -9,6 +8,7 @@ import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.Sign;
+import gg.warcraft.monolith.api.world.location.Location;
 import org.joml.Vector3f;
 
 import java.util.List;

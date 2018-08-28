@@ -1,12 +1,14 @@
-package gg.warcraft.monolith.api.world;
+package gg.warcraft.monolith.api.world.location;
 
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import gg.warcraft.monolith.api.world.World;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 /**
- * A Location represents a location in a world.
+ * A BlockLocation represents the location of a block. As blocks have integer coordinates this location object only
+ * supports integer operations.
  */
-public interface Location {
+public interface BlockLocation {
 
     /**
      * @return The world this location belongs to. Never null.
@@ -16,17 +18,17 @@ public interface Location {
     /**
      * @return The X coordinate of this location.
      */
-    float getX();
+    int getX();
 
     /**
      * @return The Y coordinate of this location.
      */
-    float getY();
+    int getY();
 
     /**
      * @return The Z coordinate of this location.
      */
-    float getZ();
+    int getZ();
 
     /**
      * @param x The X scalar.
@@ -34,7 +36,7 @@ public interface Location {
      * @param z The Z scalar.
      * @return A new location that is the result of adding the given scalars to this location. Never null.
      */
-    Location add(float x, float y, float z);
+    BlockLocation add(int x, int y, int z);
 
     /**
      * @param x The X scalar.
@@ -42,49 +44,49 @@ public interface Location {
      * @param z The Z scalar.
      * @return A new location that is the result of subtracting the given scalars from this location. Never null.
      */
-    Location sub(float x, float y, float z);
+    BlockLocation sub(int x, int y, int z);
 
     /**
      * @param vector The vector.
      * @return A new location that is the result of adding the given vector to this location. Never null.
      */
-    Location add(Vector3fc vector);
+    BlockLocation add(Vector3ic vector);
 
     /**
      * @param vector The vector.
      * @return A new location that is the result of subtracting the given vector from this location. Never null.
      */
-    Location sub(Vector3fc vector);
+    BlockLocation sub(Vector3ic vector);
 
     /**
      * @param location The location.
      * @return A new location that is the result of adding the given location to this location. Never null.
      */
-    Location add(Location location);
+    BlockLocation add(BlockLocation location);
 
     /**
      * @param location The location.
      * @return A new location that is the result of subtracting the given location from this location. Never null.
      */
-    Location sub(Location location);
+    BlockLocation sub(BlockLocation location);
 
     /**
      * @param x The X scalar.
      * @return A new location with the X scalar as its X coordinate. Never null.
      */
-    Location withX(float x);
+    BlockLocation withX(int x);
 
     /**
      * @param y The Y scalar.
      * @return A new location with the Y scalar as its Y coordinate. Never null.
      */
-    Location withY(float y);
+    BlockLocation withY(int y);
 
     /**
      * @param z The Z scalar.
      * @return A new location with the Z scalar as its Z coordinate. Never null.
      */
-    Location withZ(float z);
+    BlockLocation withZ(int z);
 
     /**
      * @param x The X scalar.
@@ -92,28 +94,15 @@ public interface Location {
      * @param z The Z scalar.
      * @return A new location with the given scalars as its coordinates. Never null.
      */
-    Location with(float x, float y, float z);
-
-    /**
-     * @param pitch The pitch.
-     * @param yaw   The yaw.
-     * @return A new oriented location at the position of this location with the given pitch and yaw. Never null.
-     */
-    OrientedLocation withOrientation(float pitch, float yaw);
-
-    /**
-     * @param direction The direction vector. Can not be null.
-     * @return A new oriented location at the position of this location with the given direction. Never null.
-     */
-    OrientedLocation withDirection(Vector3fc direction);
+    BlockLocation with(int x, int y, int z);
 
     /**
      * @return This location as a 3D int vector. Never null.
      */
-    Vector3f toVector();
+    Vector3i toVector();
 
     /**
-     * @return This location as a block location. Never null.
+     * @return This block location as a floating point location. Never null.
      */
-    BlockLocation toBlockLocation();
+    Location toLocation();
 }

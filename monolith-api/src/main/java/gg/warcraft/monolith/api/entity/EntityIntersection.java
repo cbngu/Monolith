@@ -1,6 +1,6 @@
 package gg.warcraft.monolith.api.entity;
 
-import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.location.Location;
 
 public interface EntityIntersection {
 

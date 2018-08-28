@@ -1,11 +1,11 @@
-package gg.warcraft.monolith.app.world;
+package gg.warcraft.monolith.app.world.location;
 
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import gg.warcraft.monolith.api.world.BlockLocation;
-import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.World;
+import gg.warcraft.monolith.api.world.location.BlockLocation;
+import gg.warcraft.monolith.api.world.location.Location;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 

@@ -1,8 +1,9 @@
-package gg.warcraft.monolith.spigot.world;
+package gg.warcraft.monolith.spigot.world.block;
 
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
+import gg.warcraft.monolith.spigot.world.MaterialData;
 import org.bukkit.Material;
 
 public class SpigotBlockTypeMapper {

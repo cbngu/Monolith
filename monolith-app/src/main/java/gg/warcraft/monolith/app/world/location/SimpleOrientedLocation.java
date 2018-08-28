@@ -1,11 +1,11 @@
-package gg.warcraft.monolith.app.world;
+package gg.warcraft.monolith.app.world.location;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
+import gg.warcraft.monolith.api.world.location.OrientedLocation;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 

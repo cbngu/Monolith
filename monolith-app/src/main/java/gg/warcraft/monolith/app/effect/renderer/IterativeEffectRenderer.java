@@ -5,7 +5,7 @@ import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.effect.EffectRenderer;
 import gg.warcraft.monolith.api.effect.EffectVectors;
 import gg.warcraft.monolith.api.effect.Particle;
-import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.location.Location;
 import org.joml.Vector3fc;
 
 import java.util.Iterator;

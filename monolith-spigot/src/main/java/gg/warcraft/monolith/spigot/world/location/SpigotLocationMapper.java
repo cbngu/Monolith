@@ -1,13 +1,14 @@
-package gg.warcraft.monolith.spigot.world;
+package gg.warcraft.monolith.spigot.world.location;
 
 import com.google.inject.Inject;
-import gg.warcraft.monolith.api.world.BlockLocation;
-import gg.warcraft.monolith.api.world.Location;
-import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
-import gg.warcraft.monolith.app.world.SimpleBlockLocation;
-import gg.warcraft.monolith.app.world.SimpleLocation;
-import gg.warcraft.monolith.app.world.SimpleOrientedLocation;
+import gg.warcraft.monolith.api.world.location.BlockLocation;
+import gg.warcraft.monolith.api.world.location.Location;
+import gg.warcraft.monolith.api.world.location.OrientedLocation;
+import gg.warcraft.monolith.app.world.location.SimpleBlockLocation;
+import gg.warcraft.monolith.app.world.location.SimpleLocation;
+import gg.warcraft.monolith.app.world.location.SimpleOrientedLocation;
+import gg.warcraft.monolith.spigot.world.SpigotWorldMapper;
 import org.bukkit.entity.LivingEntity;
 import org.joml.Vector3f;
 
