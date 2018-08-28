@@ -8,9 +8,6 @@ import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
-import gg.warcraft.monolith.app.world.SimpleBlockLocation;
-import gg.warcraft.monolith.app.world.SimpleLocation;
-import gg.warcraft.monolith.app.world.SimpleWorld;
 import org.joml.Vector3ic;
 
 public class DefaultWorldQueryService implements WorldQueryService {
@@ -24,18 +21,6 @@ public class DefaultWorldQueryService implements WorldQueryService {
     @Override
     public World getWorld(WorldType type) {
         return serverAdapter.getWorld(type);
-    }
-
-    @Override
-    public Location getLocation(WorldType world, float x, float y, float z) {
-        World actualWorld = new SimpleWorld(world);
-        return new SimpleLocation(actualWorld, x, y, z);
-    }
-
-    @Override
-    public BlockLocation getBlockLocation(WorldType world, int x, int y, int z) {
-        World actualWorld = new SimpleWorld(world);
-        return new SimpleBlockLocation(actualWorld, x, y, z);
     }
 
     @Override

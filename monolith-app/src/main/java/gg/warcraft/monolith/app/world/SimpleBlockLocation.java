@@ -1,6 +1,8 @@
 package gg.warcraft.monolith.app.world;
 
 import com.google.common.base.MoreObjects;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
 import gg.warcraft.monolith.api.world.World;
@@ -15,7 +17,11 @@ public class SimpleBlockLocation implements BlockLocation {
     private final int y;
     private final int z;
 
-    public SimpleBlockLocation(World world, int x, int y, int z) {
+    @Inject
+    public SimpleBlockLocation(@Assisted World world,
+                               @Assisted("x") int x,
+                               @Assisted("y") int y,
+                               @Assisted("z") int z) {
         this.world = world;
         this.x = x;
         this.y = y;

@@ -5,6 +5,7 @@ import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.LocationFactory;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.event.BlockBreakEvent;
@@ -17,7 +18,6 @@ import gg.warcraft.monolith.api.world.block.event.BlockPrePlaceEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPreTriggerEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockTriggerEvent;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
-import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockBreakEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockInteractEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockPlaceEvent;
@@ -46,21 +46,21 @@ public class SpigotWorldEventMapper implements Listener {
     private final SpigotBlockMapper blockMapper;
     private final SpigotBlockFaceMapper blockFaceMapper;
     private final SpigotItemMapper itemMapper;
-    private final WorldQueryService worldQueryService;
     private final WorldCommandService worldCommandService;
+    private final LocationFactory locationFactory;
 
     private final Map<Event, List<Item>> alternativeDropsByEvent;
 
     @Inject
     public SpigotWorldEventMapper(EventService eventService, SpigotBlockMapper blockMapper,
                                   SpigotBlockFaceMapper blockFaceMapper, SpigotItemMapper itemMapper,
-                                  WorldQueryService worldQueryService, WorldCommandService worldCommandService) {
+                                  WorldCommandService worldCommandService, LocationFactory locationFactory) {
         this.eventService = eventService;
         this.blockMapper = blockMapper;
         this.blockFaceMapper = blockFaceMapper;
         this.itemMapper = itemMapper;
-        this.worldQueryService = worldQueryService;
         this.worldCommandService = worldCommandService;
+        this.locationFactory = locationFactory;
         this.alternativeDropsByEvent = new HashMap<>();
     }
 
@@ -103,7 +103,7 @@ public class SpigotWorldEventMapper implements Listener {
 
         if (alternativeDrops != null && !alternativeDrops.isEmpty()) {
             BlockLocation blockLocation = block.getLocation();
-            Location dropLocation = worldQueryService.getLocation(blockLocation.getWorld().getType(),
+            Location dropLocation = locationFactory.createLocation(blockLocation.getWorld().getType(),
                     blockLocation.getX() + 0.5f, blockLocation.getY() + 0.5f, blockLocation.getZ() + 0.5f);
             worldCommandService.dropItemsAt(alternativeDrops, dropLocation);
         }

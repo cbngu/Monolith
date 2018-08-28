@@ -26,24 +26,6 @@ public interface WorldQueryService {
      * @param x     The X coordinate.
      * @param y     The Y coordinate.
      * @param z     The Z coordinate.
-     * @return The location in the given world at the specified coordinates.
-     */
-    Location getLocation(WorldType world, float x, float y, float z);
-
-    /**
-     * @param world The world.
-     * @param x     The X coordinate.
-     * @param y     The Y coordinate.
-     * @param z     The Z coordinate.
-     * @return The location in the given world at the specified coordinates.
-     */
-    BlockLocation getBlockLocation(WorldType world, int x, int y, int z);
-
-    /**
-     * @param world The world.
-     * @param x     The X coordinate.
-     * @param y     The Y coordinate.
-     * @param z     The Z coordinate.
      * @return The block in the given world at the specified coordinates.
      */
     Block getBlockAt(WorldType world, int x, int y, int z);

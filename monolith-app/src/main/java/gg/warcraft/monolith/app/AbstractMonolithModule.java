@@ -69,7 +69,11 @@ import gg.warcraft.monolith.api.menu.service.MenuRepository;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.BlockLocation;
 import gg.warcraft.monolith.api.world.DirectionUtils;
+import gg.warcraft.monolith.api.world.Location;
+import gg.warcraft.monolith.api.world.LocationFactory;
+import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.BlockIterator;
 import gg.warcraft.monolith.api.world.block.BlockIteratorFactory;
@@ -148,6 +152,9 @@ import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
 import gg.warcraft.monolith.app.world.DefaultDirectionUtils;
+import gg.warcraft.monolith.app.world.SimpleBlockLocation;
+import gg.warcraft.monolith.app.world.SimpleLocation;
+import gg.warcraft.monolith.app.world.SimpleOrientedLocation;
 import gg.warcraft.monolith.app.world.block.DefaultBlockTypeUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockUtils;
 import gg.warcraft.monolith.app.world.block.SimpleBlockIterator;
@@ -401,6 +408,12 @@ public class AbstractMonolithModule extends AbstractModule {
         bind(BlockUtils.class).to(DefaultBlockUtils.class);
         bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
         bind(DirectionUtils.class).to(DefaultDirectionUtils.class);
+
+        install(new FactoryModuleBuilder()
+                .implement(Location.class, Names.named("location"), SimpleLocation.class)
+                .implement(BlockLocation.class, Names.named("block"), SimpleBlockLocation.class)
+                .implement(OrientedLocation.class, Names.named("oriented"), SimpleOrientedLocation.class)
+                .build(LocationFactory.class));
 
         install(new FactoryModuleBuilder()
                 .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)

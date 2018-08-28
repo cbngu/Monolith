@@ -2,6 +2,8 @@ package gg.warcraft.monolith.app.world;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.world.OrientedLocation;
 import gg.warcraft.monolith.api.world.World;
 import org.joml.Vector3f;
@@ -21,7 +23,13 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
         this.direction = direction;
     }
 
-    public SimpleOrientedLocation(World world, float x, float y, float z, float pitch, float yaw) {
+    @Inject
+    public SimpleOrientedLocation(@Assisted World world,
+                                  @Assisted("x") float x,
+                                  @Assisted("y") float y,
+                                  @Assisted("z") float z,
+                                  @Assisted("pitch") float pitch,
+                                  @Assisted("yaw") float yaw) {
         super(world, x, y, z);
         Preconditions.checkArgument(pitch >= -90);
         Preconditions.checkArgument(pitch <= 90);
