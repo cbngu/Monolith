@@ -2,7 +2,6 @@ package gg.warcraft.monolith.app.world.block.box;
 
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
-import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
 import gg.warcraft.monolith.api.world.location.LocationFactory;
@@ -30,7 +29,6 @@ public class SimpleBoundingBlockBoxTest {
     @Mock private WorldQueryService mockWorldQueryService;
     @Mock private LocationFactory mockLocationFactory;
     @Mock private World mockWorld;
-    @Mock private Block mockBlock;
     @Mock private BlockLocation mockBlockLocation;
 
     @Before
@@ -40,7 +38,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockWorldQueryService.getWorld(world)).thenReturn(mockWorld);
 
         when(mockBlockLocation.getWorld()).thenReturn(mockWorld);
-        when(mockBlock.getLocation()).thenReturn(mockBlockLocation);
 
         Vector3i minimumCorner = new Vector3i(0, 0, 0);
         Vector3i maximumCorner = new Vector3i(9, 9, 9);
@@ -58,7 +55,7 @@ public class SimpleBoundingBlockBoxTest {
 
     @After
     public void afterEach() {
-        reset(mockWorldQueryService, mockLocationFactory, mockWorld, mockBlock, mockBlockLocation);
+        reset(mockWorldQueryService, mockLocationFactory, mockWorld, mockBlockLocation);
     }
 
     @Test
@@ -69,7 +66,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        boolean result = simpleBoundingBlockBox.test(mockBlock);
+        boolean result = simpleBoundingBlockBox.test(mockBlockLocation);
 
         // Then
         assertTrue(result);
@@ -83,7 +80,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(0);
 
         // When
-        boolean result = simpleBoundingBlockBox.test(mockBlock);
+        boolean result = simpleBoundingBlockBox.test(mockBlockLocation);
 
         // Then
         assertTrue(result);
@@ -97,7 +94,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(20);
 
         // When
-        boolean result = simpleBoundingBlockBox.test(mockBlock);
+        boolean result = simpleBoundingBlockBox.test(mockBlockLocation);
 
         // Then
         assertFalse(result);
@@ -128,7 +125,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 0);
+        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlockLocation, 0);
 
         // Then
         Assert.assertEquals(0, result.getNorthBoundary());
@@ -147,7 +144,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 90);
+        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlockLocation, 90);
 
         // Then
         Assert.assertEquals(0, result.getNorthBoundary());
@@ -166,7 +163,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 180);
+        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlockLocation, 180);
 
         // Then
         Assert.assertEquals(-7, result.getNorthBoundary());
@@ -185,7 +182,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 270);
+        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlockLocation, 270);
 
         // Then
         Assert.assertEquals(-7, result.getNorthBoundary());
@@ -204,7 +201,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, 2700);
+        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlockLocation, 2700);
 
         // Then
         Assert.assertEquals(-7, result.getNorthBoundary());
@@ -223,7 +220,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, -90);
+        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlockLocation, -90);
 
         // Then
         Assert.assertEquals(-7, result.getNorthBoundary());
@@ -242,7 +239,7 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlock, -2070);
+        BoundingBlockBox result = simpleBoundingBlockBox.rotateY(mockBlockLocation, -2070);
 
         // Then
         Assert.assertEquals(0, result.getNorthBoundary());
@@ -261,6 +258,6 @@ public class SimpleBoundingBlockBoxTest {
         when(mockBlockLocation.getZ()).thenReturn(1);
 
         // When
-        simpleBoundingBlockBox.rotateY(mockBlock, 60);
+        simpleBoundingBlockBox.rotateY(mockBlockLocation, 60);
     }
 }

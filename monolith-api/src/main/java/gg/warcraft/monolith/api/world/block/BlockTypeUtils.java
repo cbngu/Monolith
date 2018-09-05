@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * This utility is injectable.
  * <p>
- * The BlockTypeUtils utility services as a point of entry into the block implementation. It provides methods to get
+ * The BlockTypeUtils utility serves as a point of entry into the block implementation. It provides methods to get
  * block types by id and data values and to easily determine the family of a block type.
  */
 public interface BlockTypeUtils {

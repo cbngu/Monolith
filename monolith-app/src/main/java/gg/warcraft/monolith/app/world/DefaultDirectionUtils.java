@@ -2,6 +2,7 @@ package gg.warcraft.monolith.app.world;
 
 import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.DirectionUtils;
+import org.joml.Vector3f;
 
 public class DefaultDirectionUtils implements DirectionUtils {
 
@@ -38,5 +39,25 @@ public class DefaultDirectionUtils implements DirectionUtils {
             ordinalDiff += 4;
         }
         return ordinalDiff * 90;
+    }
+
+    @Override
+    public Vector3f toVector(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return new Vector3f(0, 0, -1);
+            case EAST:
+                return new Vector3f(1, 0, 0);
+            case SOUTH:
+                return new Vector3f(0, 0, 1);
+            case WEST:
+                return new Vector3f(-1, 0, 0);
+            case UP:
+                return new Vector3f(0, 1, 0);
+            case DOWN:
+                return new Vector3f(0, -1, 0);
+            default:
+                throw new IllegalArgumentException("Failed to return vector for " + direction);
+        }
     }
 }

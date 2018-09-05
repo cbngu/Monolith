@@ -6,7 +6,6 @@ import gg.warcraft.monolith.api.config.BlockLocationConfiguration;
 import gg.warcraft.monolith.api.config.LocationConfiguration;
 import gg.warcraft.monolith.api.config.OrientedLocationConfiguration;
 import gg.warcraft.monolith.api.world.WorldType;
-import org.joml.Vector3fc;
 
 public interface LocationFactory {
 
@@ -92,15 +91,4 @@ public interface LocationFactory {
                 configuration.getPitch(),
                 configuration.getYaw());
     }
-
-    /**
-     * @param world     The world.
-     * @param x         The X coordinate.
-     * @param y         The Y coordinate.
-     * @param z         The Z coordinate.
-     * @param direction The orientation direction.
-     * @return The oriented location in the given world at the specified coordinates with the specified orientation.
-     * Never null.
-     */
-    OrientedLocation createOrientedLocation(WorldType world, float x, float y, float z, Vector3fc direction);
 }

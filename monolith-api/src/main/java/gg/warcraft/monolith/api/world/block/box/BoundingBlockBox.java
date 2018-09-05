@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  * BoundingBlockBox is a utility class that allows consumers to test whether a given {@code Block} lies within the
  * bounding box.
  */
-public interface BoundingBlockBox extends Predicate<Block> {
+public interface BoundingBlockBox extends Predicate<BlockLocation> {
 
     /**
      * @return The world this bounding box is in.
@@ -79,7 +79,7 @@ public interface BoundingBlockBox extends Predicate<Block> {
      *                negative degrees rotate counterclockwise.
      * @return A copy of this bounding box rotated around the Y axis at the pivot by the specified degrees.
      */
-    BoundingBlockBox rotateY(Block pivot, int degrees);
+    BoundingBlockBox rotateY(BlockLocation pivot, int degrees);
 
     /**
      * @param vector The translation.

@@ -8,6 +8,7 @@ import gg.warcraft.monolith.api.world.location.BlockLocation;
 import gg.warcraft.monolith.app.world.block.ChestBlock;
 import gg.warcraft.monolith.app.world.block.SignBlock;
 import gg.warcraft.monolith.app.world.block.SimpleBlock;
+import gg.warcraft.monolith.spigot.world.SpigotDirectionMapper;
 import gg.warcraft.monolith.spigot.world.location.SpigotLocationMapper;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -17,16 +18,17 @@ public class SpigotBlockMapper {
     private final SpigotLocationMapper locationMapper;
     private final SpigotBlockTypeMapper blockTypeMapper;
     private final SpigotBlockFaceMapper blockFaceMapper;
+    private final SpigotDirectionMapper directionMapper;
 
     @Inject
     public SpigotBlockMapper(SpigotLocationMapper locationMapper, SpigotBlockTypeMapper blockTypeMapper,
-                             SpigotBlockFaceMapper blockFaceMapper) {
+                             SpigotBlockFaceMapper blockFaceMapper, SpigotDirectionMapper directionMapper) {
         this.locationMapper = locationMapper;
         this.blockTypeMapper = blockTypeMapper;
         this.blockFaceMapper = blockFaceMapper;
+        this.directionMapper = directionMapper;
     }
 
-    // TODO map original data byte into Monolith block, directional data is lost at the moment
     public org.bukkit.block.Block map(Block block) {
         Location spigotLocation = locationMapper.map(block.getLocation());
         return spigotLocation.getBlock();
@@ -43,14 +45,15 @@ public class SpigotBlockMapper {
             case SIGN_POST:
             case WALL_SIGN:
                 Sign sign = (Sign) block.getState();
-                String[] lines = sign.getLines();
                 org.bukkit.material.Sign signMaterial = (org.bukkit.material.Sign) sign.getData();
+                Direction facing = directionMapper.map(signMaterial.getFacing());
                 org.bukkit.block.Block spigotAttachedBlock = block.getRelative(signMaterial.getAttachedFace());
                 Block attachedBlock = map(spigotAttachedBlock);
-                return new SignBlock(type, location, lines, attachedBlock);
+                String[] lines = sign.getLines();
+                return new SignBlock(type, location, facing, attachedBlock, lines);
             case CHEST:
                 Chest chest = (Chest) block.getState().getData();
-                Direction direction = blockFaceMapper.mapDirection(chest.getFacing());
+                Direction direction = directionMapper.map(chest.getFacing());
                 return new ChestBlock(type, location, direction);
             default:
                 return new SimpleBlock(type, location);

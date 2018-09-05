@@ -70,6 +70,7 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
         return blockMapper.map(spigotBlock);
     }
 
+    // TODO create update method which takes a Block, allows for DirectionalBlock check and update facing accordingly
     @Override
     public void setBlockType(Block block, BlockType type) {
         org.bukkit.block.Block spigotBlock = blockMapper.map(block);

@@ -56,8 +56,7 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     }
 
     @Override
-    public boolean test(Block block) {
-        BlockLocation location = block.getLocation();
+    public boolean test(BlockLocation location) {
         if (location.getWorld().getType() != world.getType()) {
             return false;
         }
@@ -129,9 +128,9 @@ public class SimpleBoundingBlockBox implements BoundingBlockBox {
     }
 
     @Override
-    public BoundingBlockBox rotateY(Block pivot, int degrees) {
-        int pivotX = pivot.getLocation().getX();
-        int pivotZ = pivot.getLocation().getZ();
+    public BoundingBlockBox rotateY(BlockLocation pivot, int degrees) {
+        int pivotX = pivot.getX();
+        int pivotZ = pivot.getZ();
         int deltaNorthBoundary = pivotZ - getNorthBoundary();
         int deltaEastBoundary = getEastBoundary() - pivotX;
         int deltaSouthBoundary = getSouthBoundary() - pivotZ;

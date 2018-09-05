@@ -1,11 +1,11 @@
-package gg.warcraft.monolith.spigot.world.block;
+package gg.warcraft.monolith.spigot.world;
 
-import gg.warcraft.monolith.api.world.block.BlockFace;
+import gg.warcraft.monolith.api.world.Direction;
 
-public class SpigotBlockFaceMapper {
+public class SpigotDirectionMapper {
 
-    public org.bukkit.block.BlockFace map(BlockFace face) {
-        switch (face) {
+    public org.bukkit.block.BlockFace map(Direction direction) {
+        switch (direction) {
             case NORTH:
                 return org.bukkit.block.BlockFace.NORTH;
             case EAST:
@@ -23,22 +23,22 @@ public class SpigotBlockFaceMapper {
         }
     }
 
-    public BlockFace map(org.bukkit.block.BlockFace face) {
-        switch (face) {
+    public Direction map(org.bukkit.block.BlockFace direction) {
+        switch (direction) {
             case NORTH:
-                return BlockFace.NORTH;
+                return Direction.NORTH;
             case EAST:
-                return BlockFace.EAST;
+                return Direction.EAST;
             case SOUTH:
-                return BlockFace.SOUTH;
+                return Direction.SOUTH;
             case WEST:
-                return BlockFace.WEST;
+                return Direction.WEST;
             case UP:
-                return BlockFace.UP;
+                return Direction.UP;
             case DOWN:
-                return BlockFace.DOWN;
+                return Direction.DOWN;
             default:
-                return BlockFace.NORTH;
+                return Direction.NORTH;
         }
     }
 }
