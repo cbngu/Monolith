@@ -155,7 +155,9 @@ public class MonolithPlugin extends JavaPlugin {
         }
 
         initializeInjector();
-        injector = Monolith.getInstance().getInjector();
+        Injector baseInjector = Monolith.getInstance().getInjector();
+        AbstractModule privateMonolithModule = new PrivateSpigotMonolithModule(this);
+        injector = baseInjector.createChildInjector(privateMonolithModule);
         eventService = injector.getInstance(EventService.class);
         taskService = injector.getInstance(TaskService.class);
 
