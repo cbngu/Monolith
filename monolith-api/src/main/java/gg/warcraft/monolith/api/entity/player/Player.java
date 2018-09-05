@@ -1,9 +1,7 @@
 package gg.warcraft.monolith.api.entity.player;
 
 import gg.warcraft.monolith.api.entity.Entity;
-import gg.warcraft.monolith.api.item.Item;
-
-import java.util.List;
+import gg.warcraft.monolith.api.item.Inventory;
 
 /**
  * A Player is a human actor on the server.
@@ -44,9 +42,9 @@ public interface Player extends Entity {
     int getLifetimeCurrency(String currency);
 
     /**
-     * @return All items in the inventory of this player. Never null, but can be empty. Items are never null.
+     * @return The inventory of this player. Never null.
      */
-    List<Item> getInventory();
+    Inventory getInventory();
 
     /**
      * @return True if this player is sneaking, false otherwise.

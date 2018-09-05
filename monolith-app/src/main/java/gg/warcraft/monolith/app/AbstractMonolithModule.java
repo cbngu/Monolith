@@ -59,6 +59,7 @@ import gg.warcraft.monolith.api.item.ItemBuilder;
 import gg.warcraft.monolith.api.item.ItemBuilderFactory;
 import gg.warcraft.monolith.api.item.ItemReader;
 import gg.warcraft.monolith.api.item.ItemReaderFactory;
+import gg.warcraft.monolith.api.item.ItemTypeUtils;
 import gg.warcraft.monolith.api.menu.ButtonBuilder;
 import gg.warcraft.monolith.api.menu.ButtonBuilderFactory;
 import gg.warcraft.monolith.api.menu.MenuBuilder;
@@ -141,6 +142,7 @@ import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
 import gg.warcraft.monolith.app.entity.team.service.DefaultTeamCommandService;
 import gg.warcraft.monolith.app.entity.team.service.DefaultTeamQueryService;
 import gg.warcraft.monolith.app.entity.team.service.DefaultTeamRepository;
+import gg.warcraft.monolith.app.item.DefaultItemTypeUtils;
 import gg.warcraft.monolith.app.item.SimpleItemBuilder;
 import gg.warcraft.monolith.app.item.SimpleItemReader;
 import gg.warcraft.monolith.app.menu.SimpleButtonBuilder;
@@ -336,6 +338,8 @@ public class AbstractMonolithModule extends AbstractModule {
     }
 
     private void configureItem() {
+        bind(ItemTypeUtils.class).to(DefaultItemTypeUtils.class);
+
         install(new FactoryModuleBuilder()
                 .implement(ItemBuilder.class, SimpleItemBuilder.class)
                 .build(ItemBuilderFactory.class));

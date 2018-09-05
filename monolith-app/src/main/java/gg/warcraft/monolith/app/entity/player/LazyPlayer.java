@@ -8,11 +8,10 @@ import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.status.Status;
 import gg.warcraft.monolith.api.entity.team.service.TeamQueryService;
-import gg.warcraft.monolith.api.item.Item;
+import gg.warcraft.monolith.api.item.Inventory;
 import gg.warcraft.monolith.api.util.Lazy;
 import gg.warcraft.monolith.app.entity.LazyEntity;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class LazyPlayer extends LazyEntity implements Player {
@@ -61,7 +60,7 @@ public class LazyPlayer extends LazyEntity implements Player {
     }
 
     @Override
-    public List<Item> getInventory() {
+    public Inventory getInventory() {
         return serverData.get().getInventory();
     }
 

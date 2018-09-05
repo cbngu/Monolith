@@ -3,13 +3,12 @@ package gg.warcraft.monolith.spigot.entity.player;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.Equipment;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
-import gg.warcraft.monolith.api.item.Item;
+import gg.warcraft.monolith.api.item.Inventory;
 import gg.warcraft.monolith.api.world.location.OrientedLocation;
 import org.bukkit.OfflinePlayer;
 import org.joml.AABBf;
 import org.joml.Vector3f;
 
-import java.util.List;
 import java.util.UUID;
 
 public class SpigotOfflinePlayerData implements PlayerServerData {
@@ -65,7 +64,7 @@ public class SpigotOfflinePlayerData implements PlayerServerData {
     }
 
     @Override
-    public List<Item> getInventory() {
+    public Inventory getInventory() {
         throw new IllegalStateException("Failed to get inventory for offline player with id " + player.getUniqueId());
     }
 

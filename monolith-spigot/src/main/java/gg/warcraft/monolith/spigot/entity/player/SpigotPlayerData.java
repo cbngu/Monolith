@@ -4,17 +4,13 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
-import gg.warcraft.monolith.api.item.Item;
+import gg.warcraft.monolith.api.item.Inventory;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityData;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
+import gg.warcraft.monolith.spigot.item.SpigotInventory;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.location.SpigotLocationMapper;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SpigotPlayerData extends SpigotEntityData implements PlayerServerData {
     private final SpigotItemMapper itemMapper;
@@ -34,11 +30,8 @@ public class SpigotPlayerData extends SpigotEntityData implements PlayerServerDa
     }
 
     @Override
-    public List<Item> getInventory() {
-        ItemStack[] items = player.getInventory().getContents();
-        return Arrays.stream(items)
-                .map(itemMapper::map)
-                .collect(Collectors.toList());
+    public Inventory getInventory() {
+        return new SpigotInventory(itemMapper, player.getInventory());
     }
 
     @Override
