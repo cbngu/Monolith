@@ -14,15 +14,15 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SkullButtonBuilder implements ButtonBuilder {
-    private final String skullName;
+    private final String playerName;
     private final String title;
 
     private List<String> tooltip;
     private Consumer<Click> action;
 
     @Inject
-    public SkullButtonBuilder(@Assisted String skullName, @Assisted String title) {
-        this.skullName = skullName;
+    public SkullButtonBuilder(@Assisted("name") String playerName, @Assisted("title") String title) {
+        this.playerName = playerName;
         this.title = ColorCode.WHITE + title;
         this.tooltip = new ArrayList<>();
         this.action = click -> {};
@@ -50,7 +50,6 @@ public class SkullButtonBuilder implements ButtonBuilder {
 
     @Override
     public Button build() {
-        throw new IllegalStateException("Not implemented");
-        // return new SimpleButton(icon, title, tooltip, action);
+        return new SkullButton(playerName, title, tooltip, action);
     }
 }

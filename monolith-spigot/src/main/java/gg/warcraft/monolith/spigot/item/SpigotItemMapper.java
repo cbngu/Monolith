@@ -3,10 +3,14 @@ package gg.warcraft.monolith.spigot.item;
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.item.ItemType;
+import gg.warcraft.monolith.api.item.Skull;
 import gg.warcraft.monolith.app.item.SimpleItem;
 import gg.warcraft.monolith.spigot.world.MaterialData;
+import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +23,22 @@ public class SpigotItemMapper {
         this.itemTypeMapper = itemTypeMapper;
     }
 
+    public ItemStack mapSkull(Skull skull) {
+        ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, skull.getStackSize(), (short) skull.getDamage(),
+                (byte) SkullType.PLAYER.ordinal());
+        SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
+        itemMeta.setDisplayName(skull.getName());
+        itemMeta.setLore(skull.getLore());
+        itemMeta.setOwner(skull.getPlayerName());
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
     public ItemStack map(Item item) {
+        if (item instanceof Skull) {
+            return mapSkull((Skull) item);
+        }
+
         MaterialData materialData = itemTypeMapper.map(item.getType());
         ItemStack itemStack = new ItemStack(materialData.getMaterial(), item.getStackSize(), (short) item.getDamage(),
                 materialData.getData());

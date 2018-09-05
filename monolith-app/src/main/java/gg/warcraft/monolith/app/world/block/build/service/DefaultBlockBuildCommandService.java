@@ -15,6 +15,7 @@ import gg.warcraft.monolith.api.world.block.box.BoundingBlockBoxFactory;
 import gg.warcraft.monolith.api.world.block.build.BlockBuild;
 import gg.warcraft.monolith.api.world.block.build.service.BlockBuildCommandService;
 import gg.warcraft.monolith.api.world.block.build.service.BlockBuildRepository;
+import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.world.block.build.SimpleBlockBuild;
 import org.joml.Vector3i;
@@ -32,6 +33,7 @@ import java.util.stream.Stream;
 
 public class DefaultBlockBuildCommandService implements BlockBuildCommandService {
     private final WorldQueryService worldQueryService;
+    private final WorldCommandService worldCommandService;
     private final BlockBuildRepository buildRepository;
     private final BlockUtils blockUtils;
     private final Logger logger;
@@ -39,12 +41,14 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
     private final BoundingBlockBox buildRepositoryBoundingBox;
 
     @Inject
-    public DefaultBlockBuildCommandService(WorldQueryService worldQueryService, BlockBuildRepository buildRepository,
+    public DefaultBlockBuildCommandService(WorldQueryService worldQueryService, WorldCommandService worldCommandService,
+                                           BlockBuildRepository buildRepository,
                                            BlockUtils blockUtils, BoundingBlockBoxFactory blockBoxFactory,
                                            @PluginLogger Logger logger, @Named("BuildRepositoryWorld") WorldType world,
                                            @Named("BuildRepositoryMinimumCorner") Vector3ic minimumCorner,
                                            @Named("BuildRepositoryMaximumCorner") Vector3ic maximumCorner) {
         this.worldQueryService = worldQueryService;
+        this.worldCommandService = worldCommandService;
         this.buildRepository = buildRepository;
         this.blockUtils = blockUtils;
         this.logger = logger;
@@ -118,6 +122,15 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
         Preconditions.checkArgument(lines[0].contains(":"), "Encountered build sign with illegal type and model. " +
                 "All bottom level wall mounted signs in the build repository need to have the build type and model " +
                 "specified on the first sign line as type:model.");
+
+        // FIXME REMOVE, ONE TIME CODE
+        if (lines[0].contains(".")) {
+            String old = lines[0];
+            lines[0] = lines[0].replace(".", "_");
+            worldCommandService.setSignLines(sign, lines);
+            System.out.println("BUILD REPO updated " + old + " to " + lines[0]);
+        }
+        // FIXME REMOVE, ONE TIME CODE
 
         String[] typeAndModel = lines[0].split(":");
         String type = typeAndModel[0];
