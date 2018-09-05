@@ -16,9 +16,7 @@ public class DefaultTimeUtils implements TimeUtils {
         this.oneSecond = createDurationInSeconds(1);
     }
 
-    @Override
-    public String getTimeElapsedSince(long unixTimestamp) {
-        long age = System.currentTimeMillis() - unixTimestamp;
+    String getReadableAge(long age) {
         if (age < MILLIS_PER_MINUTE) {
             return "less than a minute";
         } else if (age < MILLIS_PER_HOUR) {
@@ -31,6 +29,19 @@ public class DefaultTimeUtils implements TimeUtils {
             long count = age / MILLIS_PER_DAY;
             return count + (count != 1 ? " days" : " day");
         }
+    }
+
+    @Override
+    public String getTimeElapsedSince(long unixTimestamp) {
+        long age = System.currentTimeMillis() - unixTimestamp;
+        return getReadableAge(age);
+    }
+
+    @Override
+    public String getTimeToGoUntil(long unixTimestamp) {
+        long current = System.currentTimeMillis();
+        long age = current - (unixTimestamp - current);
+        return getReadableAge(age);
     }
 
     @Override

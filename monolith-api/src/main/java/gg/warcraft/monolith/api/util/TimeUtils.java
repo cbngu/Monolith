@@ -24,9 +24,15 @@ public interface TimeUtils {
 
     /**
      * @param unixTimestamp The unix timestamp in milliseconds.
-     * @return The time elapsed since the unix timestamp in a human readable format. Never null, but can be empty.
+     * @return The time elapsed since the unix timestamp in a human readable format. Never null or empty.
      */
     String getTimeElapsedSince(long unixTimestamp);
+
+    /**
+     * @param unixTimestamp The unix timestamp in milliseconds.
+     * @return The time to go until the unix timestamp in a human readable format. Never null or empty.
+     */
+    String getTimeToGoUntil(long unixTimestamp);
 
     /**
      * @param millis The duration in milliseconds.
