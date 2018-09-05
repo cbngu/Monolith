@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import gg.warcraft.monolith.api.core.JsonMapper;
 import gg.warcraft.monolith.api.core.PersistenceService;
+import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.app.entity.player.SimplePlayerProfile;
@@ -13,6 +14,7 @@ import gg.warcraft.monolith.app.entity.player.persistence.PlayerProfileItem;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Singleton
 public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
@@ -20,11 +22,14 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
 
     private final PersistenceService persistenceService;
     private final ObjectMapper jsonMapper;
+    private final Logger pluginLogger;
 
     @Inject
-    public DefaultPlayerProfileRepository(PersistenceService persistenceService, @JsonMapper ObjectMapper jsonMapper) {
+    public DefaultPlayerProfileRepository(PersistenceService persistenceService, @JsonMapper ObjectMapper jsonMapper,
+                                          @PluginLogger Logger pluginLogger) {
         this.persistenceService = persistenceService;
         this.jsonMapper = jsonMapper;
+        this.pluginLogger = pluginLogger;
     }
 
     String createProfileKey(UUID playerId) {
@@ -57,7 +62,7 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
             PlayerProfileItem profileItem = jsonMapper.readValue(profileJson, PlayerProfileItem.class);
             return mapItemToProfile(profileItem);
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            pluginLogger.severe(ex.getMessage());
             return null;
         }
     }
@@ -84,7 +89,7 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
             String profileJson = jsonMapper.writeValueAsString(profileItem);
             persistenceService.set(profileKey, profileJson);
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            pluginLogger.severe(ex.getMessage());
         }
     }
 }

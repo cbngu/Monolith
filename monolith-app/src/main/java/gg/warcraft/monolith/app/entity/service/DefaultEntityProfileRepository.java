@@ -3,7 +3,9 @@ package gg.warcraft.monolith.app.entity.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import gg.warcraft.monolith.api.core.JsonMapper;
 import gg.warcraft.monolith.api.core.PersistenceService;
+import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.api.entity.EntityProfile;
 import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.app.entity.SimpleEntityProfile;
@@ -12,6 +14,7 @@ import gg.warcraft.monolith.app.entity.persistence.EntityProfileItem;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Singleton
 public class DefaultEntityProfileRepository implements EntityProfileRepository {
@@ -19,11 +22,14 @@ public class DefaultEntityProfileRepository implements EntityProfileRepository {
 
     private final PersistenceService persistenceService;
     private final ObjectMapper jsonMapper;
+    private final Logger pluginLogger;
 
     @Inject
-    public DefaultEntityProfileRepository(PersistenceService persistenceService, ObjectMapper jsonMapper) {
+    public DefaultEntityProfileRepository(PersistenceService persistenceService, @JsonMapper ObjectMapper jsonMapper,
+                                          @PluginLogger Logger pluginLogger) {
         this.persistenceService = persistenceService;
         this.jsonMapper = jsonMapper;
+        this.pluginLogger = pluginLogger;
     }
 
     String createProfileKey(UUID playerId) {
@@ -49,7 +55,7 @@ public class DefaultEntityProfileRepository implements EntityProfileRepository {
             EntityProfileItem profileItem = jsonMapper.readValue(profileJson, EntityProfileItem.class);
             return mapItemToProfile(profileItem);
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            pluginLogger.severe(ex.getMessage());
             return null;
         }
     }
@@ -69,7 +75,7 @@ public class DefaultEntityProfileRepository implements EntityProfileRepository {
             String profileJson = jsonMapper.writeValueAsString(profileItem);
             persistenceService.set(profileKey, profileJson);
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            pluginLogger.severe(ex.getMessage());
         }
     }
 

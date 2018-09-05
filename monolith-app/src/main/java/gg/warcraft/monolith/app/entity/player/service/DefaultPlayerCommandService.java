@@ -113,8 +113,8 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
 
         PlayerProfile profile = playerProfileRepository.get(playerId);
         if (profile == null) {
-            System.out.println("Failed to update profile for player with id " + playerId + ", profile was null");
-            return;
+            throw new IllegalArgumentException("Failed to update profile for player with id " + playerId +
+                    ", profile doesn't exist");
         }
 
         long newTimeLastSeen = System.currentTimeMillis();
