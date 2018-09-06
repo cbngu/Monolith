@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.google.inject.AbstractModule;
+import com.google.inject.Key;
+import com.google.inject.PrivateModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import gg.warcraft.monolith.api.MonolithPluginUtils;
@@ -87,10 +88,7 @@ import gg.warcraft.monolith.api.world.block.build.service.BlockBuildRepository;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingCommandService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingQueryService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingRepository;
-import gg.warcraft.monolith.api.world.location.BlockLocation;
-import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.api.world.location.LocationFactory;
-import gg.warcraft.monolith.api.world.location.OrientedLocation;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.combat.DefaultPotionEffectTypeUtils;
@@ -147,6 +145,7 @@ import gg.warcraft.monolith.app.item.SimpleItemBuilder;
 import gg.warcraft.monolith.app.item.SimpleItemReader;
 import gg.warcraft.monolith.app.menu.SimpleButtonBuilder;
 import gg.warcraft.monolith.app.menu.SimpleMenuBuilder;
+import gg.warcraft.monolith.app.menu.SkullButtonBuilder;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuCommandService;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuQueryService;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuRepository;
@@ -167,16 +166,14 @@ import gg.warcraft.monolith.app.world.block.build.service.DefaultBlockBuildRepos
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingCommandService;
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingQueryService;
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingRepository;
-import gg.warcraft.monolith.app.world.location.SimpleBlockLocation;
-import gg.warcraft.monolith.app.world.location.SimpleLocation;
-import gg.warcraft.monolith.app.world.location.SimpleOrientedLocation;
+import gg.warcraft.monolith.app.world.location.DefaultLocationFactory;
 import gg.warcraft.monolith.app.world.service.DefaultWorldCommandService;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 import org.joml.Vector3ic;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-public class AbstractMonolithModule extends AbstractModule {
+public class AbstractMonolithModule extends PrivateModule {
     private final String persistenceService;
     private final String redisHost;
     private final int redisPort;
@@ -221,6 +218,7 @@ public class AbstractMonolithModule extends AbstractModule {
 
     private void configureCombat() {
         bind(PotionEffectTypeUtils.class).to(DefaultPotionEffectTypeUtils.class);
+        expose(PotionEffectTypeUtils.class);
 
         install(new FactoryModuleBuilder()
                 .implement(PotionEffect.class, Names.named("potion"), SimplePotionEffect.class)
@@ -228,30 +226,47 @@ public class AbstractMonolithModule extends AbstractModule {
                 .implement(CombatValue.class, Names.named("value"), LazyCombatValue.class)
                 .implement(CombatValueModifier.class, Names.named("modifier"), SimpleCombatValueModifier.class)
                 .build(CombatFactory.class));
+        expose(CombatFactory.class);
     }
 
     private void configureCommand() {
         bind(CommandCommandService.class).to(DefaultCommandCommandService.class);
+        expose(CommandCommandService.class);
+
         bind(CommandQueryService.class).to(DefaultCommandQueryService.class);
+        expose(CommandQueryService.class);
+
         bind(CommandRepository.class).to(DefaultCommandRepository.class);
+        expose(CommandRepository.class);
 
         bind(CommandSender.class).annotatedWith(Console.class).to(ConsoleCommandSender.class);
+        expose(Key.get(CommandSender.class, Console.class));
     }
 
     private void configureConfiguration() {
         switch (configurationService) {
             case "LOCAL":
                 bind(ConfigurationCommandService.class).to(LocalConfigurationCommandService.class);
+                expose(ConfigurationCommandService.class);
+
                 bind(ConfigurationQueryService.class).to(DefaultConfigurationQueryService.class);
+                expose(ConfigurationQueryService.class);
+
                 bind(ConfigurationRepository.class).to(DefaultConfigurationRepository.class);
+                expose(ConfigurationRepository.class);
                 break;
             case "GITHUB":
                 bind(String.class).annotatedWith(Names.named("GitHubAccount")).toInstance(gitHubAccount);
                 bind(String.class).annotatedWith(Names.named("GitHubRepository")).toInstance(gitHubRepository);
 
                 bind(ConfigurationCommandService.class).to(GitHubConfigurationCommandService.class);
+                expose(ConfigurationCommandService.class);
+
                 bind(ConfigurationQueryService.class).to(DefaultConfigurationQueryService.class);
+                expose(ConfigurationQueryService.class);
+
                 bind(ConfigurationRepository.class).to(DefaultConfigurationRepository.class);
+                expose(ConfigurationRepository.class);
                 break;
             case "CUSTOM":
                 // do nothing, the implementing server should provide bindings
@@ -263,8 +278,10 @@ public class AbstractMonolithModule extends AbstractModule {
 
     private void configureCore() {
         bind(MonolithPluginUtils.class).to(DefaultMonolithPluginUtils.class);
+        expose(MonolithPluginUtils.class);
 
         bind(EventService.class).to(GuavaEventService.class);
+        expose(EventService.class);
 
         SimpleModule monolithMapperModule = new MonolithMapperModule();
 
@@ -272,11 +289,13 @@ public class AbstractMonolithModule extends AbstractModule {
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         jsonMapper.registerModule(monolithMapperModule);
         bind(ObjectMapper.class).annotatedWith(JsonMapper.class).toProvider(jsonMapper::copy);
+        expose(Key.get(ObjectMapper.class, JsonMapper.class));
 
         ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
         yamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         yamlMapper.registerModule(monolithMapperModule);
         bind(ObjectMapper.class).annotatedWith(YamlMapper.class).toProvider(yamlMapper::copy);
+        expose(Key.get(ObjectMapper.class, YamlMapper.class));
     }
 
     private void configureEffect() {
@@ -289,77 +308,134 @@ public class AbstractMonolithModule extends AbstractModule {
                 .implement(EffectVectors.class, Names.named("ring"), RingVectors.class)
                 .implement(EffectVectors.class, Names.named("sphere"), SphereVectors.class)
                 .build(EffectVectorsFactory.class));
+        expose(EffectVectorsFactory.class);
 
         install(new FactoryModuleBuilder()
                 .implement(EffectRenderer.class, Names.named("simple"), SimpleEffectRenderer.class)
                 .implement(EffectRenderer.class, Names.named("iterative"), IterativeEffectRenderer.class)
                 .build(EffectRendererFactory.class));
+        expose(EffectRendererFactory.class);
 
         install(new FactoryModuleBuilder()
                 .implement(Effect.class, Names.named("simple"), SimpleEffect.class)
                 .implement(Effect.class, Names.named("periodic"), PeriodicEffect.class)
                 .implement(Effect.class, Names.named("dynamic"), DynamicEffect.class)
                 .build(EffectFactory.class));
+        expose(EffectFactory.class);
     }
 
     private void configureEntity() {
+        // Entity bindings
         bind(EntityCommandService.class).to(DefaultEntityCommandService.class);
+        expose(EntityCommandService.class);
+
         bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
+        expose(EntityQueryService.class);
+
         bind(EntityProfileRepository.class).to(DefaultEntityProfileRepository.class);
-
-        bind(PlayerCommandService.class).to(DefaultPlayerCommandService.class);
-        bind(PlayerQueryService.class).to(DefaultPlayerQueryService.class);
-        bind(PlayerProfileRepository.class).to(DefaultPlayerProfileRepository.class);
-
-        bind(AttributeCommandService.class).to(DefaultAttributeCommandService.class);
-        bind(AttributeQueryService.class).to(DefaultAttributeQueryService.class);
-        bind(AttributeRepository.class).to(DefaultAttributeRepository.class);
-
-        bind(StatusCommandService.class).to(DefaultStatusCommandService.class);
-        bind(StatusQueryService.class).to(DefaultStatusQueryService.class);
-        bind(StatusRepository.class).to(DefaultStatusRepository.class);
-
-        bind(TeamCommandService.class).to(DefaultTeamCommandService.class);
-        bind(TeamQueryService.class).to(DefaultTeamQueryService.class);
-        bind(TeamRepository.class).to(DefaultTeamRepository.class);
-
-        bind(PlayerHidingCommandService.class).to(DefaultPlayerHidingCommandService.class);
-        bind(PlayerHidingQueryService.class).to(DefaultPlayerHidingQueryService.class);
-        bind(PlayerHidingRepository.class).to(DefaultPlayerHidingRepository.class);
+        expose(EntityProfileRepository.class);
 
         bind(EntityUtils.class).to(DefaultEntityUtils.class);
+        expose(EntityUtils.class);
 
-        bind(Float.class).annotatedWith(Names.named("BaseHealth")).toInstance(baseHealth);
+        // Player bindings
+        bind(PlayerCommandService.class).to(DefaultPlayerCommandService.class);
+        expose(PlayerCommandService.class);
 
+        bind(PlayerQueryService.class).to(DefaultPlayerQueryService.class);
+        expose(PlayerQueryService.class);
+
+        bind(PlayerProfileRepository.class).to(DefaultPlayerProfileRepository.class);
+        expose(PlayerProfileRepository.class);
+
+        // Attribute bindings
+        bind(AttributeCommandService.class).to(DefaultAttributeCommandService.class);
+        expose(AttributeCommandService.class);
+
+        bind(AttributeQueryService.class).to(DefaultAttributeQueryService.class);
+        expose(AttributeQueryService.class);
+
+        bind(AttributeRepository.class).to(DefaultAttributeRepository.class);
+        expose(AttributeRepository.class);
+
+        // Status bindings
+        bind(StatusCommandService.class).to(DefaultStatusCommandService.class);
+        expose(StatusCommandService.class);
+
+        bind(StatusQueryService.class).to(DefaultStatusQueryService.class);
+        expose(StatusQueryService.class);
+
+        bind(StatusRepository.class).to(DefaultStatusRepository.class);
+        expose(StatusRepository.class);
+
+        // Team bindings
+        bind(TeamCommandService.class).to(DefaultTeamCommandService.class);
+        expose(TeamCommandService.class);
+
+        bind(TeamQueryService.class).to(DefaultTeamQueryService.class);
+        expose(TeamQueryService.class);
+
+        bind(TeamRepository.class).to(DefaultTeamRepository.class);
+        expose(TeamRepository.class);
+
+        // Player hiding bindings
+        bind(PlayerHidingCommandService.class).to(DefaultPlayerHidingCommandService.class);
+        expose(PlayerHidingCommandService.class);
+
+        bind(PlayerHidingQueryService.class).to(DefaultPlayerHidingQueryService.class);
+        expose(PlayerHidingQueryService.class);
+
+        bind(PlayerHidingRepository.class).to(DefaultPlayerHidingRepository.class);
+        expose(PlayerHidingRepository.class);
+
+        // Misc entity bindings
         install(new FactoryModuleBuilder()
                 .implement(Entity.class, Names.named("entity"), LazyEntity.class)
                 .implement(Player.class, Names.named("player"), LazyPlayer.class)
                 .build(EntityFactory.class));
+        expose(EntityFactory.class);
+
+        bind(Float.class).annotatedWith(Names.named("BaseHealth")).toInstance(baseHealth);
+        // TODO moving all configuration code out of the plugin class into a configuration class allows for the
+        // TODO removal of this expose
+        expose(Key.get(Float.class, Names.named("BaseHealth")));
     }
 
     private void configureItem() {
         bind(ItemTypeUtils.class).to(DefaultItemTypeUtils.class);
+        expose(ItemTypeUtils.class);
 
         install(new FactoryModuleBuilder()
                 .implement(ItemBuilder.class, SimpleItemBuilder.class)
                 .build(ItemBuilderFactory.class));
+        expose(ItemBuilderFactory.class);
+
         install(new FactoryModuleBuilder()
                 .implement(ItemReader.class, SimpleItemReader.class)
                 .build(ItemReaderFactory.class));
+        expose(ItemReaderFactory.class);
     }
 
     private void configureMenu() {
         bind(MenuCommandService.class).to(DefaultMenuCommandService.class);
+        expose(MenuCommandService.class);
+
         bind(MenuQueryService.class).to(DefaultMenuQueryService.class);
+        expose(MenuQueryService.class);
+
         bind(MenuRepository.class).to(DefaultMenuRepository.class);
+        expose(MenuRepository.class);
 
         install(new FactoryModuleBuilder()
-                .implement(ButtonBuilder.class, SimpleButtonBuilder.class)
+                .implement(ButtonBuilder.class, Names.named("simple"), SimpleButtonBuilder.class)
+                .implement(ButtonBuilder.class, Names.named("skull"), SkullButtonBuilder.class)
                 .build(ButtonBuilderFactory.class));
+        expose(ButtonBuilderFactory.class);
 
         install(new FactoryModuleBuilder()
                 .implement(MenuBuilder.class, SimpleMenuBuilder.class)
                 .build(MenuBuilderFactory.class));
+        expose(MenuBuilderFactory.class);
     }
 
     private void configurePersistence() {
@@ -369,8 +445,10 @@ public class AbstractMonolithModule extends AbstractModule {
                 jedisConfiguration.setBlockWhenExhausted(false);
                 jedisConfiguration.setMaxTotal(8);
                 JedisPool jedisPool = new JedisPool(jedisConfiguration, redisHost, redisPort, 10);
+
                 bind(JedisPool.class).toInstance(jedisPool);
                 bind(PersistenceService.class).to(JedisPersistenceService.class);
+                expose(PersistenceService.class);
                 break;
             case "CUSTOM":
                 // do nothing, the implementing server should provide bindings
@@ -382,49 +460,82 @@ public class AbstractMonolithModule extends AbstractModule {
 
     private void configureUtil() {
         bind(MathUtils.class).to(DefaultMathUtils.class);
+        expose(MathUtils.class);
+
         bind(StringUtils.class).to(DefaultStringUtils.class);
+        expose(StringUtils.class);
+
         bind(TimeUtils.class).to(DefaultTimeUtils.class);
+        expose(TimeUtils.class);
     }
 
     private void configureWorld() {
+        // World bindings
         bind(WorldQueryService.class).to(DefaultWorldQueryService.class);
-        bind(WorldCommandService.class).to(DefaultWorldCommandService.class);
+        expose(WorldQueryService.class);
 
+        bind(WorldCommandService.class).to(DefaultWorldCommandService.class);
+        expose(WorldCommandService.class);
+
+        bind(DirectionUtils.class).to(DefaultDirectionUtils.class);
+        expose(DirectionUtils.class);
+
+        bind(LocationFactory.class).to(DefaultLocationFactory.class);
+        expose(LocationFactory.class);
+
+        // Block bindings
+        bind(BlockUtils.class).to(DefaultBlockUtils.class);
+        expose(BlockUtils.class);
+
+        bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
+        expose(BlockTypeUtils.class);
+
+        install(new FactoryModuleBuilder()
+                .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)
+                .build(BoundingBlockBoxFactory.class));
+        expose(BoundingBlockBoxFactory.class);
+
+        install(new FactoryModuleBuilder()
+                .implement(BlockIterator.class, SimpleBlockIterator.class)
+                .build(BlockIteratorFactory.class));
+        expose(BlockIteratorFactory.class);
+
+        // Block build bindings
+        bind(BlockBuildCommandService.class).to(DefaultBlockBuildCommandService.class);
+        expose(BlockBuildCommandService.class);
+
+        bind(BlockBuildQueryService.class).to(DefaultBlockBuildQueryService.class);
+        expose(BlockBuildQueryService.class);
+
+        bind(BlockBuildRepository.class).to(DefaultBlockBuildRepository.class);
+        expose(BlockBuildRepository.class);
+
+        // Block backup bindings
+        bind(BlockBackupCommandService.class).to(DefaultBlockBackupCommandService.class);
+        expose(BlockBackupCommandService.class);
+
+        bind(BlockBackupQueryService.class).to(DefaultBlockBackupQueryService.class);
+        expose(BlockBackupQueryService.class);
+
+        bind(BlockBackupRepository.class).to(DefaultBlockBackupRepository.class);
+        expose(BlockBackupRepository.class);
+
+        // Block spoofing bindings
+        bind(BlockSpoofingCommandService.class).to(DefaultBlockSpoofingCommandService.class);
+        expose(BlockSpoofingCommandService.class);
+
+        bind(BlockSpoofingQueryService.class).to(DefaultBlockSpoofingQueryService.class);
+        expose(BlockSpoofingQueryService.class);
+
+        bind(BlockSpoofingRepository.class).to(DefaultBlockSpoofingRepository.class);
+        expose(BlockSpoofingRepository.class);
+
+        // Misc world bindings
         bind(WorldType.class).annotatedWith(Names.named("BuildRepositoryWorld"))
                 .toInstance(buildRepositoryWorld);
         bind(Vector3ic.class).annotatedWith(Names.named("BuildRepositoryMinimumCorner"))
                 .toInstance(buildRepositoryMinimumCorner);
         bind(Vector3ic.class).annotatedWith(Names.named("BuildRepositoryMaximumCorner"))
                 .toInstance(buildRepositoryMaximumCorner);
-
-        bind(BlockBuildCommandService.class).to(DefaultBlockBuildCommandService.class);
-        bind(BlockBuildQueryService.class).to(DefaultBlockBuildQueryService.class);
-        bind(BlockBuildRepository.class).to(DefaultBlockBuildRepository.class);
-
-        bind(BlockBackupCommandService.class).to(DefaultBlockBackupCommandService.class);
-        bind(BlockBackupQueryService.class).to(DefaultBlockBackupQueryService.class);
-        bind(BlockBackupRepository.class).to(DefaultBlockBackupRepository.class);
-
-        bind(BlockSpoofingCommandService.class).to(DefaultBlockSpoofingCommandService.class);
-        bind(BlockSpoofingQueryService.class).to(DefaultBlockSpoofingQueryService.class);
-        bind(BlockSpoofingRepository.class).to(DefaultBlockSpoofingRepository.class);
-
-        bind(BlockUtils.class).to(DefaultBlockUtils.class);
-        bind(BlockTypeUtils.class).to(DefaultBlockTypeUtils.class);
-        bind(DirectionUtils.class).to(DefaultDirectionUtils.class);
-
-        install(new FactoryModuleBuilder()
-                .implement(Location.class, Names.named("location"), SimpleLocation.class)
-                .implement(BlockLocation.class, Names.named("block"), SimpleBlockLocation.class)
-                .implement(OrientedLocation.class, Names.named("oriented"), SimpleOrientedLocation.class)
-                .build(LocationFactory.class));
-
-        install(new FactoryModuleBuilder()
-                .implement(BoundingBlockBox.class, SimpleBoundingBlockBox.class)
-                .build(BoundingBlockBoxFactory.class));
-
-        install(new FactoryModuleBuilder()
-                .implement(BlockIterator.class, SimpleBlockIterator.class)
-                .build(BlockIteratorFactory.class));
     }
 }

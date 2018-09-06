@@ -1,9 +1,11 @@
 package gg.warcraft.monolith.spigot;
 
+import com.google.inject.Key;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import gg.warcraft.monolith.api.command.service.CommandServerAdapter;
 import gg.warcraft.monolith.api.core.AuthorizationService;
+import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.api.core.TaskService;
 import gg.warcraft.monolith.api.effect.Particle;
 import gg.warcraft.monolith.api.effect.ParticleFactory;
@@ -41,6 +43,8 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.joml.Vector3ic;
 
+import java.util.logging.Logger;
+
 public class SpigotMonolithModule extends AbstractMonolithModule {
     private final Plugin plugin;
     private final String overworldName;
@@ -72,19 +76,35 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     }
 
     private void configureBukkit() {
+        bind(Plugin.class).toInstance(plugin);
+
+        bind(Logger.class).annotatedWith(PluginLogger.class).toProvider(plugin::getLogger);
+
         bind(Server.class).toProvider(plugin::getServer);
+        expose(Server.class);
+
+        // Bukkit world bindings
         bind(World.class).annotatedWith(Overworld.class).toProvider(() -> plugin.getServer().getWorld(overworldName));
+        expose(Key.get(World.class, Overworld.class));
+
         bind(World.class).annotatedWith(TheNether.class).toProvider(() -> plugin.getServer().getWorld(theNetherName));
+        expose(Key.get(World.class, TheNether.class));
+
         bind(World.class).annotatedWith(TheEnd.class).toProvider(() -> plugin.getServer().getWorld(theEndName));
+        expose(Key.get(World.class, TheEnd.class));
     }
 
     private void configureCommand() {
         bind(CommandServerAdapter.class).to(SpigotCommandAdapter.class);
+        expose(CommandServerAdapter.class);
     }
 
     private void configureCore() {
         bind(AuthorizationService.class).to(SpigotAuthorizationService.class);
+        expose(AuthorizationService.class);
+
         bind(TaskService.class).to(SpigotTaskService.class);
+        expose(TaskService.class);
     }
 
     private void configureEffect() {
@@ -95,26 +115,39 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
                 .implement(Particle.class, Names.named("multi"), MultiParticle.class)
                 .implement(Particle.class, Names.named("queued"), QueuedParticle.class)
                 .build(ParticleFactory.class));
+        expose(ParticleFactory.class);
     }
 
     private void configureEntity() {
+        // Entity server adapters
         bind(EntityServerAdapter.class).to(SpigotEntityAdapter.class);
-        bind(PlayerServerAdapter.class).to(SpigotPlayerAdapter.class);
-        bind(PlayerHidingServerAdapter.class).to(SpigotPlayerHidingAdapter.class);
+        expose(EntityServerAdapter.class);
 
+        bind(PlayerServerAdapter.class).to(SpigotPlayerAdapter.class);
+        expose(PlayerServerAdapter.class);
+
+        bind(PlayerHidingServerAdapter.class).to(SpigotPlayerHidingAdapter.class);
+        expose(PlayerHidingServerAdapter.class);
+
+        // Entity factory bindings
         install(new FactoryModuleBuilder()
                 .implement(EntityServerData.class, SpigotEntityData.class)
                 .build(SpigotEntityDataFactory.class));
+        expose(SpigotEntityDataFactory.class);
+
         install(new FactoryModuleBuilder()
                 .implement(PlayerServerData.class, SpigotPlayerData.class)
                 .build(SpigotPlayerDataFactory.class));
+        expose(SpigotPlayerDataFactory.class);
     }
 
     private void configureMenu() {
         bind(MenuServerAdapter.class).to(SpigotMenuAdapter.class);
+        expose(MenuServerAdapter.class);
     }
 
     private void configureWorld() {
         bind(WorldServerAdapter.class).to(SpigotWorldAdapter.class);
+        expose(WorldServerAdapter.class);
     }
 }

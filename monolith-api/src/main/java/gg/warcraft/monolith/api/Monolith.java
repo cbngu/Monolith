@@ -1,7 +1,7 @@
 package gg.warcraft.monolith.api;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * child injector if you have modules to add of your own.
  */
 public class Monolith {
-    private static final List<AbstractModule> modules = new ArrayList<>();
+    private static final List<Module> modules = new ArrayList<>();
 
     private static Monolith instance;
 
@@ -23,11 +23,11 @@ public class Monolith {
         return instance;
     }
 
-    public static List<AbstractModule> getModules() {
+    public static List<Module> getModules() {
         return new ArrayList<>(modules);
     }
 
-    public static void registerModule(AbstractModule module) {
+    public static void registerModule(Module module) {
         modules.add(module);
     }
 

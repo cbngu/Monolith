@@ -21,8 +21,10 @@ import gg.warcraft.monolith.app.world.block.build.SimpleBlockBuild;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BinaryOperator;
@@ -143,6 +145,19 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
         return new SimpleBlockBuild(type, model, lines, boundingBox);
     }
 
+    void logInitializedBuilds(List<BlockBuild> builds) {
+        Map<String, Integer> buildCountByType = new HashMap<>();
+        builds.forEach(build -> {
+            int count = buildCountByType.getOrDefault(build.getType(), 0);
+            buildCountByType.put(build.getType(), count + 1);
+        });
+        StringBuilder buildCountByTypeStringBuilder = new StringBuilder();
+        buildCountByType.forEach((type, count) -> buildCountByTypeStringBuilder
+                .append(", ").append(count).append("x ").append(type));
+        String buildCountByTypeString = buildCountByTypeStringBuilder.toString();
+        logger.info("Initialized " + builds.size() + " builds in build repository" + buildCountByTypeString);
+    }
+
     @Override
     public void initializeBuilds() {
         Stream<Block> floor = buildRepositoryBoundingBox.sliceY(buildRepositoryBoundingBox.getLowerBoundary());
@@ -152,7 +167,7 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
                 .map(this::initializeBuild)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        logger.info("Initialized " + builds.size() + " builds in build repository");
+        logInitializedBuilds(builds);
         builds.forEach(buildRepository::save);
     }
 }

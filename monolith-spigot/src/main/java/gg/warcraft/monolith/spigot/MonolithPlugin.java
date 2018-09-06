@@ -1,8 +1,8 @@
 package gg.warcraft.monolith.spigot;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import gg.warcraft.monolith.api.Monolith;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.TaskService;
@@ -43,7 +43,7 @@ public class MonolithPlugin extends JavaPlugin {
     private TaskService taskService;
 
     void initializeInjector() {
-        List<AbstractModule> monolithModules = Monolith.getModules();
+        List<Module> monolithModules = Monolith.getModules();
         List<String> monolithModuleNames = monolithModules.stream()
                 .map(module -> module.getClass().getSimpleName())
                 .collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class MonolithPlugin extends JavaPlugin {
         String netherName = localConfig.getString("netherDirectoryName");
         String theEndName = localConfig.getString("endDirectoryName");
 
-        AbstractModule spigotMonolithModule = new SpigotMonolithModule(
+        Module spigotMonolithModule = new SpigotMonolithModule(
                 configurationService, gitHubAccount, gitHubRepository,
                 persistenceService, redisHost, redisPort,
                 baseHealth, buildRepositoryWorld,
@@ -155,9 +155,7 @@ public class MonolithPlugin extends JavaPlugin {
         }
 
         initializeInjector();
-        Injector baseInjector = Monolith.getInstance().getInjector();
-        AbstractModule privateMonolithModule = new PrivateSpigotMonolithModule(this);
-        injector = baseInjector.createChildInjector(privateMonolithModule);
+        injector = Monolith.getInstance().getInjector();
         eventService = injector.getInstance(EventService.class);
         taskService = injector.getInstance(TaskService.class);
 
