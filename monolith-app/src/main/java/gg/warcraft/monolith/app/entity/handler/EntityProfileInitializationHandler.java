@@ -27,7 +27,7 @@ public class EntityProfileInitializationHandler {
             UUID entityId = event.getEntityId();
             EntityProfile profile = entityProfileRepository.get(entityId);
             if (profile == null) {
-                EntityProfile newProfile = new SimpleEntityProfile(entityId, null, new HashMap<>());
+                EntityProfile newProfile = new SimpleEntityProfile(entityId, new HashMap<>());
                 entityProfileRepository.save(newProfile);
             }
         }

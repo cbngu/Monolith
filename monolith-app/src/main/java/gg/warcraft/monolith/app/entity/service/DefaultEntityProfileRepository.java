@@ -38,9 +38,8 @@ public class DefaultEntityProfileRepository implements EntityProfileRepository {
 
     EntityProfile mapItemToProfile(EntityProfileItem item) {
         UUID entityId = item.getEntityId();
-        String team = item.getTeam();
         Map<String, String> data = item.getData();
-        return new SimpleEntityProfile(entityId, team, data);
+        return new SimpleEntityProfile(entityId, data);
     }
 
     @Override
@@ -62,9 +61,8 @@ public class DefaultEntityProfileRepository implements EntityProfileRepository {
 
     EntityProfileItem mapProfileToItem(EntityProfile profile) {
         UUID entityId = profile.getEntityId();
-        String team = profile.getTeam();
         Map<String, String> data = profile.getData();
-        return new EntityProfileItem(entityId, team, data);
+        return new EntityProfileItem(entityId, data);
     }
 
     @Override

@@ -44,10 +44,9 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         long timePlayed = item.getTimePlayed();
         Map<String, Integer> currencies = item.getCurrencies();
         Map<String, Integer> lifetimeCurrencies = item.getLifetimeCurrencies();
-        String team = item.getTeam();
         Map<String, String> data = item.getData();
         return new SimplePlayerProfile(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, lifetimeCurrencies, team, data);
+                currencies, lifetimeCurrencies, data);
     }
 
     @Override
@@ -55,6 +54,7 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         String profileKey = createProfileKey(playerId);
         String profileJson = persistenceService.get(profileKey);
         if (profileJson == null) {
+            pluginLogger.severe("Failed to retrieve profile for player " + playerId);
             return null;
         }
 
@@ -75,10 +75,9 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         long timePlayed = profile.getTimePlayed();
         Map<String, Integer> currencies = profile.getCurrencies();
         Map<String, Integer> lifetimeCurrencies = profile.getLifetimeCurrencies();
-        String team = profile.getTeam();
         Map<String, String> data = profile.getData();
         return new PlayerProfileItem(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed, currencies,
-                lifetimeCurrencies, team, data);
+                lifetimeCurrencies, data);
     }
 
     @Override

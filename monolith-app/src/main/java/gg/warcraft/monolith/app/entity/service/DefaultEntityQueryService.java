@@ -4,15 +4,14 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.Entity;
 import gg.warcraft.monolith.api.entity.EntityFactory;
 import gg.warcraft.monolith.api.entity.EntityServerData;
+import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
+import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
-import gg.warcraft.monolith.api.world.block.BlockIteratorFactory;
-import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.location.Location;
-import gg.warcraft.monolith.api.world.service.WorldQueryService;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,28 +22,27 @@ public class DefaultEntityQueryService implements EntityQueryService {
     private final AttributeQueryService attributeQueryService;
     private final StatusQueryService statusQueryService;
     private final EntityServerAdapter entityServerAdapter;
-    private final WorldQueryService worldQueryService;
+    private final PlayerQueryService playerQueryService;
     private final EntityFactory entityFactory;
-    private final BlockIteratorFactory blockIteratorFactory;
-    private final BlockTypeUtils blockTypeUtils;
 
     @Inject
     public DefaultEntityQueryService(EntityProfileRepository entityProfileRepository,
                                      AttributeQueryService attributeQueryService, StatusQueryService statusQueryService,
-                                     EntityServerAdapter entityServerAdapter, WorldQueryService worldQueryService,
-                                     EntityFactory entityFactory, BlockIteratorFactory blockIteratorFactory,
-                                     BlockTypeUtils blockTypeUtils) {
+                                     EntityServerAdapter entityServerAdapter, PlayerQueryService playerQueryService,
+                                     EntityFactory entityFactory) {
         this.entityProfileRepository = entityProfileRepository;
         this.attributeQueryService = attributeQueryService;
         this.statusQueryService = statusQueryService;
         this.entityServerAdapter = entityServerAdapter;
-        this.worldQueryService = worldQueryService;
+        this.playerQueryService = playerQueryService;
         this.entityFactory = entityFactory;
-        this.blockIteratorFactory = blockIteratorFactory;
-        this.blockTypeUtils = blockTypeUtils;
     }
 
     Entity getEntity(EntityServerData serverData) {
+        if (serverData.getType() == EntityType.PLAYER) {
+            return playerQueryService.getPlayer(serverData.getEntityId());
+        }
+
         UUID entityId = serverData.getEntityId();
         return entityFactory.createEntity(
                 () -> entityProfileRepository.get(entityId),

@@ -8,6 +8,7 @@ import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.entity.team.Team;
+import gg.warcraft.monolith.api.entity.team.service.TeamCommandService;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
@@ -19,29 +20,23 @@ import java.util.UUID;
 
 public class DefaultEntityCommandService extends AbstractEntityCommandService {
     private final EntityProfileRepository entityProfileRepository;
-
+    private final TeamCommandService teamCommandService;
 
     @Inject
     public DefaultEntityCommandService(EntityProfileRepository entityProfileRepository,
-                                       EntityQueryService entityQueryService,
+                                       TeamCommandService teamCommandService, EntityQueryService entityQueryService,
                                        EntityServerAdapter entityServerAdapter, WorldQueryService worldQueryService,
                                        EventService eventService, BlockUtils blockUtils, BlockTypeUtils blockTypeUtils,
                                        TimeUtils timeUtils) {
         super(entityQueryService, entityServerAdapter, worldQueryService, eventService, blockUtils, blockTypeUtils,
                 timeUtils);
         this.entityProfileRepository = entityProfileRepository;
+        this.teamCommandService = teamCommandService;
     }
 
     @Override
     public void setTeam(UUID entityId, Team team) {
-        EntityProfile profile = entityProfileRepository.get(entityId);
-        if (profile == null) {
-            throw new IllegalArgumentException("Failed to set team for non-existent non-player entity with id "
-                    + entityId + ", did you mean to use PlayerCommandService::setTeam?");
-        }
-
-        EntityProfile newProfile = new SimpleEntityProfile(profile.getEntityId(), team.getName(), profile.getData());
-        entityProfileRepository.save(newProfile);
+        teamCommandService.setTeam(team, entityId);
     }
 
     @Override
@@ -64,7 +59,7 @@ public class DefaultEntityCommandService extends AbstractEntityCommandService {
         } else {
             newData.remove(data);
         }
-        EntityProfile newProfile = new SimpleEntityProfile(profile.getEntityId(), profile.getTeam(), newData);
+        EntityProfile newProfile = new SimpleEntityProfile(profile.getEntityId(), newData);
         entityProfileRepository.save(newProfile);
     }
 }
