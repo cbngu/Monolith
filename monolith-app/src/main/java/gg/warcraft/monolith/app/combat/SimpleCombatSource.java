@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.combat.CombatSource;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class SimpleCombatSource implements CombatSource {
@@ -11,7 +12,7 @@ public class SimpleCombatSource implements CombatSource {
     private final UUID entityId;
 
     @Inject
-    public SimpleCombatSource(@Assisted String name, @Assisted UUID entityId) {
+    public SimpleCombatSource(@Assisted String name, @Assisted @Nullable UUID entityId) {
         this.name = name;
         this.entityId = entityId;
     }

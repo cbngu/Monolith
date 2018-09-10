@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.app.core;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import gg.warcraft.monolith.api.core.PersistenceService;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -12,21 +13,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Singleton
 public class JedisPersistenceService implements PersistenceService {
-    private final Jedis jedis;
+    private final JedisPool pool;
+
+    private Jedis jedis;
 
     @Inject
     public JedisPersistenceService(JedisPool pool) {
+        this.pool = pool;
         this.jedis = pool.getResource();
     }
 
     @Override
     public String get(String key) {
+        try {
+            return jedis.get(key);
+        } catch (Exception ex) {
+            jedis.close();
+            jedis = pool.getResource();
+        }
         return jedis.get(key);
     }
 
     @Override
     public void set(String key, String value) {
+        try {
+            jedis.set(key, value);
+        } catch (Exception ex) {
+            // FIXME look into caching failed attempts if new resource doesn't work
+            jedis.close();
+            jedis = pool.getResource();
+        }
         jedis.set(key, value);
     }
 

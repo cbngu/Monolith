@@ -18,6 +18,7 @@ import gg.warcraft.monolith.app.combat.event.SimpleProjectilePreLaunchEvent;
 import gg.warcraft.monolith.app.combat.event.SimpleProjectilePrePickupEvent;
 import gg.warcraft.monolith.spigot.world.block.SpigotBlockMapper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -73,7 +74,7 @@ public class SpigotProjectileEventMapper implements Listener {
         org.bukkit.entity.Projectile projectile = event.getEntity();
         Block block = blockMapper.map(event.getHitBlock());
         UUID entityId = null;
-        if (event.getHitEntity() != null) {
+        if (event.getHitEntity() instanceof LivingEntity) {
             entityId = event.getHitEntity().getUniqueId();
         }
 
@@ -90,7 +91,7 @@ public class SpigotProjectileEventMapper implements Listener {
         org.bukkit.entity.Projectile projectile = event.getEntity();
         Block block = blockMapper.map(event.getHitBlock());
         UUID entityId = null;
-        if (event.getHitEntity() != null) {
+        if (event.getHitEntity() instanceof LivingEntity) {
             entityId = event.getHitEntity().getUniqueId();
         }
 

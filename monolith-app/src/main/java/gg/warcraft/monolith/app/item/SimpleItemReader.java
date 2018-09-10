@@ -9,8 +9,6 @@ import gg.warcraft.monolith.api.item.ItemReader;
 import java.util.List;
 
 public class SimpleItemReader implements ItemReader {
-    private static final int PLUS_INDEX = 0;
-
     private final Item item;
 
     @Inject
@@ -23,9 +21,12 @@ public class SimpleItemReader implements ItemReader {
         List<String> lore = item.getLore();
         for (String line : lore) {
             if (line.contains(attribute.getName())) {
-                int spaceIndex = line.indexOf(" ");
-                String attributeValueSubString = line.substring(PLUS_INDEX + 1, spaceIndex);
-                return Integer.parseInt(attributeValueSubString);
+                String cleanedLine = line.replaceAll("[\\D]", "");
+                try {
+                    return Integer.parseInt(cleanedLine);
+                } catch (NumberFormatException ex) {
+                    return 0;
+                }
             }
         }
         return 0;

@@ -8,6 +8,7 @@ import gg.warcraft.monolith.api.menu.Menu;
 import gg.warcraft.monolith.api.menu.service.MenuQueryService;
 import gg.warcraft.monolith.api.menu.service.MenuRepository;
 import gg.warcraft.monolith.app.menu.SimpleClick;
+import gg.warcraft.monolith.spigot.menu.MonolithMenuHolder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,16 +33,19 @@ public class SpigotInventoryEventMapper implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryClickEvent(InventoryClickEvent event) {
         UUID clickerId = event.getWhoClicked().getUniqueId();
-        Menu menu = menuQueryService.getMenu(clickerId);
-        if (menu != null) {
+        if (event.getInventory().getHolder() instanceof MonolithMenuHolder) {
             event.setCancelled(true);
-            if (event.isLeftClick() || event.isRightClick()) {
-                Button button = menu.getButtons().get(event.getSlot());
-                if (button != null) {
-                    Click click = new SimpleClick(clickerId, event.isLeftClick(), event.isShiftClick());
-                    button.getAction().accept(click);
+
+            Menu menu = menuQueryService.getMenu(clickerId);
+            if (menu != null) {
+                if (event.isLeftClick() || event.isRightClick()) {
+                    Button button = menu.getButtons().get(event.getSlot());
+                    if (button != null) {
+                        Click click = new SimpleClick(clickerId, event.isLeftClick(), event.isShiftClick());
+                        button.getAction().accept(click);
+                    }
+                    // TODO publish Monolith menu click event
                 }
-                // TODO publish Monolith menu click event
             }
         } else {
             // TODO publish Monolith inventory pre click event

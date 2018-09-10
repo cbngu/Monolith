@@ -1,19 +1,30 @@
 package gg.warcraft.monolith.spigot.event;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import gg.warcraft.monolith.api.combat.CombatFactory;
+import gg.warcraft.monolith.api.combat.CombatSource;
+import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.event.EntityAttackEvent;
+import gg.warcraft.monolith.api.entity.event.EntityDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
 import gg.warcraft.monolith.api.entity.event.EntityInteractEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreAttackEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreFatalDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreInteractEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreSpawnEvent;
 import gg.warcraft.monolith.api.entity.event.EntitySpawnEvent;
-import gg.warcraft.monolith.api.entity.player.Player;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.location.Location;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityAttackEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityDeathEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityInteractEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreAttackEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreFatalDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreInteractEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreSpawnEvent;
@@ -21,32 +32,46 @@ import gg.warcraft.monolith.app.entity.event.SimpleEntitySpawnEvent;
 import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.location.SpigotLocationMapper;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.projectiles.ProjectileSource;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Singleton
 public class SpigotEntityEventMapper implements Listener {
     private final EventService eventService;
+    private final CombatFactory combatFactory;
     private final SpigotEntityTypeMapper entityTypeMapper;
     private final SpigotItemMapper itemMapper;
     private final SpigotLocationMapper locationMapper;
 
+    private final Map<Event, CombatValue> combatValues;
+
     @Inject
-    public SpigotEntityEventMapper(EventService eventService, SpigotEntityTypeMapper entityTypeMapper,
-                                   SpigotItemMapper itemMapper, SpigotLocationMapper locationMapper) {
+    public SpigotEntityEventMapper(EventService eventService, CombatFactory combatFactory,
+                                   SpigotEntityTypeMapper entityTypeMapper, SpigotItemMapper itemMapper,
+                                   SpigotLocationMapper locationMapper) {
         this.eventService = eventService;
+        this.combatFactory = combatFactory;
         this.entityTypeMapper = entityTypeMapper;
         this.itemMapper = itemMapper;
         this.locationMapper = locationMapper;
+
+        this.combatValues = new HashMap<>();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -75,6 +100,10 @@ public class SpigotEntityEventMapper implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityPreInteractEvent(PlayerInteractAtEntityEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
+
         org.bukkit.entity.Player player = event.getPlayer();
         UUID entityId = event.getRightClicked().getUniqueId();
         EntityType entityType = entityTypeMapper.map(event.getRightClicked().getType());
@@ -93,6 +122,10 @@ public class SpigotEntityEventMapper implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityInteractEvent(PlayerInteractAtEntityEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
+
         org.bukkit.entity.Player player = event.getPlayer();
         UUID entityId = event.getRightClicked().getUniqueId(); // FIXME do we only want this for livingentities? Gonna need a new event for others
         EntityType entityType = entityTypeMapper.map(event.getRightClicked().getType());
@@ -106,35 +139,121 @@ public class SpigotEntityEventMapper implements Listener {
         eventService.publish(entityInteractEvent);
     }
 
-    // TODO rework this into multiple events: EntityDamageEvent, Entity(pre)FatalDamageEvent, and EntityDeathEvent
-    @EventHandler
-    public void onEntityDamageEvent(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            return;
+    void onEntityPreAttackEvent(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+
+        Entity damager = event.getDamager();
+        UUID attackerId = event.getDamager().getUniqueId();
+        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
+            Arrow arrow = (Arrow) damager;
+            ProjectileSource arrowSource = arrow.getShooter();
+            if (arrowSource instanceof LivingEntity) {
+                attackerId = ((LivingEntity) arrowSource).getUniqueId();
+            }
         }
 
-        if (event.getEntity() instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity) event.getEntity();
-            if (event.getDamage() > livingEntity.getHealth()) {
-                UUID entityId = livingEntity.getUniqueId();
-                EntityType entityType = entityTypeMapper.map(livingEntity.getType());
-                EntityPreFatalDamageEvent entityPreFatalDamageEvent =
-                        new SimpleEntityPreFatalDamageEvent(entityId, entityType, event.isCancelled());
-                eventService.publish(entityPreFatalDamageEvent);
+        CombatSource combatSource = combatFactory.createCombatSource(damager.getName(), attackerId);
+        CombatValue damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
 
-                if (entityPreFatalDamageEvent.isCancelled() && !entityPreFatalDamageEvent.isExplicitlyAllowed()) {
-                    event.setDamage(livingEntity.getHealth() - 1);
-                }
+        EntityPreAttackEvent entityPreAttackEvent = new SimpleEntityPreAttackEvent(entityId, entityType, attackerId,
+                damage, event.isCancelled());
+        eventService.publish(entityPreAttackEvent);
+
+        combatValues.put(event, entityPreAttackEvent.getDamage());
+        event.setDamage(entityPreAttackEvent.getDamage().getModifiedValue());
+
+        boolean isCancelled = entityPreAttackEvent.isCancelled() && !entityPreAttackEvent.isExplicitlyAllowed();
+        event.setCancelled(isCancelled);
+    }
+
+    void onEntityAttackEvent(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+
+        Entity damager = event.getDamager();
+        UUID attackerId = event.getDamager().getUniqueId();
+        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
+            Arrow arrow = (Arrow) damager;
+            ProjectileSource arrowSource = arrow.getShooter();
+            if (arrowSource instanceof LivingEntity) {
+                attackerId = ((LivingEntity) arrowSource).getUniqueId();
+            }
+        }
+
+        CombatValue damage = combatValues.get(event);
+        EntityAttackEvent entityAttackEvent = new SimpleEntityAttackEvent(entityId, entityType, attackerId, damage);
+        eventService.publish(entityAttackEvent);
+    }
+
+    // TODO rework this into multiple events: EntityDamageEvent, Entity(pre)FatalDamageEvent, and EntityDeathEvent
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onEntityPreDamageEvent(org.bukkit.event.entity.EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+        LivingEntity entity = (LivingEntity) event.getEntity();
+
+        org.bukkit.event.entity.EntityDamageEvent.DamageCause cause = event.getCause();
+        if (cause == org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+            onEntityPreAttackEvent((EntityDamageByEntityEvent) event);
+            if (event.isCancelled()) {
+                return;
+            }
+        }
+
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+        CombatValue damage = combatValues.get(event);
+        if (damage == null) {
+            CombatSource combatSource = combatFactory.createCombatSource(event.getCause().name(), null);
+            damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
+        }
+        EntityPreDamageEvent entityPreDamageEvent = new SimpleEntityPreDamageEvent(entityId, entityType, damage, event.isCancelled());
+        eventService.publish(entityPreDamageEvent);
+
+        if (event.getDamage() > entity.getHealth()) {
+            EntityPreFatalDamageEvent entityPreFatalDamageEvent =
+                    new SimpleEntityPreFatalDamageEvent(entityId, entityType, event.isCancelled());
+            eventService.publish(entityPreFatalDamageEvent);
+            if (entityPreFatalDamageEvent.isCancelled() && !entityPreFatalDamageEvent.isExplicitlyAllowed()) {
+                event.setDamage(entity.getHealth() - 1);
             }
         }
     }
 
-    @EventHandler
-    public void onEntityDeath(org.bukkit.event.entity.EntityDeathEvent event) {
-        if (event.getEntity() instanceof Player) {
+    @EventHandler(priority = EventPriority.MONITOR) // don't auto ignore cancelled until combat value is removed
+    public void onEntityDamageEvent(org.bukkit.event.entity.EntityDamageEvent event) {
+        if (event.isCancelled()) {
+            combatValues.remove(event);
             return;
         }
 
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+        LivingEntity entity = (LivingEntity) event.getEntity();
+
+        org.bukkit.event.entity.EntityDamageEvent.DamageCause cause = event.getCause();
+        if (cause == org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+            onEntityAttackEvent((EntityDamageByEntityEvent) event);
+        }
+
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+        CombatValue damage = combatValues.remove(event);
+        if (damage == null) {
+            CombatSource combatSource = combatFactory.createCombatSource(event.getCause().name(), null);
+            damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
+        }
+        EntityDamageEvent entityDamageEvent = new SimpleEntityDamageEvent(entityId, entityType, damage);
+        eventService.publish(entityDamageEvent);
+    }
+
+    @EventHandler
+    public void onEntityDeathEvent(org.bukkit.event.entity.EntityDeathEvent event) {
         UUID entityId = event.getEntity().getUniqueId();
         EntityType entityType = entityTypeMapper.map(event.getEntityType());
         List<Item> drops = event.getDrops().stream()

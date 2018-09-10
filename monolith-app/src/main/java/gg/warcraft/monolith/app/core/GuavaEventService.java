@@ -15,6 +15,7 @@ public class GuavaEventService implements EventService {
 
     @Override
     public void publish(Event event) {
+        System.out.println("DEBUG Event service asked to publish: " + event.getClass().getSimpleName());
         bus.post(event);
     }
 

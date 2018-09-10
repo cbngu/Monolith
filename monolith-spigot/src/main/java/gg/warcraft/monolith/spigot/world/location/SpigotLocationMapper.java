@@ -21,6 +21,17 @@ public class SpigotLocationMapper {
     }
 
     public org.bukkit.Location map(Location location) {
+        if (location instanceof OrientedLocation) {
+            OrientedLocation orientedLocation = (OrientedLocation) location;
+            org.bukkit.World world = worldMapper.map(location.getWorld());
+            float x = location.getX();
+            float y = location.getY();
+            float z = location.getZ();
+            float pitch = orientedLocation.getPitch();
+            float yaw = orientedLocation.getYaw();
+            return new org.bukkit.Location(world, x, y, z, yaw, pitch);
+        }
+
         org.bukkit.World world = worldMapper.map(location.getWorld());
         float x = location.getX();
         float y = location.getY();
@@ -54,6 +65,7 @@ public class SpigotLocationMapper {
 
     public OrientedLocation map(LivingEntity entity) {
         org.bukkit.Location location = entity.getLocation();
+        System.out.println("DEBUG mapping location with pitch " + location.getPitch() + " and yaw " + location.getYaw());
         Vector3f direction = new Vector3f(
                 (float) location.getDirection().getX(),
                 (float) location.getDirection().getY(),
@@ -70,6 +82,7 @@ public class SpigotLocationMapper {
 
     public OrientedLocation mapEye(LivingEntity entity) {
         org.bukkit.Location location = entity.getEyeLocation();
+        System.out.println("DEBUG mapping EYE location with pitch " + location.getPitch() + " and yaw " + location.getYaw());
         Vector3f direction = new Vector3f(
                 (float) location.getDirection().getX(),
                 (float) location.getDirection().getY(),

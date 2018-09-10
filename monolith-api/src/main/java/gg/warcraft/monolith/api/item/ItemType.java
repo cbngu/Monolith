@@ -1,8 +1,5 @@
 package gg.warcraft.monolith.api.item;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * ItemType serves as an abstraction layer between Monolith plugin code and the eventual server implementation the
  * plugin is run on. It is identical to part of Spigot's {@code Material} and the server adapter will substitute its
@@ -737,36 +734,6 @@ public enum ItemType {
     WARD_DISC("minecraft:record_ward", 2265),
     ELEVEN_DISC("minecraft:record_11", 2266),
     WAIT_DISC("minecraft:record_wait", 2267);
-
-    private static final Map<String, ItemType> types = new HashMap<>();
-
-    static {
-        for (ItemType type : ItemType.values()) {
-            String typeKey = type.getId() + ":" + type.getData();
-            types.put(typeKey, type);
-        }
-    }
-
-    /**
-     * Returns the item type with the given id.
-     *
-     * @param id The id.
-     * @return The item type with the given id. Can be null.
-     */
-    public static ItemType get(int id) {
-        return get(id, 0);
-    }
-
-    /**
-     * Returns the item type with the given id and data.
-     *
-     * @param id   The id.
-     * @param data The data.
-     * @return The item type with the given id and data. Can be null.
-     */
-    public static ItemType get(int id, int data) {
-        return types.get(id + ":" + data);
-    }
 
     private final String type;
     private final int id;

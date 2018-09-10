@@ -11,6 +11,7 @@ import org.bukkit.Server;
 import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -29,7 +30,8 @@ public class SpigotMenuMapper {
 
     public Inventory map(Menu menu, UUID viewerId) {
         Player player = server.getPlayer(viewerId);
-        Inventory inventory = server.createInventory(player, menu.getSize().getNumberOfSlots(), menu.getTitle());
+        MonolithMenuHolder menuHolder = new MonolithMenuHolder(player);
+        Inventory inventory = server.createInventory(menuHolder, menu.getSize().getNumberOfSlots(), menu.getTitle());
         menu.getButtons().forEach((slot, button) -> {
             ItemStack item = map(button);
             inventory.setItem(slot, item);
@@ -43,6 +45,7 @@ public class SpigotMenuMapper {
         itemMeta.setDisplayName(button.getTitle());
         itemMeta.setLore(button.getTooltip());
         itemMeta.setOwner(button.getPlayerName());
+        itemMeta.addItemFlags(ItemFlag.values());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
@@ -57,6 +60,7 @@ public class SpigotMenuMapper {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(button.getTitle());
         meta.setLore(button.getTooltip());
+        meta.addItemFlags(ItemFlag.values());
         item.setItemMeta(meta);
         return item;
     }

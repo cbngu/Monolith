@@ -443,7 +443,6 @@ public class AbstractMonolithModule extends PrivateModule {
             case "REDIS":
                 JedisPoolConfig jedisConfiguration = new JedisPoolConfig();
                 jedisConfiguration.setBlockWhenExhausted(false);
-                jedisConfiguration.setMaxTotal(8);
                 JedisPool jedisPool = new JedisPool(jedisConfiguration, redisHost, redisPort, 10);
 
                 bind(JedisPool.class).toInstance(jedisPool);

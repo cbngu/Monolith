@@ -87,7 +87,8 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
                 && Objects.equals(getY(), other.getY())
                 && Objects.equals(getZ(), other.getZ())
                 && Objects.equals(getPitch(), other.getPitch())
-                && Objects.equals(getYaw(), other.getYaw());
+                && Objects.equals(getYaw(), other.getYaw())
+                && Objects.equals(getDirection(), other.getDirection());
     }
 
     @Override
@@ -97,7 +98,8 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
                 getY() + "," +
                 getZ() + "," +
                 getPitch() + "," +
-                getYaw();
+                getYaw() + "," +
+                getDirection();
         return id.hashCode();
     }
 
@@ -110,6 +112,7 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
                 .add("z", getZ())
                 .add("pitch", getPitch())
                 .add("yaw", getYaw())
+                .add("direction", getDirection())
                 .toString();
     }
 }

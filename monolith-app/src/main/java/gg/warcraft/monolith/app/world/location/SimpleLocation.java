@@ -165,6 +165,9 @@ public class SimpleLocation implements Location {
 
     @Override
     public BlockLocation toBlockLocation() {
-        return new SimpleBlockLocation(world, (int) x, (int) y, (int) z);
+        int blockX = x >= 0 ? (int) x : (int) Math.floor(x);
+        int blockY = y >= 0 ? (int) y : (int) Math.floor(y);
+        int blockZ = z >= 0 ? (int) z : (int) Math.floor(z);
+        return new SimpleBlockLocation(world, blockX, blockY, blockZ);
     }
 }

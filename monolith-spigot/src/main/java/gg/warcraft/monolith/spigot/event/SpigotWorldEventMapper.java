@@ -34,6 +34,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +90,7 @@ public class SpigotWorldEventMapper implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR) // return if cancelled after removing alternative drops
     public void onBlockBreakEvent(org.bukkit.event.block.BlockBreakEvent event) {
         List<Item> alternativeDrops = alternativeDropsByEvent.remove(event);
         if (event.isCancelled()) {
@@ -165,6 +166,10 @@ public class SpigotWorldEventMapper implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerPreInteractEvent(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
+
         switch (event.getAction()) {
             case LEFT_CLICK_BLOCK:
             case RIGHT_CLICK_BLOCK:
@@ -198,6 +203,10 @@ public class SpigotWorldEventMapper implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
+
         switch (event.getAction()) {
             case LEFT_CLICK_BLOCK:
             case RIGHT_CLICK_BLOCK:

@@ -41,8 +41,7 @@ public class DefaultWorldQueryService implements WorldQueryService {
 
     @Override
     public Block getBlockAt(Location location) {
-        return serverAdapter.getBlockAt(location.getWorld().getType(),
-                (int) location.getX(), (int) location.getY(), (int) location.getZ());
+        return getBlockAt(location.toBlockLocation());
     }
 
     @Override

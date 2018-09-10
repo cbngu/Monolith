@@ -7,9 +7,6 @@ import gg.warcraft.monolith.api.world.block.BlockIterator;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
 import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
-import org.joml.AABBf;
-import org.joml.Rayf;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -61,17 +58,20 @@ public class SimpleBlockIterator implements BlockIterator {
 
     @Override
     public Location calculateIntersection() {
-        Vector3fc blockMinimumCorner = currentBlockLocation.toLocation().toVector();
-        AABBf blockBoundingBox = new AABBf(blockMinimumCorner, blockMinimumCorner.add(1, 1, 1, new Vector3f()));
-        Rayf iteratorRay = new Rayf(origin.toVector(), direction);
-        Vector2f intersectionResult = new Vector2f();
-        if (blockBoundingBox.intersectRay(iteratorRay, intersectionResult)) {
-            float nearIntersectionScalar = intersectionResult.x;
-            return origin.add(direction.mul(nearIntersectionScalar, new Vector3f()));
-        } else {
-            throw new IllegalStateException("Failed to calculate intersection for current block location in block " +
-                    "iterator, this should not be possible.");
-        }
+        return currentBlockLocation.toLocation().add(0.5f, 0.5f, 0.5f);
+        // FIXME
+//        System.out.println("DEBUG Calculating intersection for " + currentBlockLocation);
+//        Vector3fc blockMinimumCorner = currentBlockLocation.toLocation().toVector();
+//        AABBf blockBoundingBox = new AABBf(blockMinimumCorner, blockMinimumCorner.add(1, 1, 1, new Vector3f()));
+//        Rayf iteratorRay = new Rayf(origin.toVector(), direction);
+//        Vector2f intersectionResult = new Vector2f();
+//        if (blockBoundingBox.intersectRay(iteratorRay, intersectionResult)) {
+//            float nearIntersectionScalar = intersectionResult.x;
+//            return origin.add(direction.mul(nearIntersectionScalar, new Vector3f()));
+//        } else {
+//            throw new IllegalStateException("Failed to calculate intersection for current block location in block " +
+//                    "iterator, this should not be possible.");
+//        }
     }
 
     @Override
@@ -83,6 +83,7 @@ public class SimpleBlockIterator implements BlockIterator {
     public Block next() {
         currentBlockLocation = nextBlockLocation;
         nextBlockLocation = calculateNext();
-        return worldQueryService.getBlockAt(currentBlockLocation);
+        Block block = worldQueryService.getBlockAt(currentBlockLocation);
+        return block;
     }
 }
