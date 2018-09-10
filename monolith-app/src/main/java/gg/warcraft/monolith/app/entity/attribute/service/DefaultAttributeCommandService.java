@@ -35,7 +35,7 @@ public class DefaultAttributeCommandService implements AttributeCommandService {
         newAttributeModifiers.add(modifier);
 
         newModifiers.put(attribute, newAttributeModifiers);
-        Attributes newAttributes = new LazyAttributes(this, entityId, newModifiers);
+        Attributes newAttributes = new LazyAttributes(this, entityServerAdapter, entityId, newModifiers);
         repository.save(newAttributes);
         modifier.addObserver(newAttributes);
 
@@ -58,7 +58,7 @@ public class DefaultAttributeCommandService implements AttributeCommandService {
             modifier.removeObserver(attributes);
 
             newModifiers.put(attribute, newAttributeModifiers);
-            Attributes newAttributes = new LazyAttributes(this, entityId, newModifiers);
+            Attributes newAttributes = new LazyAttributes(this, entityServerAdapter, entityId, newModifiers);
             repository.save(newAttributes);
 
             if (attribute instanceof GenericAttribute) {

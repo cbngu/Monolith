@@ -25,4 +25,9 @@ public class DefaultAttributeRepository implements AttributeRepository {
     public void save(Attributes attributes) {
         this.attributes.put(attributes.getEntityId(), attributes);
     }
+
+    @Override
+    public void delete(UUID entityId) {
+        attributes.remove(entityId);
+    }
 }

@@ -22,4 +22,9 @@ public interface AttributeRepository {
      * @param attributes The attributes to save. Can not be null.
      */
     void save(Attributes attributes);
+
+    /**
+     * @param entityId The id of the entity. Can not be null.
+     */
+    void delete(UUID entityId);
 }

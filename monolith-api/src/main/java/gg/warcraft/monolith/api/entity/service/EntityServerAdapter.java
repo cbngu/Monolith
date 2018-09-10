@@ -57,6 +57,14 @@ public interface EntityServerAdapter {
 
     /**
      * @param entityId  The id of the entity. Can not be null.
+     * @param attribute The generic attribute to return the value for. Can not be null.
+     * @return The value of the generic attribute for the entity on the server. This value is made up of the default
+     * value, the Monolith value, and any other values added by other plugins.
+     */
+    float getGenericAttribute(UUID entityId, GenericAttribute attribute);
+
+    /**
+     * @param entityId  The id of the entity. Can not be null.
      * @param attribute The generic attribute to force an update for. Can not be null.
      */
     void updateGenericAttribute(UUID entityId, GenericAttribute attribute);

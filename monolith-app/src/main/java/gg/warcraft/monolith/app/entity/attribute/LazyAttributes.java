@@ -1,10 +1,13 @@
 package gg.warcraft.monolith.app.entity.attribute;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.entity.attribute.Attribute;
 import gg.warcraft.monolith.api.entity.attribute.AttributeModifier;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeCommandService;
+import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,13 +17,16 @@ import java.util.UUID;
 
 public class LazyAttributes implements Attributes {
     private final AttributeCommandService attributeCommandService;
+    private final EntityServerAdapter entityServerAdapter;
     private final UUID entityId;
     private final Map<Attribute, Set<AttributeModifier>> modifiers;
     private final Map<Attribute, Float> attributes;
 
-    public LazyAttributes(AttributeCommandService attributeCommandService,
-                          UUID entityId, Map<Attribute, Set<AttributeModifier>> modifiers) {
+    @Inject
+    public LazyAttributes(AttributeCommandService attributeCommandService, EntityServerAdapter entityServerAdapter,
+                          @Assisted UUID entityId, @Assisted Map<Attribute, Set<AttributeModifier>> modifiers) {
         this.attributeCommandService = attributeCommandService;
+        this.entityServerAdapter = entityServerAdapter;
         this.entityId = entityId;
         this.modifiers = modifiers;
         this.attributes = new HashMap<>();
@@ -44,10 +50,14 @@ public class LazyAttributes implements Attributes {
 
     @Override
     public float getValue(Attribute attribute) {
-        return attributes.computeIfAbsent(attribute, key -> getModifiers(attribute).stream()
-                .map(AttributeModifier::getValue)
-                .reduce(Float::sum)
-                .orElse(0f));
+        if (attribute instanceof GenericAttribute) {
+            return entityServerAdapter.getGenericAttribute(entityId, (GenericAttribute) attribute);
+        } else {
+            return attributes.computeIfAbsent(attribute, key -> getModifiers(attribute).stream()
+                    .map(AttributeModifier::getValue)
+                    .reduce(Float::sum)
+                    .orElse(0f));
+        }
     }
 
     @Override
