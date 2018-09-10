@@ -10,11 +10,5 @@ import java.io.IOException;
  */
 public interface ConfigurationCommandService {
 
-    /**
-     * @param configurationFileName The name of the configuration file to reload. Can not be null or empty.
-     * @param configurationClass    The class of the configuration object. Can not be null.
-     * @throws IOException Thrown if either the retrieval of the configuration file or the mapping to the configuration
-     *                     class failed.
-     */
-    void reloadConfiguration(String configurationFileName, Class<?> configurationClass) throws IOException;
+    void reloadConfiguration(String configurationFileName) throws IOException;
 }

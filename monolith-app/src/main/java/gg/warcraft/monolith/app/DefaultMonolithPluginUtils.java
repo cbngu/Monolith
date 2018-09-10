@@ -41,19 +41,25 @@ public class DefaultMonolithPluginUtils implements MonolithPluginUtils {
 
     @Override
     public <T> T loadRemoteConfiguration(String configurationFileName, Class<T> configurationClass) {
-        T configuration = configurationQueryService.getConfiguration(configurationClass);
+        String configuration = configurationQueryService.getConfiguration(configurationFileName);
         if (configuration == null) {
             logger.info("Remote " + configurationClass.getSimpleName() + " missing from cache, attempting to load...");
             try {
-                configurationCommandService.reloadConfiguration(configurationFileName, configurationClass);
-                configuration = configurationQueryService.getConfiguration(configurationClass);
+                configurationCommandService.reloadConfiguration(configurationFileName);
+                configuration = configurationQueryService.getConfiguration(configurationFileName);
                 logger.info("Successfully loaded remote " + configurationClass.getSimpleName());
             } catch (IOException ex) {
                 logger.warning("Exception while loading remote " + configurationClass.getSimpleName() + ": " + ex.getMessage());
                 return null;
             }
         }
-        return configuration;
+
+        try {
+            return yamlMapper.readValue(configuration, configurationClass);
+        } catch (IOException ex) {
+            logger.warning("Exception while reading " + configurationFileName + ": " + ex.getMessage());
+            return null;
+        }
     }
 
     @Override

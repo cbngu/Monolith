@@ -13,7 +13,7 @@ public class DefaultConfigurationQueryService implements ConfigurationQueryServi
     }
 
     @Override
-    public <T> T getConfiguration(Class<T> configurationClass) {
-        return repository.getConfiguration(configurationClass);
+    public String getConfiguration(String configurationFileName) {
+        return repository.getConfiguration(configurationFileName);
     }
 }

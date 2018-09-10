@@ -8,13 +8,5 @@ package gg.warcraft.monolith.api.config.service;
  */
 public interface ConfigurationQueryService {
 
-    /**
-     * Returns the configuration object for the given class. This will return null if no configuration for this class
-     * has been loaded.
-     *
-     * @param configurationClass The class of the configuration object. Can not be null.
-     * @param <T>                The type of the configuration class. Can not be null.
-     * @return The configuration object. Can be null.
-     */
-    <T> T getConfiguration(Class<T> configurationClass);
+    String getConfiguration(String configurationFileName);
 }
