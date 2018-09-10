@@ -5,6 +5,7 @@ import gg.warcraft.monolith.api.combat.PotionEffect;
 import gg.warcraft.monolith.api.combat.PotionEffectType;
 import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.attribute.AttributeModifier;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
 import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
@@ -112,18 +113,31 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     @Override
+    public float getGenericAttribute(UUID entityId, GenericAttribute attribute) {
+        Entity entity = server.getEntity(entityId);
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            Attribute spigotAttribute = genericAttributeMapper.map(attribute);
+            AttributeInstance spigotAttributeInstance = livingEntity.getAttribute(spigotAttribute);
+            return (float) spigotAttributeInstance.getValue();
+        }
+        return 0;
+    }
+
+    @Override
     public void updateGenericAttribute(UUID entityId, GenericAttribute attribute) {
         Entity entity = server.getEntity(entityId);
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
             Attributes attributes = attributeQueryService.getAttributes(entityId);
-            float monolithValue = attributes.getValue(attribute);
-            if (monolithValue != 0) {
-                Attribute spigotAttribute = genericAttributeMapper.map(attribute);
-                AttributeInstance spigotAttributeInstance = livingEntity.getAttribute(spigotAttribute);
-                double defaultValue = spigotAttributeInstance.getDefaultValue();
-                spigotAttributeInstance.setBaseValue(defaultValue + monolithValue);
-            }
+            float monolithValue = attributes.getModifiers(attribute).stream()
+                    .map(AttributeModifier::getValue)
+                    .reduce(Float::sum)
+                    .orElse(0f);
+            Attribute spigotAttribute = genericAttributeMapper.map(attribute);
+            AttributeInstance spigotAttributeInstance = livingEntity.getAttribute(spigotAttribute);
+            double defaultValue = spigotAttributeInstance.getDefaultValue();
+            spigotAttributeInstance.setBaseValue(defaultValue + monolithValue);
         }
     }
 
@@ -165,8 +179,9 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     public void burn(UUID entityId, Duration duration) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
+            System.out.println("DEBUG burning entity for " + duration.inTicks() + " ticks");
             int currentTicks = entity.getFireTicks();
-            int newFireTicks = currentTicks + duration.inSeconds();
+            int newFireTicks = currentTicks + duration.inTicks();
             entity.setFireTicks(newFireTicks);
         }
     }

@@ -76,8 +76,7 @@ public class LazyEntity implements Entity {
 
     @Override
     public Team getTeam() {
-        String team = profile.get().getTeam();
-        return teamQueryService.getTeam(team);
+        return teamQueryService.getTeam(getId());
     }
 
     @Override

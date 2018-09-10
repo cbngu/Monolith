@@ -3,7 +3,11 @@ package gg.warcraft.monolith.api.entity.event;
 import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
 
-public interface EntityPreDamageEvent extends EntityPreEvent {
+import java.util.UUID;
+
+public interface EntityPreAttackEvent extends EntityPreEvent {
+
+    UUID getAttackerId();
 
     CombatValue getDamage();
 

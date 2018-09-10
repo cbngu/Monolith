@@ -5,19 +5,28 @@ import gg.warcraft.monolith.api.combat.value.CombatValue;
 import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.event.AbstractEntityPreEvent;
-import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreAttackEvent;
 import gg.warcraft.monolith.app.combat.value.LazyCombatValue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class SimpleEntityPreDamageEvent extends AbstractEntityPreEvent implements EntityPreDamageEvent {
+public class SimpleEntityPreAttackEvent extends AbstractEntityPreEvent implements EntityPreAttackEvent {
+    private final UUID attackerId;
+
     private CombatValue damage;
 
-    public SimpleEntityPreDamageEvent(UUID entityId, EntityType entityType, CombatValue damage, boolean cancelled) {
+    public SimpleEntityPreAttackEvent(UUID entityId, EntityType entityType, UUID attackerId, CombatValue damage,
+                                      boolean cancelled) {
         super(entityId, entityType, cancelled);
+        this.attackerId = attackerId;
         this.damage = damage;
+    }
+
+    @Override
+    public UUID getAttackerId() {
+        return attackerId;
     }
 
     @Override

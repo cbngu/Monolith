@@ -19,6 +19,7 @@ import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializatio
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler;
 import gg.warcraft.monolith.app.entity.player.hiding.handler.PlayerHidingHandler;
 import gg.warcraft.monolith.app.entity.status.handler.StatusEffectHandler;
+import gg.warcraft.monolith.app.entity.team.handler.TeamInitializationHandler;
 import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotInventoryEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotPlayerEventMapper;
@@ -55,6 +56,9 @@ public class MonolithPlugin extends JavaPlugin {
     void initializeMonolithHandlers() {
         CommandExecutedHandler commandExecutedHandler = injector.getInstance(CommandExecutedHandler.class);
         eventService.subscribe(commandExecutedHandler);
+
+        TeamInitializationHandler teamInitializationHandler = injector.getInstance(TeamInitializationHandler.class);
+        eventService.subscribe(teamInitializationHandler);
 
         AttributesInitializationHandler attributesInitializationHandler =
                 injector.getInstance(AttributesInitializationHandler.class);

@@ -19,8 +19,8 @@ public interface EntityUtils {
     /**
      * @param entityId         The id of the entity. Can not be null.
      * @param range            The max range to scan ahead for from the entities eye location.
-     * @param filterFriendlies Whether or not to ignore entities on the same team as the entity.
+     * @param ignoreFriendlies Whether or not to ignore entities on the same team as the entity.
      * @return The representation of what the entity is currently targeting given the range. Never null.
      */
-    EntityTarget calculateTarget(UUID entityId, float range, boolean filterFriendlies);
+    EntityTarget calculateTarget(UUID entityId, float range, boolean ignoreFriendlies);
 }

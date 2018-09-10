@@ -92,11 +92,11 @@ public class DefaultEntityUtils implements EntityUtils {
 
         BlockIntersection blockIntersection = blockUtils.intersectBlock(origin, target, blockTypeUtils.getNonSolids());
 
-        Location correctedTarget = blockIntersection.getLocation() != null
+        Location correctedTarget = blockIntersection != null && blockIntersection.getLocation() != null
                 ? blockIntersection.getLocation()
                 : target;
         Predicate<Entity> ignore = ignoreFriendlies
-                ? e -> e.getTeam() != entity.getTeam()
+                ? e -> e.getTeam() == entity.getTeam()
                 : e -> false;
         EntityIntersection entityIntersection = intersectEntity(origin, correctedTarget, ignore);
 
