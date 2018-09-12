@@ -42,6 +42,25 @@ public class DefaultDirectionUtils implements DirectionUtils {
     }
 
     @Override
+    public Direction toDirection(float yaw) {
+        if (yaw >= -45) {
+            if (yaw <= 45) {
+                return Direction.SOUTH;
+            } else if (yaw <= 135) {
+                return Direction.WEST;
+            } else {
+                return Direction.NORTH;
+            }
+        } else {
+            if (yaw >= -135) {
+                return Direction.EAST;
+            } else {
+                return Direction.NORTH;
+            }
+        }
+    }
+
+    @Override
     public Vector3f toVector(Direction direction) {
         switch (direction) {
             case NORTH:

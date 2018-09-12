@@ -7,6 +7,7 @@ import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.api.world.World;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
 import gg.warcraft.monolith.api.world.block.Sign;
@@ -21,6 +22,7 @@ import gg.warcraft.monolith.app.world.block.build.SimpleBlockBuild;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -142,7 +144,24 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
         if (boundingBox == null) {
             return null;
         }
-        return new SimpleBlockBuild(type, model, lines, boundingBox);
+
+        List<Sign> extraSigns = new ArrayList<>();
+        Block nextSign = blockUtils.getRelative(sign, BlockFace.EAST);
+        while (nextSign.getType() == BlockType.WALL_MOUNTED_SIGN) {
+            extraSigns.add((Sign) nextSign);
+            nextSign = blockUtils.getRelative(nextSign, BlockFace.EAST);
+        }
+
+        String[] extraLines = extraSigns.stream()
+                .map(Sign::getLines)
+                .flatMap(Stream::of)
+                .toArray(String[]::new);
+
+        String[] allLines = Stream.of(lines, extraLines)
+                .flatMap(Stream::of)
+                .toArray(String[]::new);
+
+        return new SimpleBlockBuild(type, model, allLines, boundingBox);
     }
 
     void logInitializedBuilds(List<BlockBuild> builds) {

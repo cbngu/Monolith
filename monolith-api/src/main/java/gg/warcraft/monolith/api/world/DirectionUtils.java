@@ -8,5 +8,7 @@ public interface DirectionUtils {
 
     int getRotation(Direction from, Direction to);
 
+    Direction toDirection(float yaw);
+
     Vector3f toVector(Direction direction);
 }
