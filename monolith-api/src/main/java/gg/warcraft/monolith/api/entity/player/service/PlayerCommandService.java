@@ -28,9 +28,34 @@ public interface PlayerCommandService {
      */
     void setData(UUID playerId, String data, String value);
 
+    /**
+     * Adds an amount of currency to the player.
+     *
+     * @param playerId The id of the player. Can not be null.
+     * @param currency The currency to add. Can not be null.
+     * @param amount   The amount of currency to add.
+     */
     void addCurrency(UUID playerId, Currency currency, int amount);
 
+    /**
+     * Removes an amount of currency to the player. Throws an IllegalArgumentException if the player does not have
+     * sufficient funds to cover the removal.
+     *
+     * @param playerId The id of the player. Can not be null.
+     * @param currency The currency to remove. Can not be null.
+     * @param amount   The amount of currency to remove.
+     */
     void removeCurrency(UUID playerId, Currency currency, int amount);
+
+    /**
+     * Revokes an amount of currency to the player. Revoking does not throw on sufficient funds and also reduces the
+     * amount from the lifetime amount the player has accumulated.
+     *
+     * @param playerId The id of the player. Can not be null.
+     * @param currency The currency to revoke. Can not be null.
+     * @param amount   The amount of currency to revoke.
+     */
+    void revokeCurrency(UUID playerId, Currency currency, int amount);
 
     boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory);
 

@@ -103,6 +103,30 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
     }
 
     @Override
+    public void revokeCurrency(UUID playerId, Currency currency, int amount) {
+        String currencyName = currency.getName();
+        PlayerProfile profile = playerProfileRepository.get(playerId);
+
+        Map<String, Integer> newCurrencies = profile.getCurrencies();
+        int currentAmount = newCurrencies.getOrDefault(currencyName, 0);
+        int newCurrentAmount = currentAmount - amount;
+        newCurrencies.put(currencyName, newCurrentAmount);
+
+        Map<String, Integer> newLifetimeCurrencies = profile.getLifetimeCurrencies();
+        int currentLifetimeAmount = newLifetimeCurrencies.getOrDefault(currencyName, 0);
+        int newCurrentLifetimeAmount = currentLifetimeAmount - amount;
+        newLifetimeCurrencies.put(currencyName, newCurrentLifetimeAmount);
+
+        PlayerProfile newProfile = profile.getCopyer()
+                .withCurrencies(newCurrencies)
+                .withLifetimeCurrencies(newLifetimeCurrencies)
+                .copy();
+        playerProfileRepository.save(newProfile);
+
+        // TODO do we want to publish PlayerCurrencyLostEvent here?
+    }
+
+    @Override
     public boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory) {
         return playerServerAdapter.giveItem(playerId, item, dropOnFullInventory);
     }

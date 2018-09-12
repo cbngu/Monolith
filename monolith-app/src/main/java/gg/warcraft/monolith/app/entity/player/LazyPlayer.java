@@ -3,6 +3,7 @@ package gg.warcraft.monolith.app.entity.player;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import gg.warcraft.monolith.api.entity.attribute.Attributes;
+import gg.warcraft.monolith.api.entity.player.GameMode;
 import gg.warcraft.monolith.api.entity.player.Player;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
@@ -57,6 +58,11 @@ public class LazyPlayer extends LazyEntity implements Player {
     @Override
     public int getLifetimeCurrency(String currency) {
         return profile.get().getLifetimeCurrencies().getOrDefault(currency, 0);
+    }
+
+    @Override
+    public GameMode getGameMode() {
+        return serverData.get().getGameMode();
     }
 
     @Override

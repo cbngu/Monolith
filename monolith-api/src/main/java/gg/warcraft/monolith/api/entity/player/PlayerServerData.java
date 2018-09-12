@@ -5,6 +5,8 @@ import gg.warcraft.monolith.api.item.Inventory;
 
 public interface PlayerServerData extends EntityServerData {
 
+    GameMode getGameMode();
+
     /**
      * @return The inventory of this player. Never null.
      */

@@ -41,6 +41,8 @@ public interface Player extends Entity {
      */
     int getLifetimeCurrency(String currency);
 
+    GameMode getGameMode();
+
     /**
      * @return The inventory of this player. Never null.
      */

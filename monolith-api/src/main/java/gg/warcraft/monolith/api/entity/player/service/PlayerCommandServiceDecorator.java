@@ -20,6 +20,11 @@ public interface PlayerCommandServiceDecorator extends PlayerCommandService {
     }
 
     @Override
+    default void revokeCurrency(UUID playerId, Currency currency, int amount) {
+        getPlayerCommandService().revokeCurrency(playerId, currency, amount);
+    }
+
+    @Override
     default boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory) {
         return getPlayerCommandService().giveItem(playerId, item, dropOnFullInventory);
     }

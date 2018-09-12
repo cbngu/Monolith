@@ -117,6 +117,11 @@ public interface PlayerDecorator extends Player {
     }
 
     @Override
+    default GameMode getGameMode() {
+        return getPlayer().getGameMode();
+    }
+
+    @Override
     default Inventory getInventory() {
         return getPlayer().getInventory();
     }

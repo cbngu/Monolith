@@ -2,6 +2,7 @@ package gg.warcraft.monolith.spigot.entity.player;
 
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.Equipment;
+import gg.warcraft.monolith.api.entity.player.GameMode;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.item.Inventory;
 import gg.warcraft.monolith.api.world.location.OrientedLocation;
@@ -61,6 +62,11 @@ public class SpigotOfflinePlayerData implements PlayerServerData {
     @Override
     public AABBf getBoundingBox() {
         throw new IllegalStateException("Failed to get bounding box for offline player with id " + player.getUniqueId());
+    }
+
+    @Override
+    public GameMode getGameMode() {
+        throw new IllegalStateException("Failed to get game mode for offline player with id " + player.getUniqueId());
     }
 
     @Override
