@@ -17,101 +17,109 @@ import java.util.Set;
 public class JedisPersistenceService implements PersistenceService {
     private final JedisPool pool;
 
-    private Jedis jedis;
-
     @Inject
     public JedisPersistenceService(JedisPool pool) {
         this.pool = pool;
-        this.jedis = pool.getResource();
     }
 
     @Override
     public String get(String key) {
-        try {
+        try (Jedis jedis = pool.getResource()) {
             return jedis.get(key);
-        } catch (Exception ex) {
-            jedis.close();
-            jedis = pool.getResource();
         }
-        return jedis.get(key);
     }
 
     @Override
     public void set(String key, String value) {
-        try {
+        try (Jedis jedis = pool.getResource()) {
             jedis.set(key, value);
-        } catch (Exception ex) {
-            // FIXME look into caching failed attempts if new resource doesn't work
-            jedis.close();
-            jedis = pool.getResource();
         }
-        jedis.set(key, value);
     }
 
     @Override
     public List<String> getList(String key) {
-        return jedis.lrange(key, -1, Integer.MAX_VALUE);
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.lrange(key, -1, Integer.MAX_VALUE);
+        }
     }
 
     @Override
     public void setList(String key, List<String> values) {
-        jedis.del(key);
-        if (!values.isEmpty()) {
-            jedis.lpush(key, values.toArray(new String[0]));
+        try (Jedis jedis = pool.getResource()) {
+            jedis.del(key);
+            if (!values.isEmpty()) {
+                jedis.lpush(key, values.toArray(new String[0]));
+            }
         }
     }
 
     @Override
     public void pushList(String key, String value) {
-        jedis.lpush(key, value);
+        try (Jedis jedis = pool.getResource()) {
+            jedis.lpush(key, value);
+        }
     }
 
     @Override
     public Map<String, String> getMap(String key) {
-        return jedis.hgetAll(key);
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.hgetAll(key);
+        }
     }
 
     @Override
     public void setMap(String key, Map<String, String> values) {
-        values.forEach((field, value) -> jedis.hset(key, field, value));
+        try (Jedis jedis = pool.getResource()) {
+            values.forEach((field, value) -> jedis.hset(key, field, value));
+        }
     }
 
     @Override
     public Set<String> getSet(String key) {
-        return jedis.smembers(key);
+        try (Jedis jedis = pool.getResource()) {
+            return jedis.smembers(key);
+        }
     }
 
     @Override
     public void addSet(String key, List<String> values) {
-        if (!values.isEmpty()) {
-            jedis.sadd(key, values.toArray(new String[0]));
+        try (Jedis jedis = pool.getResource()) {
+            if (!values.isEmpty()) {
+                jedis.sadd(key, values.toArray(new String[0]));
+            }
         }
     }
 
     @Override
     public void removeSet(String key, List<String> values) {
-        if (!values.isEmpty()) {
-            jedis.srem(key, values.toArray(new String[0]));
+        try (Jedis jedis = pool.getResource()) {
+            if (!values.isEmpty()) {
+                jedis.srem(key, values.toArray(new String[0]));
+            }
         }
     }
 
     @Override
     public void delete(String key) {
-        jedis.del(key);
+        try (Jedis jedis = pool.getResource()) {
+            jedis.del(key);
+        }
     }
 
     @Override
     public List<String> getAllKeys(String keyPrefix) {
-        List<String> keys = new ArrayList<>();
+        try (Jedis jedis = pool.getResource()) {
+            List<String> keys = new ArrayList<>();
 
-        ScanParams scanParams = new ScanParams().match(keyPrefix + "*");
-        String cur = ScanParams.SCAN_POINTER_START;
-        do {
-            ScanResult<String> scanResult = jedis.scan(cur, scanParams);
+            ScanParams scanParams = new ScanParams().match(keyPrefix + "*");
+            String cur = ScanParams.SCAN_POINTER_START;
+            do {
+                ScanResult<String> scanResult = jedis.scan(cur, scanParams);
 
-            keys.addAll(scanResult.getResult());
-            cur = scanResult.getStringCursor();
-        } while (!cur.equals(ScanParams.SCAN_POINTER_START));
-        return keys;
+                keys.addAll(scanResult.getResult());
+                cur = scanResult.getStringCursor();
+            } while (!cur.equals(ScanParams.SCAN_POINTER_START));
+            return keys;
+        }
     }
 }
