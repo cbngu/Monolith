@@ -89,6 +89,9 @@ import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingCommandService
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingQueryService;
 import gg.warcraft.monolith.api.world.block.spoofing.BlockSpoofingRepository;
 import gg.warcraft.monolith.api.world.location.LocationFactory;
+import gg.warcraft.monolith.api.world.portal.service.PortalCommandService;
+import gg.warcraft.monolith.api.world.portal.service.PortalQueryService;
+import gg.warcraft.monolith.api.world.portal.service.PortalRepository;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import gg.warcraft.monolith.app.combat.DefaultPotionEffectTypeUtils;
@@ -167,6 +170,9 @@ import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingCommand
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingQueryService;
 import gg.warcraft.monolith.app.world.block.spoofing.DefaultBlockSpoofingRepository;
 import gg.warcraft.monolith.app.world.location.DefaultLocationFactory;
+import gg.warcraft.monolith.app.world.portal.service.DefaultPortalCommandService;
+import gg.warcraft.monolith.app.world.portal.service.DefaultPortalQueryService;
+import gg.warcraft.monolith.app.world.portal.service.DefaultPortalRepository;
 import gg.warcraft.monolith.app.world.service.DefaultWorldCommandService;
 import gg.warcraft.monolith.app.world.service.DefaultWorldQueryService;
 import org.joml.Vector3ic;
@@ -528,6 +534,16 @@ public class AbstractMonolithModule extends PrivateModule {
 
         bind(BlockSpoofingRepository.class).to(DefaultBlockSpoofingRepository.class);
         expose(BlockSpoofingRepository.class);
+
+        // Portal bindings
+        bind(PortalCommandService.class).to(DefaultPortalCommandService.class);
+        expose(PortalCommandService.class);
+
+        bind(PortalQueryService.class).to(DefaultPortalQueryService.class);
+        expose(PortalQueryService.class);
+
+        bind(PortalRepository.class).to(DefaultPortalRepository.class);
+        expose(PortalRepository.class);
 
         // Misc world bindings
         bind(WorldType.class).annotatedWith(Names.named("BuildRepositoryWorld"))
