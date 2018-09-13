@@ -6,15 +6,15 @@ import gg.warcraft.monolith.api.config.BoundingBlockBoxConfiguration;
 import gg.warcraft.monolith.api.config.Vector3iConfiguration;
 import gg.warcraft.monolith.api.world.WorldType;
 
-public class SimpleBoundingBlockBoxConfiguration implements BoundingBlockBoxConfiguration {
+public class JacksonBoundingBlockBoxConfiguration implements BoundingBlockBoxConfiguration {
     private final WorldType world;
     private final Vector3iConfiguration minimumCorner;
     private final Vector3iConfiguration maximumCorner;
 
     @JsonCreator
-    public SimpleBoundingBlockBoxConfiguration(@JsonProperty("world") WorldType world,
-                                               @JsonProperty("minimumCorner") Vector3iConfiguration minimumCorner,
-                                               @JsonProperty("maximumCorner") Vector3iConfiguration maximumCorner) {
+    public JacksonBoundingBlockBoxConfiguration(@JsonProperty("world") WorldType world,
+                                                @JsonProperty("minimumCorner") Vector3iConfiguration minimumCorner,
+                                                @JsonProperty("maximumCorner") Vector3iConfiguration maximumCorner) {
         this.world = world;
         this.minimumCorner = minimumCorner;
         this.maximumCorner = maximumCorner;

@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gg.warcraft.monolith.api.config.BlockLocationConfiguration;
 import gg.warcraft.monolith.api.world.WorldType;
 
-public class SimpleBlockLocationConfiguration implements BlockLocationConfiguration {
+public class JacksonBlockLocationConfiguration implements BlockLocationConfiguration {
     private final WorldType world;
     private final int x;
     private final int y;
     private final int z;
 
     @JsonCreator
-    public SimpleBlockLocationConfiguration(@JsonProperty("world") WorldType world,
-                                            @JsonProperty("x") int x,
-                                            @JsonProperty("y") int y,
-                                            @JsonProperty("z") int z) {
+    public JacksonBlockLocationConfiguration(@JsonProperty("world") WorldType world,
+                                             @JsonProperty("x") int x,
+                                             @JsonProperty("y") int y,
+                                             @JsonProperty("z") int z) {
         this.world = world;
         this.x = x;
         this.y = y;
