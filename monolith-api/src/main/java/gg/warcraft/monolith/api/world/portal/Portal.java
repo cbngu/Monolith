@@ -1,9 +1,9 @@
 package gg.warcraft.monolith.api.world.portal;
 
-import gg.warcraft.monolith.api.effect.Effect;
 import gg.warcraft.monolith.api.entity.Entity;
+import gg.warcraft.monolith.api.util.Cancellable;
+import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.location.Location;
-import gg.warcraft.monolith.api.world.location.OrientedLocation;
 
 import java.util.function.Predicate;
 
@@ -11,9 +11,11 @@ public interface Portal {
 
     Location getEntryLocation();
 
-    OrientedLocation getExitLocation();
+    Location getExitLocation();
+
+    Direction getExitOrientation();
 
     Predicate<Entity> getPredicate();
 
-    Effect getEffect();
+    Cancellable getEffect();
 }

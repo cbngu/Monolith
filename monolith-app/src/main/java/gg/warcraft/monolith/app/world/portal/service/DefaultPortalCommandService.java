@@ -1,10 +1,10 @@
 package gg.warcraft.monolith.app.world.portal.service;
 
 import com.google.inject.Inject;
-import gg.warcraft.monolith.api.effect.Effect;
 import gg.warcraft.monolith.api.entity.Entity;
+import gg.warcraft.monolith.api.util.Cancellable;
+import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.location.Location;
-import gg.warcraft.monolith.api.world.location.OrientedLocation;
 import gg.warcraft.monolith.api.world.portal.Portal;
 import gg.warcraft.monolith.api.world.portal.service.PortalCommandService;
 import gg.warcraft.monolith.api.world.portal.service.PortalRepository;
@@ -21,8 +21,9 @@ public class DefaultPortalCommandService implements PortalCommandService {
     }
 
     @Override
-    public void createPortal(Location entryLocation, OrientedLocation exitLocation, Predicate<Entity> predicate, Effect effect) {
-        Portal portal = new SimplePortal(entryLocation, exitLocation, predicate, effect);
+    public void createPortal(Location entryLocation, Location exitLocation, Direction exitOrientation,
+                             Predicate<Entity> predicate, Cancellable effect) {
+        Portal portal = new SimplePortal(entryLocation, exitLocation, exitOrientation, predicate, effect);
         portalRepository.save(portal);
     }
 
@@ -34,7 +35,7 @@ public class DefaultPortalCommandService implements PortalCommandService {
         }
 
         portalRepository.delete(portal);
-        Effect effect = portal.getEffect();
+        Cancellable effect = portal.getEffect();
         if (effect != null) {
             effect.cancel();
         }

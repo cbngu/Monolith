@@ -123,6 +123,11 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
 
     BlockBuild initializeBuild(Sign sign) {
         String[] lines = sign.getLines();
+        if (lines[0].isEmpty()) {
+            // sign is extra data for other build
+            return null;
+        }
+
         Preconditions.checkArgument(lines[0].contains(":"), "Encountered build sign with illegal type and model. " +
                 "All bottom level wall mounted signs in the build repository need to have the build type and model " +
                 "specified on the first sign line as type:model.");
