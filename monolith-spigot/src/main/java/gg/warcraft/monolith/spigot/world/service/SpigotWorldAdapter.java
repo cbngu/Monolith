@@ -7,6 +7,7 @@ import gg.warcraft.monolith.api.world.SoundCategory;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.Sign;
 import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
@@ -18,6 +19,7 @@ import gg.warcraft.monolith.spigot.world.block.SpigotBlockMapper;
 import gg.warcraft.monolith.spigot.world.location.SpigotLocationMapper;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -31,6 +33,7 @@ import java.util.UUID;
 
 public class SpigotWorldAdapter implements WorldServerAdapter {
     private final Server server;
+    private final BlockTypeUtils blockTypeUtils;
     private final SpigotWorldMapper worldMapper;
     private final SpigotBlockMapper blockMapper;
     private final SpigotLocationMapper locationMapper;
@@ -39,10 +42,12 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
     private final SpigotSoundCategoryMapper soundCategoryMapper;
 
     @Inject
-    public SpigotWorldAdapter(Server server, SpigotWorldMapper worldMapper, SpigotBlockMapper blockMapper,
-                              SpigotLocationMapper locationMapper, SpigotItemMapper itemMapper,
-                              SpigotSoundMapper soundMapper, SpigotSoundCategoryMapper soundCategoryMapper) {
+    public SpigotWorldAdapter(Server server, BlockTypeUtils blockTypeUtils, SpigotWorldMapper worldMapper,
+                              SpigotBlockMapper blockMapper, SpigotLocationMapper locationMapper,
+                              SpigotItemMapper itemMapper, SpigotSoundMapper soundMapper,
+                              SpigotSoundCategoryMapper soundCategoryMapper) {
         this.server = server;
+        this.blockTypeUtils = blockTypeUtils;
         this.worldMapper = worldMapper;
         this.blockMapper = blockMapper;
         this.locationMapper = locationMapper;
@@ -67,6 +72,20 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
     public Block getHighestBlockAt(WorldType world, int x, int z) {
         World spigotWorld = worldMapper.map(world);
         org.bukkit.block.Block spigotBlock = spigotWorld.getHighestBlockAt(x, z);
+        while (blockTypeUtils.getNonSolids().contains(blockMapper.map(spigotBlock).getType())) {
+            spigotBlock = spigotBlock.getRelative(BlockFace.DOWN);
+        }
+        if (spigotBlock.getY() <= 255) {
+            org.bukkit.block.Block relativeSpigotBlock = spigotBlock;
+            do {
+                relativeSpigotBlock = relativeSpigotBlock.getRelative(BlockFace.UP);
+                if (!blockTypeUtils.getNonSolids().contains(blockMapper.map(relativeSpigotBlock).getType())) {
+                    spigotBlock = relativeSpigotBlock;
+                } else {
+                    break;
+                }
+            } while (relativeSpigotBlock.getY() <= 255);
+        }
         return blockMapper.map(spigotBlock);
     }
 
