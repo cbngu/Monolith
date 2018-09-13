@@ -111,6 +111,7 @@ import gg.warcraft.monolith.app.config.service.LocalConfigurationCommandService;
 import gg.warcraft.monolith.app.core.GuavaEventService;
 import gg.warcraft.monolith.app.core.JedisPersistenceService;
 import gg.warcraft.monolith.app.effect.DynamicEffect;
+import gg.warcraft.monolith.app.effect.PeriodicDynamicEffect;
 import gg.warcraft.monolith.app.effect.PeriodicEffect;
 import gg.warcraft.monolith.app.effect.SimpleEffect;
 import gg.warcraft.monolith.app.effect.renderer.IterativeEffectRenderer;
@@ -326,6 +327,7 @@ public class AbstractMonolithModule extends PrivateModule {
                 .implement(Effect.class, Names.named("simple"), SimpleEffect.class)
                 .implement(Effect.class, Names.named("periodic"), PeriodicEffect.class)
                 .implement(Effect.class, Names.named("dynamic"), DynamicEffect.class)
+                .implement(Effect.class, Names.named("periodynamic"), PeriodicDynamicEffect.class)
                 .build(EffectFactory.class));
         expose(EffectFactory.class);
     }

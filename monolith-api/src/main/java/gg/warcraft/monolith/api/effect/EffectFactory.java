@@ -38,7 +38,7 @@ public interface EffectFactory {
      *
      * @param location The location supplier.
      * @param period   The period.
-     * @return A new timed {@code Effect}. Never null.
+     * @return A new periodic {@code Effect}. Never null.
      */
     @Named("periodic")
     Effect createPeriodicEffect(Supplier<Location> location, Duration period);
@@ -55,4 +55,20 @@ public interface EffectFactory {
      */
     @Named("dynamic")
     Effect createDynamicEffect(Supplier<Location> location, Runnable runnable);
+
+    /**
+     * Creates a new periodic and dynamic {@code Effect}.
+     * <p>
+     * A periodic {@code Effect} will call all of its effect renderers to display their particles at the location
+     * currently provided by the supplier once every period.
+     * A dynamic {@code Effect} will call the provided runnable each time before calling all of its renderers. This
+     * allows for dynamic updating of the effect without having to schedule a new task for it.
+     *
+     * @param location The location supplier.
+     * @param period   The period.
+     * @param runnable The runnable.
+     * @return A new periodic and dynamic {@code Effect}. Never null.
+     */
+    @Named("periodynamic")
+    Effect createPeriodicDynamicEffect(Supplier<Location> location, Duration period, Runnable runnable);
 }
