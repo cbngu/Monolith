@@ -19,7 +19,6 @@ import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
 import gg.warcraft.monolith.app.AbstractMonolithModule;
 import gg.warcraft.monolith.app.effect.particle.MultiParticle;
-import gg.warcraft.monolith.app.effect.particle.QueuedParticle;
 import gg.warcraft.monolith.spigot.command.SpigotCommandAdapter;
 import gg.warcraft.monolith.spigot.core.SpigotAuthorizationService;
 import gg.warcraft.monolith.spigot.core.SpigotTaskService;
@@ -113,7 +112,6 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
                 .implement(Particle.class, Names.named("color"), ColorParticle.class)
                 .implement(Particle.class, Names.named("speed"), SpeedParticle.class)
                 .implement(Particle.class, Names.named("multi"), MultiParticle.class)
-                .implement(Particle.class, Names.named("queued"), QueuedParticle.class)
                 .build(ParticleFactory.class));
         expose(ParticleFactory.class);
     }

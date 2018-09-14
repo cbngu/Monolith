@@ -7,11 +7,11 @@ import gg.warcraft.monolith.api.world.location.Location;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class MultiParticle implements Particle {
-    private final Collection<Particle> particles;
+    private final List<Particle> particles;
 
     private Iterator<Particle> iterator;
 
