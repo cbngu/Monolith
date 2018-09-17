@@ -33,17 +33,8 @@ public interface Inventory {
     boolean contains(Item item);
 
     /**
-     * Removes all items with the given item type from the inventory.
-     *
-     * @param type The item type. Can not be null.
-     * @return True if any items were removed, false otherwise.
-     */
-    boolean remove(ItemType type);
-
-    /**
-     * Removes an item from the inventory that fully matches the given item. This means that if the inventory has three
-     * stacks of item type X that have a size of 10 and this method is called with an item of type X with a stack size
-     * of 20 two out of three of those stacks will be removed from the inventory.
+     * Removes items from the inventory that fully match the given item. The amount of items removed is equal to the
+     * stack size of the given item.
      *
      * @param item The item. Can not be null.
      * @return True if the specified item could be removed, false otherwise.

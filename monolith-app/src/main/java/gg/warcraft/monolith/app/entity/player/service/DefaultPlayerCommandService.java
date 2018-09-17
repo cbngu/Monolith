@@ -161,4 +161,9 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
     public void sendNotification(UUID playerId, String notification) {
         sendMessage(playerId, ColorCode.YELLOW + "[SERVER] " + notification);
     }
+
+    @Override
+    public void sendTitle(UUID playerId, String title, String subTitle) {
+        playerServerAdapter.sendTitle(playerId, title, subTitle);
+    }
 }

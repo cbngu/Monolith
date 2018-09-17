@@ -8,6 +8,9 @@ import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.TaskService;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.WorldType;
+import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
+import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupCommandService;
+import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupQueryService;
 import gg.warcraft.monolith.api.world.block.build.service.BlockBuildCommandService;
 import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.PlayerCommandSender;
@@ -169,6 +172,13 @@ public class MonolithPlugin extends JavaPlugin {
         getLogger().info("Initializing build repository, this might take a little bit..");
         BlockBuildCommandService blockBuildCommandService = injector.getInstance(BlockBuildCommandService.class);
         blockBuildCommandService.initializeBuilds();
+
+        // restore any outstanding block backups
+        BlockBackupQueryService blockBackupQueryService = injector.getInstance(BlockBackupQueryService.class);
+        BlockBackupCommandService blockBackupCommandService = injector.getInstance(BlockBackupCommandService.class);
+        blockBackupQueryService.getAllBlockBackups().stream()
+                .map(BlockBackup::getId)
+                .forEach(blockBackupCommandService::restoreBlockBackup);
     }
 
     @Override

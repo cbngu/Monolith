@@ -87,4 +87,12 @@ public class SpigotPlayerAdapter implements PlayerServerAdapter {
             player.sendMessage(message);
         }
     }
+
+    @Override
+    public void sendTitle(UUID playerId, String title, String subTitle) {
+        Player player = server.getPlayer(playerId);
+        if (player != null) {
+            player.sendTitle(title, subTitle);
+        }
+    }
 }

@@ -57,12 +57,12 @@ public class SpigotInventory implements Inventory {
     }
 
     @Override
-    public boolean remove(ItemType type) {
-        throw new IllegalStateException("Not implemented");
-    }
-
-    @Override
     public boolean remove(Item item) {
-        throw new IllegalStateException("Not implemented");
+        ItemStack spigotItem = itemMapper.map(item);
+        if (inventory.contains(spigotItem, item.getStackSize())) {
+            inventory.remove(spigotItem);
+            return true;
+        }
+        return false;
     }
 }

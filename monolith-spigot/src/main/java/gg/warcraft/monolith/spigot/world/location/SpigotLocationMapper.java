@@ -82,7 +82,6 @@ public class SpigotLocationMapper {
 
     public OrientedLocation mapEye(LivingEntity entity) {
         org.bukkit.Location location = entity.getEyeLocation();
-        System.out.println("DEBUG mapping EYE location with pitch " + location.getPitch() + " and yaw " + location.getYaw());
         Vector3f direction = new Vector3f(
                 (float) location.getDirection().getX(),
                 (float) location.getDirection().getY(),

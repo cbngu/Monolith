@@ -43,4 +43,9 @@ public interface PlayerCommandServiceDecorator extends PlayerCommandService {
     default void sendNotification(UUID playerId, String notification) {
         getPlayerCommandService().sendNotification(playerId, notification);
     }
+
+    @Override
+    default void sendTitle(UUID playerId, String title, String subTitle) {
+        getPlayerCommandService().sendTitle(playerId, title, subTitle);
+    }
 }

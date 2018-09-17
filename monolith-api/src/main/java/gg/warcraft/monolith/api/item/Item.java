@@ -13,4 +13,14 @@ public interface Item {
     int getDamage();
 
     List<String> getLore();
+
+    Item withType(ItemType type);
+
+    Item withName(String name);
+
+    Item withStackSize(int size);
+
+    Item withDamage(int damage);
+
+    Item withLore(List<String> lore);
 }

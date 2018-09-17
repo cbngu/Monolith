@@ -43,6 +43,13 @@ public class DefaultDirectionUtils implements DirectionUtils {
 
     @Override
     public Direction toDirection(float yaw) {
+        if (yaw > 180) {
+            yaw -= 360;
+        }
+        if (yaw < -180) {
+            yaw += 360;
+        }
+
         if (yaw >= -45) {
             if (yaw <= 45) {
                 return Direction.SOUTH;

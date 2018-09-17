@@ -77,4 +77,11 @@ public interface PlayerCommandService {
      * @param notification The notification to send. Can not be null or empty.
      */
     void sendNotification(UUID playerId, String notification);
+
+    /**
+     * @param playerId The id of the player. Can not be null.
+     * @param title    The title to send. Can not be null, but can be empty.
+     * @param subTitle The sub title to send. Can not be null, but can be empty.
+     */
+    void sendTitle(UUID playerId, String title, String subTitle);
 }
