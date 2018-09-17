@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Singleton
 public class JedisPersistenceService implements PersistenceService {
@@ -22,88 +24,86 @@ public class JedisPersistenceService implements PersistenceService {
         this.pool = pool;
     }
 
+    private void retryOnce(Consumer<Jedis> action) {
+        try (Jedis jedis = pool.getResource()) {
+            action.accept(jedis);
+        } catch (Exception ex) {
+            try (Jedis retryJedis = pool.getResource()) {
+                action.accept(retryJedis);
+            }
+        }
+    }
+
+    private <T> T retryOnceWithResult(Function<Jedis, T> action) {
+        try (Jedis jedis = pool.getResource()) {
+            return action.apply(jedis);
+        } catch (Exception ex) {
+            try (Jedis retryJedis = pool.getResource()) {
+                return action.apply(retryJedis);
+            }
+        }
+    }
+
     @Override
     public String get(String key) {
-        try (Jedis jedis = pool.getResource()) {
-            return jedis.get(key);
-        }
+        return retryOnceWithResult(jedis -> jedis.get(key));
     }
 
     @Override
     public void set(String key, String value) {
-        try (Jedis jedis = pool.getResource()) {
-            jedis.set(key, value);
-        }
+        retryOnce(jedis -> jedis.set(key, value));
     }
 
     @Override
     public List<String> getList(String key) {
-        try (Jedis jedis = pool.getResource()) {
-            return jedis.lrange(key, -1, Integer.MAX_VALUE);
-        }
+        return retryOnceWithResult(jedis -> jedis.lrange(key, -1, Integer.MAX_VALUE));
     }
 
     @Override
     public void setList(String key, List<String> values) {
-        try (Jedis jedis = pool.getResource()) {
-            jedis.del(key);
-            if (!values.isEmpty()) {
-                jedis.lpush(key, values.toArray(new String[0]));
-            }
+        retryOnce(jedis -> jedis.del(key));
+        if (!values.isEmpty()) {
+            retryOnce(jedis -> jedis.lpush(key, values.toArray(new String[0])));
         }
     }
 
     @Override
     public void pushList(String key, String value) {
-        try (Jedis jedis = pool.getResource()) {
-            jedis.lpush(key, value);
-        }
+        retryOnce(jedis -> jedis.lpush(key, value));
     }
 
     @Override
     public Map<String, String> getMap(String key) {
-        try (Jedis jedis = pool.getResource()) {
-            return jedis.hgetAll(key);
-        }
+        return retryOnceWithResult(jedis -> jedis.hgetAll(key));
     }
 
     @Override
     public void setMap(String key, Map<String, String> values) {
-        try (Jedis jedis = pool.getResource()) {
-            values.forEach((field, value) -> jedis.hset(key, field, value));
-        }
+        retryOnce(jedis -> values.forEach((field, value) -> jedis.hset(key, field, value)));
     }
 
     @Override
     public Set<String> getSet(String key) {
-        try (Jedis jedis = pool.getResource()) {
-            return jedis.smembers(key);
-        }
+        return retryOnceWithResult(jedis -> jedis.smembers(key));
     }
 
     @Override
     public void addSet(String key, List<String> values) {
-        try (Jedis jedis = pool.getResource()) {
-            if (!values.isEmpty()) {
-                jedis.sadd(key, values.toArray(new String[0]));
-            }
+        if (!values.isEmpty()) {
+            retryOnce(jedis -> jedis.sadd(key, values.toArray(new String[0])));
         }
     }
 
     @Override
     public void removeSet(String key, List<String> values) {
-        try (Jedis jedis = pool.getResource()) {
-            if (!values.isEmpty()) {
-                jedis.srem(key, values.toArray(new String[0]));
-            }
+        if (!values.isEmpty()) {
+            retryOnce(jedis -> jedis.srem(key, values.toArray(new String[0])));
         }
     }
 
     @Override
     public void delete(String key) {
-        try (Jedis jedis = pool.getResource()) {
-            jedis.del(key);
-        }
+        retryOnce(jedis -> jedis.del(key));
     }
 
     @Override
