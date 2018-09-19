@@ -6,18 +6,23 @@ import gg.warcraft.monolith.api.entity.attribute.Attribute;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.item.ItemReader;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class SimpleItemReader implements ItemReader {
     private final Item item;
 
     @Inject
-    public SimpleItemReader(@Assisted Item item) {
+    public SimpleItemReader(@Assisted @Nullable Item item) {
         this.item = item;
     }
 
     @Override
     public int getAttribute(Attribute attribute) {
+        if (item == null) {
+            return 0;
+        }
+
         List<String> lore = item.getLore();
         for (String line : lore) {
             if (line.contains(attribute.getName())) {

@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.api.entity.player.service;
 
+import gg.warcraft.monolith.api.entity.EquipmentSlot;
 import gg.warcraft.monolith.api.entity.player.Currency;
 import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.item.Item;
@@ -29,6 +30,21 @@ public interface PlayerCommandService {
     void setData(UUID playerId, String data, String value);
 
     /**
+     * @param playerId The id of the player. Can not be null.
+     * @param slot     The equipment slot to set. Can not be null.
+     * @param item     The item to set in the equipment slot. Can not be null.
+     */
+    void setEquipment(UUID playerId, EquipmentSlot slot, Item item);
+
+    /**
+     * @param playerId            The id of the player. Can not be null.
+     * @param item                The item to add to the inventory. Can not be null.
+     * @param dropOnFullInventory Whether or not to drop items that could not be added to the inventory.
+     * @return True if all items could be added to the inventory, false otherwise.
+     */
+    boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory);
+
+    /**
      * Adds an amount of currency to the player.
      *
      * @param playerId The id of the player. Can not be null.
@@ -56,8 +72,6 @@ public interface PlayerCommandService {
      * @param amount   The amount of currency to revoke.
      */
     void revokeCurrency(UUID playerId, Currency currency, int amount);
-
-    boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory);
 
     /**
      * @param playerId The id of the player to update. Can not be null.

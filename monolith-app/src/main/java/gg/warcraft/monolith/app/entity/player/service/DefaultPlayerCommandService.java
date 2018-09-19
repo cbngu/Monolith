@@ -2,6 +2,7 @@ package gg.warcraft.monolith.app.entity.player.service;
 
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.core.EventService;
+import gg.warcraft.monolith.api.entity.EquipmentSlot;
 import gg.warcraft.monolith.api.entity.player.Currency;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
 import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyGainedEvent;
@@ -51,6 +52,16 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
         }
         PlayerProfile newProfile = profile.getCopyer().withData(newData).copy();
         playerProfileRepository.save(newProfile);
+    }
+
+    @Override
+    public void setEquipment(UUID playerId, EquipmentSlot slot, Item item) {
+        playerServerAdapter.setEquipment(playerId, slot, item);
+    }
+
+    @Override
+    public boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory) {
+        return playerServerAdapter.giveItem(playerId, item, dropOnFullInventory);
     }
 
     @Override
@@ -124,11 +135,6 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
         playerProfileRepository.save(newProfile);
 
         // TODO do we want to publish PlayerCurrencyLostEvent here?
-    }
-
-    @Override
-    public boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory) {
-        return playerServerAdapter.giveItem(playerId, item, dropOnFullInventory);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.spigot.entity.player.service;
 
 import com.google.inject.Inject;
+import gg.warcraft.monolith.api.entity.EquipmentSlot;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.item.Item;
@@ -12,6 +13,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Collection;
 import java.util.Map;
@@ -51,6 +53,37 @@ public class SpigotPlayerAdapter implements PlayerServerAdapter {
         return server.getOnlinePlayers().stream()
                 .map(Player::getUniqueId)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setEquipment(UUID playerId, EquipmentSlot slot, Item item) {
+        Player player = server.getPlayer(playerId);
+        if (player == null) {
+            return;
+        }
+
+        ItemStack spigotItem = itemMapper.map(item);
+        PlayerInventory inventory = player.getInventory();
+        switch (slot) {
+            case HEAD:
+                inventory.setHelmet(spigotItem);
+                break;
+            case CHEST:
+                inventory.setChestplate(spigotItem);
+                break;
+            case LEGS:
+                inventory.setLeggings(spigotItem);
+                break;
+            case FEET:
+                inventory.setBoots(spigotItem);
+                break;
+            case MAIN_HAND:
+                inventory.setItemInMainHand(spigotItem);
+                break;
+            case OFF_HAND:
+                inventory.setItemInOffHand(spigotItem);
+                break;
+        }
     }
 
     @Override

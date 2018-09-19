@@ -29,7 +29,7 @@ public class SimpleItemBuilder implements ItemBuilder {
 
     @Override
     public ItemBuilder addLore(String lore) {
-        this.lore.add(ColorCode.WHITE + lore);
+        this.lore.add(ColorCode.GRAY + lore);
         return this;
     }
 

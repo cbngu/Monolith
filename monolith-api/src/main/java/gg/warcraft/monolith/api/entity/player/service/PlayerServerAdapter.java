@@ -1,5 +1,6 @@
 package gg.warcraft.monolith.api.entity.player.service;
 
+import gg.warcraft.monolith.api.entity.EquipmentSlot;
 import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.item.Item;
 
@@ -26,6 +27,19 @@ public interface PlayerServerAdapter {
      */
     Collection<UUID> getOnlinePlayers();
 
+    /**
+     * @param playerId The id of the player. Can not be null.
+     * @param slot     The equipment slot to set. Can not be null.
+     * @param item     The item to set in the equipment slot. Can not be null.
+     */
+    void setEquipment(UUID playerId, EquipmentSlot slot, Item item);
+
+    /**
+     * @param playerId            The id of the player. Can not be null.
+     * @param item                The item to add to the inventory. Can not be null.
+     * @param dropOnFullInventory Whether or not to drop items that could not be added to the inventory.
+     * @return True if all items could be added to the inventory, false otherwise.
+     */
     boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory);
 
     /**
