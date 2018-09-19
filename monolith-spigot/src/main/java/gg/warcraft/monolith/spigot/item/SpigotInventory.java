@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SpigotInventory implements Inventory {
@@ -25,6 +26,7 @@ public class SpigotInventory implements Inventory {
     @Override
     public List<Item> getItems() {
         return Arrays.stream(inventory.getContents())
+                .filter(Objects::nonNull)
                 .map(itemMapper::map)
                 .collect(Collectors.toList());
     }
@@ -59,8 +61,8 @@ public class SpigotInventory implements Inventory {
     @Override
     public boolean remove(Item item) {
         ItemStack spigotItem = itemMapper.map(item);
-        if (inventory.contains(spigotItem, item.getStackSize())) {
-            inventory.remove(spigotItem);
+        if (inventory.containsAtLeast(spigotItem, item.getStackSize())) {
+            inventory.removeItem(spigotItem);
             return true;
         }
         return false;
