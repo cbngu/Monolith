@@ -24,6 +24,11 @@ public class DefaultWorldCommandService implements WorldCommandService {
     }
 
     @Override
+    public void setBlock(Block block) {
+        worldServerAdapter.setBlock(block);
+    }
+
+    @Override
     public void setBlockType(Block block, BlockType type) {
         worldServerAdapter.setBlockType(block, type);
     }
@@ -46,6 +51,11 @@ public class DefaultWorldCommandService implements WorldCommandService {
     @Override
     public void strikeLightning(Location location, boolean ambient) {
         worldServerAdapter.strikeLightning(location, ambient);
+    }
+
+    @Override
+    public void createExplosion(Location location, boolean ambient) {
+        worldServerAdapter.createExplosion(location, ambient);
     }
 
     @Override

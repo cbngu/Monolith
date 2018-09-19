@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.world.block;
 
 import gg.warcraft.monolith.api.world.location.Location;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -67,6 +68,14 @@ public interface BlockUtils {
      * @return The block neighbouring this block at the given block face. Never null.
      */
     Block getRelative(Block block, BlockFace at);
+
+    /**
+     * @param location The location. Can not be null.
+     * @param radius   The radius.
+     * @return All blocks whose bounding boxes collide with the sphere created from the location and radius. Never null
+     * or empty.
+     */
+    List<Block> getWithinRadius(Location location, float radius);
 
     /**
      * @param origin The starting location. Can not be null.

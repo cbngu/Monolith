@@ -3,37 +3,34 @@ package gg.warcraft.monolith.app.world.block;
 import com.google.common.base.MoreObjects;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.Slab;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
 
 import java.util.Objects;
 
-public class SimpleBlock implements Block {
-    private final BlockType type;
-    private final BlockLocation location;
+public class SlabBlock extends SimpleBlock implements Slab {
+    private final boolean top;
+    private final boolean bottom;
 
-    public SimpleBlock(BlockType type, BlockLocation location) {
-        this.type = type;
-        this.location = location;
+    public SlabBlock(BlockType type, BlockLocation location, boolean top, boolean bottom) {
+        super(type, location);
+        this.top = top;
+        this.bottom = bottom;
     }
 
     @Override
-    public BlockType getType() {
-        return type;
+    public boolean isTop() {
+        return top;
     }
 
     @Override
-    public BlockLocation getLocation() {
-        return location;
-    }
-
-    @Override
-    public Block withType(BlockType type) {
-        return new SimpleBlock(type, getLocation());
+    public boolean isBottom() {
+        return bottom;
     }
 
     @Override
     public Block withLocation(BlockLocation location) {
-        return new SimpleBlock(getType(), location);
+        return new SlabBlock(getType(), location, isTop(), isBottom());
     }
 
     @Override
@@ -41,15 +38,19 @@ public class SimpleBlock implements Block {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        Block other = (Block) object;
+        SlabBlock other = (SlabBlock) object;
         return Objects.equals(getType(), other.getType())
-                && Objects.equals(getLocation(), other.getLocation());
+                && Objects.equals(getLocation(), other.getLocation())
+                && Objects.equals(isTop(), other.isTop())
+                && Objects.equals(isBottom(), other.isBottom());
     }
 
     @Override
     public int hashCode() {
         String id = getType() + ":"
-                + getLocation();
+                + getLocation() + ":"
+                + isTop() + ":"
+                + isBottom();
         return id.hashCode();
     }
 
@@ -58,6 +59,8 @@ public class SimpleBlock implements Block {
         return MoreObjects.toStringHelper(this.getClass())
                 .add("type", getType())
                 .add("location", getLocation())
+                .add("top", isTop())
+                .add("bottom", isBottom())
                 .toString();
     }
 }

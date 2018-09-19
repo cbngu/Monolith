@@ -21,26 +21,33 @@ import java.util.UUID;
 public interface WorldCommandService {
 
     /**
-     * @param block The block to update.
-     * @param type  The new type.
+     * @param block The block to update. Can not be null.
+     */
+    void setBlock(Block block);
+
+    /**
+     * @param block The block to update. Can not be null.
+     * @param type  The new type. Can not be null.
      */
     void setBlockType(Block block, BlockType type);
 
     /**
-     * @param sign  The sign to update.
-     * @param lines The new lines.
+     * @param sign  The sign to update. Can not be null.
+     * @param lines The new lines. Can not be null.
      */
     void setSignLines(Sign sign, String[] lines);
 
     /**
-     * @param items    The items to drop.
-     * @param location The location to drop at.
+     * @param items    The items to drop. Can not be null, but can be empty. Items can not be null.
+     * @param location The location to drop at. Can not be null.
      */
     void dropItemsAt(List<Item> items, Location location);
 
     void playSound(Location location, Sound sound, SoundCategory category, float volume, float pitch);
 
     void strikeLightning(Location location, boolean ambient);
+
+    void createExplosion(Location location, boolean ambient);
 
     UUID createArrow(UUID shooterId, Location location, Vector3f direction, float speed, float spread);
 }

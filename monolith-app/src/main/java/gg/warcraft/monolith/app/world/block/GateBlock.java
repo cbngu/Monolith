@@ -3,32 +3,37 @@ package gg.warcraft.monolith.app.world.block;
 import com.google.common.base.MoreObjects;
 import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.block.BlockType;
-import gg.warcraft.monolith.api.world.block.DirectionalBlock;
+import gg.warcraft.monolith.api.world.block.Gate;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
 
 import java.util.Objects;
 
-public class SimpleDirectionalBlock extends SimpleBlock implements DirectionalBlock {
-    private final Direction facing;
+public class GateBlock extends SimpleDirectionalBlock implements Gate {
+    private final boolean open;
 
-    public SimpleDirectionalBlock(BlockType type, BlockLocation location, Direction facing) {
-        super(type, location);
-        this.facing = facing;
+    public GateBlock(BlockType type, BlockLocation location, Direction facing, boolean open) {
+        super(type, location, facing);
+        this.open = open;
     }
 
     @Override
-    public Direction getFacing() {
-        return facing;
+    public boolean isOpen() {
+        return open;
     }
 
     @Override
-    public DirectionalBlock withLocation(BlockLocation location) {
-        return new SimpleDirectionalBlock(getType(), location, getFacing());
+    public Gate withOpen(boolean open) {
+        return new GateBlock(getType(), getLocation(), getFacing(), open);
     }
 
     @Override
-    public DirectionalBlock withFacing(Direction facing) {
-        return new SimpleDirectionalBlock(getType(), getLocation(), facing);
+    public Gate withLocation(BlockLocation location) {
+        return new GateBlock(getType(), location, getFacing(), isOpen());
+    }
+
+    @Override
+    public Gate withFacing(Direction facing) {
+        return new GateBlock(getType(), getLocation(), facing, isOpen());
     }
 
     @Override
@@ -36,17 +41,19 @@ public class SimpleDirectionalBlock extends SimpleBlock implements DirectionalBl
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        DirectionalBlock other = (DirectionalBlock) object;
+        Gate other = (Gate) object;
         return Objects.equals(getType(), other.getType())
                 && Objects.equals(getLocation(), other.getLocation())
-                && Objects.equals(getFacing(), other.getFacing());
+                && Objects.equals(getFacing(), other.getFacing())
+                && Objects.equals(isOpen(), other.isOpen());
     }
 
     @Override
     public int hashCode() {
         String id = getType() + ":"
                 + getLocation() + ":"
-                + getFacing();
+                + getFacing() + ":"
+                + isOpen();
         return id.hashCode();
     }
 
@@ -56,6 +63,7 @@ public class SimpleDirectionalBlock extends SimpleBlock implements DirectionalBl
                 .add("type", getType())
                 .add("location", getLocation())
                 .add("facing", getFacing())
+                .add("open", isOpen())
                 .toString();
     }
 }

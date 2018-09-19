@@ -1,6 +1,7 @@
 package gg.warcraft.monolith.app.world.block;
 
 import com.google.inject.Inject;
+import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockIntersection;
@@ -8,22 +9,32 @@ import gg.warcraft.monolith.api.world.block.BlockIterator;
 import gg.warcraft.monolith.api.world.block.BlockIteratorFactory;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
+import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
+import gg.warcraft.monolith.api.world.block.box.BoundingBlockBoxFactory;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
 import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.api.world.service.WorldQueryService;
+import org.joml.AABBf;
+import org.joml.Intersectionf;
+import org.joml.Spheref;
+import org.joml.Vector3ic;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DefaultBlockUtils implements BlockUtils {
     private final WorldQueryService worldQueryService;
     private final BlockIteratorFactory blockIteratorFactory;
+    private final BoundingBlockBoxFactory boundingBlockBoxFactory;
 
     @Inject
-    public DefaultBlockUtils(WorldQueryService worldQueryService, BlockIteratorFactory blockIteratorFactory) {
+    public DefaultBlockUtils(WorldQueryService worldQueryService, BlockIteratorFactory blockIteratorFactory,
+                             BoundingBlockBoxFactory boundingBlockBoxFactory) {
         this.worldQueryService = worldQueryService;
         this.blockIteratorFactory = blockIteratorFactory;
+        this.boundingBlockBoxFactory = boundingBlockBoxFactory;
     }
 
     @Override
@@ -145,6 +156,26 @@ public class DefaultBlockUtils implements BlockUtils {
             default:
                 throw new IllegalArgumentException("Failed to get relative block for illegal block face " + at);
         }
+    }
+
+    @Override
+    public List<Block> getWithinRadius(Location location, float radius) {
+        WorldType world = location.getWorld().getType();
+        Vector3ic minimumCorner = location.sub(radius, radius, radius)
+                .toBlockLocation()
+                .toVector();
+        Vector3ic maximumCorner = location.add(1 + radius, 1 + radius, 1 + radius)
+                .toBlockLocation()
+                .toVector();
+        BoundingBlockBox box = boundingBlockBoxFactory.createBoundingBlockBox(world, minimumCorner, maximumCorner);
+        Spheref sphere = new Spheref(location.getX(), location.getY(), location.getZ(), radius);
+        return box.stream()
+                .filter(block -> {
+                    Location blockLocation = block.getLocation().toLocation();
+                    AABBf blockBox = new AABBf(blockLocation.toVector(), blockLocation.add(1, 1, 1).toVector());
+                    return Intersectionf.testAabSphere(blockBox, sphere);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
