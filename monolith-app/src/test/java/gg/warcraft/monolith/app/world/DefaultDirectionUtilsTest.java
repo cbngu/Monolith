@@ -60,4 +60,65 @@ public class DefaultDirectionUtilsTest {
         Assert.assertEquals(270, westSouthRotation);
         Assert.assertEquals(0, westWestRotation);
     }
+
+    @Test
+    public void rotate_ShouldReturnCorrectRotation() {
+        // When
+        Direction northRotate0 = defaultDirectionUtils.rotate(Direction.NORTH, 0);
+        Direction northRotate90 = defaultDirectionUtils.rotate(Direction.NORTH, 90);
+        Direction northRotate180 = defaultDirectionUtils.rotate(Direction.NORTH, 180);
+        Direction northRotate270 = defaultDirectionUtils.rotate(Direction.NORTH, 270);
+        Direction northRotate360 = defaultDirectionUtils.rotate(Direction.NORTH, 360);
+        Direction northRotate720 = defaultDirectionUtils.rotate(Direction.NORTH, 720);
+
+        Direction eastRotate0 = defaultDirectionUtils.rotate(Direction.EAST, 0);
+        Direction eastRotate90 = defaultDirectionUtils.rotate(Direction.EAST, 90);
+        Direction eastRotate180 = defaultDirectionUtils.rotate(Direction.EAST, 180);
+        Direction eastRotate270 = defaultDirectionUtils.rotate(Direction.EAST, 270);
+        Direction eastRotate360 = defaultDirectionUtils.rotate(Direction.EAST, 360);
+        Direction eastRotate720 = defaultDirectionUtils.rotate(Direction.EAST, 720);
+
+        Direction southRotate0 = defaultDirectionUtils.rotate(Direction.SOUTH, 0);
+        Direction southRotate90 = defaultDirectionUtils.rotate(Direction.SOUTH, 90);
+        Direction southRotate180 = defaultDirectionUtils.rotate(Direction.SOUTH, 180);
+        Direction southRotate270 = defaultDirectionUtils.rotate(Direction.SOUTH, 270);
+        Direction southRotate360 = defaultDirectionUtils.rotate(Direction.SOUTH, 360);
+        Direction southRotate720 = defaultDirectionUtils.rotate(Direction.SOUTH, 720);
+
+        Direction westRotate0 = defaultDirectionUtils.rotate(Direction.WEST, 0);
+        Direction westRotate90 = defaultDirectionUtils.rotate(Direction.WEST, 90);
+        Direction westRotate180 = defaultDirectionUtils.rotate(Direction.WEST, 180);
+        Direction westRotate270 = defaultDirectionUtils.rotate(Direction.WEST, 270);
+        Direction westRotate360 = defaultDirectionUtils.rotate(Direction.WEST, 360);
+        Direction westRotate720 = defaultDirectionUtils.rotate(Direction.WEST, 720);
+
+        // Then
+        Assert.assertEquals(northRotate0, Direction.NORTH);
+        Assert.assertEquals(northRotate90, Direction.EAST);
+        Assert.assertEquals(northRotate180, Direction.SOUTH);
+        Assert.assertEquals(northRotate270, Direction.WEST);
+        Assert.assertEquals(northRotate360, Direction.NORTH);
+        Assert.assertEquals(northRotate720, Direction.NORTH);
+
+        Assert.assertEquals(eastRotate0, Direction.EAST);
+        Assert.assertEquals(eastRotate90, Direction.SOUTH);
+        Assert.assertEquals(eastRotate180, Direction.WEST);
+        Assert.assertEquals(eastRotate270, Direction.NORTH);
+        Assert.assertEquals(eastRotate360, Direction.EAST);
+        Assert.assertEquals(eastRotate720, Direction.EAST);
+
+        Assert.assertEquals(southRotate0, Direction.SOUTH);
+        Assert.assertEquals(southRotate90, Direction.WEST);
+        Assert.assertEquals(southRotate180, Direction.NORTH);
+        Assert.assertEquals(southRotate270, Direction.EAST);
+        Assert.assertEquals(southRotate360, Direction.SOUTH);
+        Assert.assertEquals(southRotate720, Direction.SOUTH);
+
+        Assert.assertEquals(westRotate0, Direction.WEST);
+        Assert.assertEquals(westRotate90, Direction.NORTH);
+        Assert.assertEquals(westRotate180, Direction.EAST);
+        Assert.assertEquals(westRotate270, Direction.SOUTH);
+        Assert.assertEquals(westRotate360, Direction.WEST);
+        Assert.assertEquals(westRotate720, Direction.WEST);
+    }
 }

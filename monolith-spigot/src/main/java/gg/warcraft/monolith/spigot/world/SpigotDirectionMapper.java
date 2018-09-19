@@ -5,6 +5,10 @@ import gg.warcraft.monolith.api.world.Direction;
 public class SpigotDirectionMapper {
 
     public org.bukkit.block.BlockFace map(Direction direction) {
+        if (direction == null) {
+            return null;
+        }
+
         switch (direction) {
             case NORTH:
                 return org.bukkit.block.BlockFace.NORTH;
@@ -24,6 +28,10 @@ public class SpigotDirectionMapper {
     }
 
     public Direction map(org.bukkit.block.BlockFace direction) {
+        if (direction == null) {
+            return null;
+        }
+
         switch (direction) {
             case NORTH:
                 return Direction.NORTH;

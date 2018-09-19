@@ -42,6 +42,25 @@ public class DefaultDirectionUtils implements DirectionUtils {
     }
 
     @Override
+    public Direction rotate(Direction direction, int rotation) {
+        if (direction == Direction.UP || direction == Direction.DOWN) {
+            return direction;
+        }
+
+        if (rotation % 90 != 0) {
+            throw new IllegalArgumentException("Failed to rotate " + direction + " for illegal rotation of " +
+                    rotation + ", needs to be a multiple of 90.");
+        }
+
+        int adjustedRotation = rotation % 360;
+        int ordinalDifference = adjustedRotation / 90;
+        int startingOrdinal = direction.ordinal();
+        int targetOrdinal = startingOrdinal + ordinalDifference;
+        int adjustedOrdinal = targetOrdinal % 4;
+        return Direction.values()[adjustedOrdinal];
+    }
+
+    @Override
     public Direction toDirection(float yaw) {
         if (yaw > 180) {
             yaw -= 360;
