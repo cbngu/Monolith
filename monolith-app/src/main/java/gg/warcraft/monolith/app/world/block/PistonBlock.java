@@ -63,12 +63,7 @@ public class PistonBlock extends SimpleDirectionalBlock implements Piston {
 
     @Override
     public int hashCode() {
-        String id = getType() + ":"
-                + getLocation() + ":"
-                + getFacing() + ":"
-                + isPowered() + ":"
-                + isSticky();
-        return id.hashCode();
+        return Objects.hash(getType(), getLocation(), getFacing(), isPowered());
     }
 
     @Override

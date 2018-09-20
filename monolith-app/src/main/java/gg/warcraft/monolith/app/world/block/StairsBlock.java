@@ -50,11 +50,7 @@ public class StairsBlock extends SimpleDirectionalBlock implements Stairs {
 
     @Override
     public int hashCode() {
-        String id = getType() + ":"
-                + getLocation() + ":"
-                + getFacing() + ":"
-                + isInverted();
-        return id.hashCode();
+        return Objects.hash(getType(), getLocation(), getFacing(), isInverted());
     }
 
     @Override

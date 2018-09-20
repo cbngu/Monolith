@@ -50,11 +50,7 @@ public class LeverBlock extends SimpleDirectionalBlock implements Lever {
 
     @Override
     public int hashCode() {
-        String id = getType() + ":"
-                + getLocation() + ":"
-                + getFacing() + ":"
-                + isPowered();
-        return id.hashCode();
+        return Objects.hash(getType(), getLocation(), getFacing(), isPowered());
     }
 
     @Override

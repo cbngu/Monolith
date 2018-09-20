@@ -93,14 +93,7 @@ public class SimpleOrientedLocation extends SimpleLocation implements OrientedLo
 
     @Override
     public int hashCode() {
-        String id = getWorld().getType() + ":" +
-                getX() + "," +
-                getY() + "," +
-                getZ() + "," +
-                getPitch() + "," +
-                getYaw() + "," +
-                getDirection();
-        return id.hashCode();
+        return Objects.hash(getWorld().getType(), getX(), getY(), getZ(), getPitch(), getYaw());
     }
 
     @Override

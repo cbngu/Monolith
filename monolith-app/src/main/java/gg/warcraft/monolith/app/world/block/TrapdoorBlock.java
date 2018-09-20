@@ -63,12 +63,7 @@ public class TrapdoorBlock extends SimpleDirectionalBlock implements Trapdoor {
 
     @Override
     public int hashCode() {
-        String id = getType() + ":"
-                + getLocation() + ":"
-                + getFacing() + ":"
-                + isInverted() + ":"
-                + isOpen();
-        return id.hashCode();
+        return Objects.hash(getType(), getLocation(), getFacing(), isInverted(), isOpen());
     }
 
     @Override

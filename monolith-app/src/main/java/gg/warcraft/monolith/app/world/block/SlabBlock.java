@@ -47,11 +47,7 @@ public class SlabBlock extends SimpleBlock implements Slab {
 
     @Override
     public int hashCode() {
-        String id = getType() + ":"
-                + getLocation() + ":"
-                + isTop() + ":"
-                + isBottom();
-        return id.hashCode();
+        return Objects.hash(getType(), getLocation(), isTop());
     }
 
     @Override

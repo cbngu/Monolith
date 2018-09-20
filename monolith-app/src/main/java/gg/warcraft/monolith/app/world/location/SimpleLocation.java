@@ -141,11 +141,7 @@ public class SimpleLocation implements Location {
 
     @Override
     public int hashCode() {
-        String id = getWorld().getType() + ":" +
-                getX() + "," +
-                getY() + "," +
-                getZ();
-        return id.hashCode();
+        return Objects.hash(getWorld().getType(), getX(), getY(), getZ());
     }
 
     @Override

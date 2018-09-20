@@ -50,11 +50,7 @@ public class GateBlock extends SimpleDirectionalBlock implements Gate {
 
     @Override
     public int hashCode() {
-        String id = getType() + ":"
-                + getLocation() + ":"
-                + getFacing() + ":"
-                + isOpen();
-        return id.hashCode();
+        return Objects.hash(getType(), getLocation(), getFacing(), isOpen());
     }
 
     @Override

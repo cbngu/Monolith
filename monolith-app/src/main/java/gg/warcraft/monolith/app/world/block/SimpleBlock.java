@@ -48,9 +48,7 @@ public class SimpleBlock implements Block {
 
     @Override
     public int hashCode() {
-        String id = getType() + ":"
-                + getLocation();
-        return id.hashCode();
+        return Objects.hash(getType(), getLocation());
     }
 
     @Override
