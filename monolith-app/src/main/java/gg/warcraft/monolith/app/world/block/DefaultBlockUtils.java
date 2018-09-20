@@ -17,8 +17,10 @@ import gg.warcraft.monolith.api.world.service.WorldQueryService;
 import org.joml.AABBf;
 import org.joml.Intersectionf;
 import org.joml.Spheref;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -156,6 +158,46 @@ public class DefaultBlockUtils implements BlockUtils {
             default:
                 throw new IllegalArgumentException("Failed to get relative block for illegal block face " + at);
         }
+    }
+
+    @Override
+    public BoundingBlockBox getBoundingBox(Collection<Block> blocks) {
+        if (blocks == null || blocks.isEmpty()) {
+            return null;
+        }
+
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+        for (Block block : blocks) {
+            BlockLocation location = block.getLocation();
+            if (location.getX() < minX) {
+                minX = location.getX();
+            }
+            if (location.getX() > maxX) {
+                maxX = location.getX();
+            }
+            if (location.getY() < minY) {
+                minY = location.getY();
+            }
+            if (location.getY() > maxY) {
+                maxY = location.getY();
+            }
+            if (location.getZ() < minZ) {
+                minZ = location.getZ();
+            }
+            if (location.getZ() > maxZ) {
+                maxZ = location.getZ();
+            }
+        }
+
+        WorldType world = blocks.iterator().next().getLocation().getWorld().getType();
+        Vector3ic minimumCorner = new Vector3i(minX, minY, minZ);
+        Vector3ic maximumCorner = new Vector3i(maxX, maxY, maxZ);
+        return boundingBlockBoxFactory.createBoundingBlockBox(world, minimumCorner, maximumCorner);
     }
 
     @Override

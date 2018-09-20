@@ -1,7 +1,9 @@
 package gg.warcraft.monolith.api.world.block;
 
+import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
 import gg.warcraft.monolith.api.world.location.Location;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -68,6 +70,12 @@ public interface BlockUtils {
      * @return The block neighbouring this block at the given block face. Never null.
      */
     Block getRelative(Block block, BlockFace at);
+
+    /**
+     * @param blocks The collection of blocks. Can not be null or empty.
+     * @return A block box representing the bounds of the collection of blocks. Never null.
+     */
+    BoundingBlockBox getBoundingBox(Collection<Block> blocks);
 
     /**
      * @param location The location. Can not be null.
