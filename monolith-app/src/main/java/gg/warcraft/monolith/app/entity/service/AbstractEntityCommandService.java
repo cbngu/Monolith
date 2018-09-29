@@ -98,7 +98,7 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
         EntityType entityType = entity.getType();
         EntityPreDamageEvent entityPreDamageEvent = new SimpleEntityPreDamageEvent(entityId, entityType, damage, false);
         eventService.publish(entityPreDamageEvent);
-        if (entityPreDamageEvent.isCancelled()) {
+        if (entityPreDamageEvent.isCancelled() && !entityPreDamageEvent.isExplicitlyAllowed()) {
             return;
         }
 
