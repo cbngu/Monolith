@@ -35,6 +35,12 @@ public interface TimeUtils {
     String getTimeToGoUntil(long unixTimestamp);
 
     /**
+     * @param duration The duration. Can not be null.
+     * @return A formatted string representing the duration as seen on digital displays. Never null or empty.
+     */
+    String getDigitalDisplay(Duration duration);
+
+    /**
      * @param millis The duration in milliseconds.
      * @return A new {@code Duration} for the specified milliseconds. Never null.
      */

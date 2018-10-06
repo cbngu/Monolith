@@ -45,6 +45,32 @@ public class DefaultTimeUtils implements TimeUtils {
     }
 
     @Override
+    public String getDigitalDisplay(Duration duration) {
+        int durationInSeconds = duration.inSeconds();
+        int hours = durationInSeconds / SECONDS_PER_HOUR;
+        int durationInSecondsMinusHours = durationInSeconds % SECONDS_PER_HOUR;
+        int minutes = durationInSecondsMinusHours / SECONDS_PER_MINUTE;
+        int seconds = durationInSecondsMinusHours % SECONDS_PER_MINUTE;
+
+        String display = "";
+        if (hours != 0) {
+            if (hours < 10) {
+                display += "0";
+            }
+            display += hours + ":";
+        }
+        if (minutes < 10) {
+            display += "0";
+        }
+        display += minutes + ":";
+        if (seconds < 10) {
+            display += "0";
+        }
+        display += seconds;
+        return display;
+    }
+
+    @Override
     public Duration createDurationInMillis(int millis) {
         return new SimpleDuration(Duration.Type.MILLIS, millis);
     }
