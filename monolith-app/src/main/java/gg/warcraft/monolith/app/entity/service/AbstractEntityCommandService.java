@@ -15,6 +15,7 @@ import gg.warcraft.monolith.api.entity.service.EntityQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.util.TimeUtils;
+import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
@@ -89,6 +90,11 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     @Override
     public void teleport(UUID entityId, Location location) {
         entityServerAdapter.teleport(entityId, location);
+    }
+
+    @Override
+    public void teleport(UUID entityId, Location location, Direction orientation) {
+        entityServerAdapter.teleport(entityId, location, orientation);
     }
 
     @Override

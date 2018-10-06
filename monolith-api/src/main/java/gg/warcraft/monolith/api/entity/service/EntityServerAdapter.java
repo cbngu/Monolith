@@ -6,6 +6,7 @@ import gg.warcraft.monolith.api.entity.EntityServerData;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
 import gg.warcraft.monolith.api.util.Duration;
+import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.location.Location;
 import org.joml.Vector3fc;
 
@@ -111,5 +112,5 @@ public interface EntityServerAdapter {
      * @param location    The location to teleport the entity to. Can not be null.
      * @param orientation The new orientation of the entity. Can not be null.
      */
-    void teleport(UUID entityId, Location location, Vector3fc orientation);
+    void teleport(UUID entityId, Location location, Direction orientation);
 }

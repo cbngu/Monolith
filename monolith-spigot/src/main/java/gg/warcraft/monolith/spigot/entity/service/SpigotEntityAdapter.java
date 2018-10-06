@@ -11,6 +11,8 @@ import gg.warcraft.monolith.api.entity.attribute.GenericAttribute;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.util.Duration;
+import gg.warcraft.monolith.api.world.Direction;
+import gg.warcraft.monolith.api.world.DirectionUtils;
 import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.spigot.combat.SpigotPotionEffectTypeMapper;
 import gg.warcraft.monolith.spigot.entity.GenericAttributeMapper;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 public class SpigotEntityAdapter implements EntityServerAdapter {
     private final Server server;
     private final AttributeQueryService attributeQueryService;
+    private final DirectionUtils directionUtils;
     private final SpigotEntityTypeMapper entityTypeMapper;
     private final SpigotLocationMapper locationMapper;
     private final SpigotEntityDataFactory entityDataFactory;
@@ -42,12 +45,13 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
 
     @Inject
     public SpigotEntityAdapter(Server server, AttributeQueryService attributeQueryService,
-                               SpigotEntityTypeMapper entityTypeMapper, SpigotLocationMapper locationMapper,
-                               SpigotEntityDataFactory entityDataFactory,
+                               DirectionUtils directionUtils, SpigotEntityTypeMapper entityTypeMapper,
+                               SpigotLocationMapper locationMapper, SpigotEntityDataFactory entityDataFactory,
                                SpigotPotionEffectTypeMapper potionEffectTypeMapper,
                                GenericAttributeMapper genericAttributeMapper) {
         this.server = server;
         this.attributeQueryService = attributeQueryService;
+        this.directionUtils = directionUtils;
         this.entityTypeMapper = entityTypeMapper;
         this.locationMapper = locationMapper;
         this.entityDataFactory = entityDataFactory;
@@ -197,11 +201,12 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     }
 
     @Override
-    public void teleport(UUID entityId, Location location, Vector3fc orientation) {
+    public void teleport(UUID entityId, Location location, Direction orientation) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
             org.bukkit.Location newLocation = locationMapper.map(location);
-            newLocation.setDirection(new Vector(orientation.x(), orientation.y(), orientation.z()));
+            Vector3fc direction = directionUtils.toVector(orientation);
+            newLocation.setDirection(new Vector(direction.x(), direction.y(), direction.z()));
             entity.teleport(newLocation);
         }
     }
