@@ -9,9 +9,9 @@ public interface BlockInteractEvent extends BlockEvent {
 
     BlockInteraction getInteraction();
 
-    BlockFace getClickedBlockFace();
+    BlockFace getFace();
 
-    Item getItemInClickHand();
+    Item getItemInHand();
 
     UUID getPlayerId();
 }
