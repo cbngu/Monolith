@@ -8,13 +8,33 @@ import gg.warcraft.monolith.api.item.ItemReader;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class SimpleItemReader implements ItemReader {
+    private static final Pattern chatCodePattern = Pattern.compile("§.");
+
     private final Item item;
 
     @Inject
     public SimpleItemReader(@Assisted @Nullable Item item) {
         this.item = item;
+    }
+
+    private String removeChatCodes(String string) {
+        return chatCodePattern.matcher(string).replaceAll("");
+    }
+
+    @Override
+    public String getType() {
+        if (item == null) {
+            return null;
+        }
+
+        List<String> lore = item.getLore();
+        if (lore.size() == 1 || lore.get(1).isEmpty()) {
+            return removeChatCodes(lore.get(0));
+        }
+        return null;
     }
 
     @Override
@@ -26,9 +46,10 @@ public class SimpleItemReader implements ItemReader {
         List<String> lore = item.getLore();
         for (String line : lore) {
             if (line.contains(attribute.getName())) {
-                String cleanedLine = line.replaceAll("[\\D]", "");
+                String rawLine = removeChatCodes(line);
+                String onlyNumbers = rawLine.replaceAll("[\\D]", "");
                 try {
-                    return Integer.parseInt(cleanedLine);
+                    return Integer.parseInt(onlyNumbers);
                 } catch (NumberFormatException ex) {
                     return 0;
                 }
