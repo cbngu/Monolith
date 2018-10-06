@@ -3,6 +3,7 @@ package gg.warcraft.monolith.api.core;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 
 /**
  * This service is injectable.
@@ -10,7 +11,10 @@ import java.util.Set;
  * The PersistenceService serves as a point of entry into the persistence module implementation. It provides methods to
  * get and set data in the key-value/document store.
  * <p>
- * Redis is currently the only supported implementation of this interface.
+ * All operations exposed by this service are heavily inspired by the Redis API (as such Redis is also the recommended
+ * implementation), but to make adding your own implementation as simple as possible Monolith only relies on the {@code
+ * get}, {@code set}, and {@code delete} operations. Other operations could throw an {@code
+ * UnsupportedOperationException}.
  */
 public interface PersistenceService {
 
@@ -25,6 +29,11 @@ public interface PersistenceService {
      * @param value The value. Can be null or empty.
      */
     void set(String key, String value);
+
+    /**
+     * @param key The key to delete any associated value or value map for. Can not be null or empty.
+     */
+    void delete(String key);
 
     /**
      * @param key The key of the value list to retrieve. Can not be null or empty.
@@ -55,9 +64,15 @@ public interface PersistenceService {
 
     /**
      * @param key    The key to set the value map at. Can not be null or empty.
-     * @param values The value map. Can be null or empty.
+     * @param values The value map. Can not be null, but can be empty.
      */
     void setMap(String key, Map<String, String> values);
+
+    /**
+     * @param key    The key of the map to remove the values from. Can not be null or empty.
+     * @param fields The fields. Can not be null, but can be empty.
+     */
+    void removeMap(String key, List<String> fields);
 
     /**
      * @param key The key of the value set to retrieve. Can not be null or empty.
@@ -77,10 +92,17 @@ public interface PersistenceService {
      */
     void removeSet(String key, List<String> values);
 
-    /**
-     * @param key The key to delete any associated value or value map for. Can not be null or empty.
-     */
-    void delete(String key);
+    SortedMap<String, Double> getSortedSet(String key);
+
+    SortedMap<String, Double> getSortedSet(String key, int start, int end);
+
+    void setSortedSet(String key, String field, double value);
+
+    void incrSortedSet(String key, String field, double amount);
+
+    void decrSortedSet(String key, String field, double amount);
+
+    void removeSortedSet(String key, String field);
 
     /**
      * @param keyPrefix The prefix. Can not be null or empty.
