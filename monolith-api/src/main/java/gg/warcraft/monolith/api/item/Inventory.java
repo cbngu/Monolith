@@ -10,6 +10,11 @@ public interface Inventory {
     List<Item> getItems();
 
     /**
+     * @return The amount of empty slots in this inventory.
+     */
+    int getSpace();
+
+    /**
      * @param items The items to add to the inventory. Can not be null, but can be empty. Items can not be null.
      * @return A list of items that could not be added to the inventory. Never null, but can be empty.
      */

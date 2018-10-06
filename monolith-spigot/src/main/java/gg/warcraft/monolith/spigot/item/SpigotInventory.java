@@ -32,6 +32,13 @@ public class SpigotInventory implements Inventory {
     }
 
     @Override
+    public int getSpace() {
+        return (int) Arrays.stream(inventory.getContents())
+                .filter(Objects::isNull)
+                .count();
+    }
+
+    @Override
     public List<Item> add(List<Item> items) {
         ItemStack[] spigotItems = items.stream()
                 .map(itemMapper::map)
