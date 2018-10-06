@@ -1,23 +1,19 @@
 package gg.warcraft.monolith.api.world.block.backup.service;
 
-import gg.warcraft.monolith.api.world.block.Block;
+import gg.warcraft.monolith.api.world.location.BlockLocation;
 
 import java.util.UUID;
 
 public interface BlockBackupCommandService {
 
     /**
-     * Creates a new block backup for the given block.
-     *
-     * @param block The block.
-     * @return The id of the new block backup.
+     * @param location The location of the block. Can not be null.
+     * @return The id of the block backup. Never null.
      */
-    UUID createBlockBackup(Block block);
+    UUID createBlockBackup(BlockLocation location);
 
     /**
-     * Restores the block backup with the given id.
-     *
-     * @param id The id.
+     * @param id The id of the backup. Can not be null.
      */
     void restoreBlockBackup(UUID id);
 }

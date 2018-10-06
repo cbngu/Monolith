@@ -16,6 +16,7 @@ import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.menu.service.MenuServerAdapter;
 import gg.warcraft.monolith.api.world.WorldType;
+import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupCommandService;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
 import gg.warcraft.monolith.app.AbstractMonolithModule;
 import gg.warcraft.monolith.app.effect.particle.MultiParticle;
@@ -36,6 +37,7 @@ import gg.warcraft.monolith.spigot.menu.service.SpigotMenuAdapter;
 import gg.warcraft.monolith.spigot.world.Overworld;
 import gg.warcraft.monolith.spigot.world.TheEnd;
 import gg.warcraft.monolith.spigot.world.TheNether;
+import gg.warcraft.monolith.spigot.world.block.backup.service.SpigotBlockBackupCommandService;
 import gg.warcraft.monolith.spigot.world.service.SpigotWorldAdapter;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -145,6 +147,9 @@ public class SpigotMonolithModule extends AbstractMonolithModule {
     }
 
     private void configureWorld() {
+        bind(BlockBackupCommandService.class).to(SpigotBlockBackupCommandService.class);
+        expose(BlockBackupCommandService.class);
+
         bind(WorldServerAdapter.class).to(SpigotWorldAdapter.class);
         expose(WorldServerAdapter.class);
     }

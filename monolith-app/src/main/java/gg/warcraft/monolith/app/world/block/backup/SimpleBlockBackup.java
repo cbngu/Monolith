@@ -1,6 +1,5 @@
 package gg.warcraft.monolith.app.world.block.backup;
 
-import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
@@ -10,15 +9,13 @@ import java.util.UUID;
 public class SimpleBlockBackup implements BlockBackup {
     private final UUID id;
     private final BlockType type;
+    private final int data;
     private final BlockLocation location;
 
-    public SimpleBlockBackup(Block block) {
-        this(UUID.randomUUID(), block.getType(), block.getLocation());
-    }
-
-    public SimpleBlockBackup(UUID id, BlockType type, BlockLocation location) {
+    public SimpleBlockBackup(UUID id, BlockType type, int data, BlockLocation location) {
         this.id = id;
         this.type = type;
+        this.data = data;
         this.location = location;
     }
 
@@ -30,6 +27,11 @@ public class SimpleBlockBackup implements BlockBackup {
     @Override
     public BlockType getType() {
         return type;
+    }
+
+    @Override
+    public int getData() {
+        return data;
     }
 
     @Override

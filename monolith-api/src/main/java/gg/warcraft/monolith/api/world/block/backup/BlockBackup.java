@@ -8,23 +8,22 @@ import java.util.UUID;
 public interface BlockBackup {
 
     /**
-     * Returns the id of this backup.
-     *
      * @return The id of this backup. Never null.
      */
     UUID getId();
 
     /**
-     * Returns the type of the block this backup belongs to.
-     *
-     * @return The type of the block this backup belongs to. Never null.
+     * @return The type of the block. Never null.
      */
     BlockType getType();
 
     /**
-     * Returns the location of the block this backup belongs to.
-     *
-     * @return The location of the block this backup belongs to. Never null.
+     * @return The raw data value of the block.
+     */
+    int getData();
+
+    /**
+     * @return The location of the block. Never null.
      */
     BlockLocation getLocation();
 }

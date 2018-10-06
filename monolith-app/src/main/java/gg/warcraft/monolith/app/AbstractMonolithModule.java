@@ -77,7 +77,6 @@ import gg.warcraft.monolith.api.world.block.BlockIterator;
 import gg.warcraft.monolith.api.world.block.BlockIteratorFactory;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.BlockUtils;
-import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupCommandService;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupQueryService;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupRepository;
 import gg.warcraft.monolith.api.world.block.box.BoundingBlockBox;
@@ -160,7 +159,6 @@ import gg.warcraft.monolith.app.world.DefaultDirectionUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockTypeUtils;
 import gg.warcraft.monolith.app.world.block.DefaultBlockUtils;
 import gg.warcraft.monolith.app.world.block.SimpleBlockIterator;
-import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupCommandService;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupQueryService;
 import gg.warcraft.monolith.app.world.block.backup.service.DefaultBlockBackupRepository;
 import gg.warcraft.monolith.app.world.block.box.SimpleBoundingBlockBox;
@@ -517,10 +515,7 @@ public class AbstractMonolithModule extends PrivateModule {
         bind(BlockBuildRepository.class).to(DefaultBlockBuildRepository.class);
         expose(BlockBuildRepository.class);
 
-        // Block backup bindings
-        bind(BlockBackupCommandService.class).to(DefaultBlockBackupCommandService.class);
-        expose(BlockBackupCommandService.class);
-
+        // Block backup bindings, the command service is bound in the Spigot layer
         bind(BlockBackupQueryService.class).to(DefaultBlockBackupQueryService.class);
         expose(BlockBackupQueryService.class);
 

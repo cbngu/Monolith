@@ -1,103 +1,100 @@
 package gg.warcraft.monolith.app.world.block.backup.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import gg.warcraft.monolith.api.core.JsonMapper;
 import gg.warcraft.monolith.api.core.PersistenceService;
-import gg.warcraft.monolith.api.world.World;
-import gg.warcraft.monolith.api.world.WorldType;
-import gg.warcraft.monolith.api.world.block.BlockType;
-import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
+import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
 import gg.warcraft.monolith.api.world.block.backup.service.BlockBackupRepository;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
-import gg.warcraft.monolith.app.world.SimpleWorld;
+import gg.warcraft.monolith.api.world.location.LocationFactory;
 import gg.warcraft.monolith.app.world.block.backup.SimpleBlockBackup;
-import gg.warcraft.monolith.app.world.location.SimpleBlockLocation;
+import gg.warcraft.monolith.app.world.block.backup.persistence.BlockBackupItem;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Singleton
 public class DefaultBlockBackupRepository implements BlockBackupRepository {
     private static final String KEY_PREFIX = "blockbackup:";
-    private static final String TYPE_ID = "typeid";
-    private static final String TYPE_DATA = "typedata";
-    private static final String LOCATION_WORLD = "locationworld";
-    private static final String LOCATION_X = "locationx";
-    private static final String LOCATION_Y = "locationy";
-    private static final String LOCATION_Z = "locationz";
 
     private final PersistenceService persistenceService;
-    private final BlockTypeUtils blockTypeUtils;
+    private final LocationFactory locationFactory;
+    private final ObjectMapper jsonMapper;
+    private final Logger pluginLogger;
 
     @Inject
-    public DefaultBlockBackupRepository(PersistenceService persistenceService, BlockTypeUtils blockTypeUtils) {
+    public DefaultBlockBackupRepository(PersistenceService persistenceService, LocationFactory locationFactory,
+                                        @JsonMapper ObjectMapper jsonMapper, @PluginLogger Logger pluginLogger) {
         this.persistenceService = persistenceService;
-        this.blockTypeUtils = blockTypeUtils;
+        this.locationFactory = locationFactory;
+        this.jsonMapper = jsonMapper;
+        this.pluginLogger = pluginLogger;
     }
 
-    @Override
-    public void save(BlockBackup blockBackup) {
-        persistenceService.setMap(getDataKey(blockBackup.getId()), flatten(blockBackup));
+    private String createBackupKey(UUID id) {
+        return KEY_PREFIX + id;
+    }
+
+    BlockBackup mapItemToBackup(BlockBackupItem item) {
+        BlockLocation location =
+                locationFactory.createBlockLocation(item.getWorld(), item.getX(), item.getY(), item.getZ());
+        return new SimpleBlockBackup(item.getId(), item.getType(), item.getData(), location);
     }
 
     @Override
     public BlockBackup get(UUID id) {
-        Map<String, String> data = persistenceService.getMap(getDataKey(id));
-        if (data.isEmpty()) {
+        String backupKey = createBackupKey(id);
+        String backupJson = persistenceService.get(backupKey);
+        if (backupJson == null) {
             return null;
         }
-        return new SimpleBlockBackup(id, getBlockTypeFromData(data), getLocationFromData(data));
+
+        try {
+            BlockBackupItem backupItem = jsonMapper.readValue(backupJson, BlockBackupItem.class);
+            return mapItemToBackup(backupItem);
+        } catch (IOException ex) {
+            pluginLogger.severe(ex.getMessage());
+            return null;
+        }
     }
 
     @Override
     public List<BlockBackup> getAll() {
         return persistenceService.getAllKeys(KEY_PREFIX).stream()
-                .map(dataKey -> get(getBlockBackupId(dataKey)))
+                .map(dataKey -> {
+                    String uuidString = dataKey.substring(dataKey.lastIndexOf(":") + 1);
+                    return UUID.fromString(uuidString);
+                })
+                .map(this::get)
                 .collect(Collectors.toList());
+    }
+
+    BlockBackupItem mapBackupToItem(BlockBackup backup) {
+        BlockLocation location = backup.getLocation();
+        return new BlockBackupItem(backup.getId(), backup.getType(), backup.getData(), location.getWorld().getType(),
+                location.getX(), location.getY(), location.getZ());
+    }
+
+    @Override
+    public void save(BlockBackup backup) {
+        String backupKey = createBackupKey(backup.getId());
+        BlockBackupItem backupItem = mapBackupToItem(backup);
+        try {
+            String backupJson = jsonMapper.writeValueAsString(backupItem);
+            persistenceService.set(backupKey, backupJson);
+        } catch (IOException ex) {
+            pluginLogger.severe(ex.getMessage());
+        }
     }
 
     @Override
     public void delete(UUID id) {
-        persistenceService.delete(getDataKey(id));
-    }
-
-    private String getDataKey(UUID id) {
-        return KEY_PREFIX + id;
-    }
-
-    private BlockType getBlockTypeFromData(Map<String, String> data) {
-        String typeId = data.get(TYPE_ID);
-        String typeData = data.get(TYPE_DATA);
-        return blockTypeUtils.getType(Integer.parseInt(typeId), Integer.parseInt(typeData));
-    }
-
-    private BlockLocation getLocationFromData(Map<String, String> data) {
-        String locationWorld = data.get(LOCATION_WORLD);
-        String locationX = data.get(LOCATION_X);
-        String locationY = data.get(LOCATION_Y);
-        String locationZ = data.get(LOCATION_Z);
-
-        World world = new SimpleWorld(WorldType.valueOf(locationWorld));
-        return new SimpleBlockLocation(world, Integer.parseInt(locationX), Integer.parseInt(locationY),
-                Integer.parseInt(locationZ));
-    }
-
-    private UUID getBlockBackupId(String dataKey) {
-        return UUID.fromString(dataKey.substring(dataKey.lastIndexOf(":") + 1));
-    }
-
-    private Map<String, String> flatten(BlockBackup blockBackup) {
-        Map<String, String> flattenedBlockBackup = new HashMap<>();
-        flattenedBlockBackup.put(TYPE_ID, String.valueOf(blockBackup.getType().getId()));
-        flattenedBlockBackup.put(TYPE_DATA, String.valueOf(blockBackup.getType().getData()));
-        flattenedBlockBackup.put(LOCATION_WORLD, blockBackup.getLocation().getWorld().getType().name());
-        flattenedBlockBackup.put(LOCATION_X, String.valueOf(blockBackup.getLocation().getX()));
-        flattenedBlockBackup.put(LOCATION_Y, String.valueOf(blockBackup.getLocation().getY()));
-        flattenedBlockBackup.put(LOCATION_Z, String.valueOf(blockBackup.getLocation().getZ()));
-        return flattenedBlockBackup;
+        persistenceService.delete(createBackupKey(id));
     }
 }
