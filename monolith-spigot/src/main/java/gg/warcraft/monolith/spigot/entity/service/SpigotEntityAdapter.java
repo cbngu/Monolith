@@ -191,6 +191,17 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
             org.bukkit.Location newLocation = locationMapper.map(location);
+            newLocation.setDirection(entity.getLocation().getDirection());
+            entity.teleport(newLocation);
+        }
+    }
+
+    @Override
+    public void teleport(UUID entityId, Location location, Vector3fc orientation) {
+        Entity entity = server.getEntity(entityId);
+        if (entity != null) {
+            org.bukkit.Location newLocation = locationMapper.map(location);
+            newLocation.setDirection(new Vector(orientation.x(), orientation.y(), orientation.z()));
             entity.teleport(newLocation);
         }
     }
