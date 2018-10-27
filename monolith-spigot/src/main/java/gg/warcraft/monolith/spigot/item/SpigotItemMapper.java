@@ -8,6 +8,7 @@ import gg.warcraft.monolith.app.item.SimpleItem;
 import gg.warcraft.monolith.spigot.world.MaterialData;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -32,6 +33,7 @@ public class SpigotItemMapper {
         }
         itemMeta.setLore(skull.getLore());
         itemMeta.setOwner(skull.getPlayerName());
+        itemMeta.addItemFlags(ItemFlag.values());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
@@ -49,6 +51,7 @@ public class SpigotItemMapper {
             itemMeta.setDisplayName(item.getName());
         }
         itemMeta.setLore(item.getLore());
+        itemMeta.addItemFlags(ItemFlag.values());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
