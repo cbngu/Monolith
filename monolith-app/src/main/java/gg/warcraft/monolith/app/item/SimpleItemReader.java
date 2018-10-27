@@ -31,7 +31,7 @@ public class SimpleItemReader implements ItemReader {
         }
 
         List<String> lore = item.getLore();
-        if (lore.size() == 1 || lore.get(1).isEmpty()) {
+        if (lore.size() == 1 || removeChatCodes(lore.get(1)).isEmpty()) {
             return removeChatCodes(lore.get(0));
         }
         return null;
