@@ -28,8 +28,11 @@ public class SimpleItemReader implements ItemReader {
         }
 
         List<String> lore = item.getLore();
-        String itemTypeSeparator = stringUtils.removeChatCodes(lore.get(1));
-        if (lore.size() == 1 || itemTypeSeparator.isEmpty()) {
+        if (lore.isEmpty()) {
+            return null;
+        }
+
+        if (lore.size() == 1 || stringUtils.removeChatCodes(lore.get(1)).isEmpty()) {
             return stringUtils.removeChatCodes(lore.get(0));
         }
         return null;
