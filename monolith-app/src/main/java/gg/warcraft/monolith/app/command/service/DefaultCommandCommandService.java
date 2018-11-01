@@ -7,6 +7,7 @@ import gg.warcraft.monolith.api.command.service.CommandCommandService;
 import gg.warcraft.monolith.api.command.service.CommandQueryService;
 import gg.warcraft.monolith.api.command.service.CommandRepository;
 import gg.warcraft.monolith.api.command.service.CommandServerAdapter;
+import gg.warcraft.monolith.api.core.PluginLogger;
 import gg.warcraft.monolith.app.command.SimpleCommand;
 
 import java.util.Arrays;
@@ -14,24 +15,27 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 public class DefaultCommandCommandService implements CommandCommandService {
     private static final String NAME_NULL_OR_EMPTY = "Failed to create command with null or empty name.";
-    private static final String NAME_ALREADY_EXISTS = "Failed to create command '%s', name already exists";
+    private static final String NAME_ALREADY_EXISTS = "Possible command conflict for '%s', name already exists";
     private static final String ALIAS_NULL_OR_EMPTY = "Failed to create command '%s' with null or empty alias.";
-    private static final String ALIAS_ALREADY_EXISTS = "Failed to create command '%s', alias '%s' already exists";
+    private static final String ALIAS_ALREADY_EXISTS = "Possible command conflict for '%s', alias '%s' already exists";
     private static final String HANDLER_NULL = "Failed to create command '%s' with null handler";
 
     private final CommandQueryService queryService;
     private final CommandRepository repository;
     private final CommandServerAdapter adapter;
+    private final Logger pluginLogger;
 
     @Inject
     public DefaultCommandCommandService(CommandQueryService queryService, CommandRepository repository,
-                                        CommandServerAdapter adapter) {
+                                        CommandServerAdapter adapter, @PluginLogger Logger pluginLogger) {
         this.queryService = queryService;
         this.repository = repository;
         this.adapter = adapter;
+        this.pluginLogger = pluginLogger;
     }
 
     boolean validateName(String name, Predicate<String> isAvailable) {
@@ -40,7 +44,7 @@ public class DefaultCommandCommandService implements CommandCommandService {
         }
         if (!isAvailable.test(name)) {
             String nameAlreadyExists = String.format(NAME_ALREADY_EXISTS, name);
-            throw new IllegalArgumentException(nameAlreadyExists);
+            pluginLogger.warning(nameAlreadyExists);
         }
         return true;
     }
@@ -52,7 +56,7 @@ public class DefaultCommandCommandService implements CommandCommandService {
         }
         if (!isAvailable.test(alias)) {
             String aliasAlreadyExists = String.format(ALIAS_ALREADY_EXISTS, command, alias);
-            throw new IllegalArgumentException(aliasAlreadyExists);
+            pluginLogger.warning(aliasAlreadyExists);
         }
         return true;
     }

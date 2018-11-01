@@ -17,9 +17,6 @@ import java.util.UUID;
 
 @Singleton
 public class SpigotCommandAdapter implements CommandServerAdapter {
-    private static final String NAME_ALREADY_EXISTS = "Failed to create command '%s', name already exists";
-    private static final String ALIAS_ALREADY_EXISTS = "Failed to create command '%s', alias '%s' already exists";
-
     private final Server server;
     private final Plugin plugin;
 
@@ -66,20 +63,6 @@ public class SpigotCommandAdapter implements CommandServerAdapter {
 
     @Override
     public void registerCommand(String name, List<String> aliases) {
-        PluginCommand pluginCommandByName = server.getPluginCommand(name);
-        if (pluginCommandByName != null) {
-            String nameAlreadyExists = String.format(NAME_ALREADY_EXISTS, name);
-            throw new IllegalArgumentException(nameAlreadyExists);
-        }
-
-        aliases.forEach(alias -> {
-            PluginCommand pluginCommandByAlias = server.getPluginCommand(alias);
-            if (pluginCommandByAlias != null) {
-                String nameAlreadyExists = String.format(ALIAS_ALREADY_EXISTS, name, alias);
-                throw new IllegalArgumentException(nameAlreadyExists);
-            }
-        });
-
         try {
             PluginCommand newPluginCommand = pluginCommandConstructor.newInstance(name, plugin);
             newPluginCommand.setAliases(aliases);
