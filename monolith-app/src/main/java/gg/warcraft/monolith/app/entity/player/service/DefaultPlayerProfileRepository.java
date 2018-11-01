@@ -54,7 +54,7 @@ public class DefaultPlayerProfileRepository implements PlayerProfileRepository {
         String profileKey = createProfileKey(playerId);
         String profileJson = persistenceService.get(profileKey);
         if (profileJson == null) {
-            pluginLogger.severe("Failed to retrieve profile for player " + playerId);
+            pluginLogger.warning("Failed to retrieve profile for player " + playerId + ", is it their first time?");
             return null;
         }
 
