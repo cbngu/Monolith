@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class SimpleEntityDeathEvent extends AbstractEntityEvent implements EntityDeathEvent {
-    private final List<Item> drops;
+    private List<Item> drops;
 
     public SimpleEntityDeathEvent(UUID entityId, EntityType entityType, List<Item> drops) {
         super(entityId, entityType);
@@ -24,7 +24,6 @@ public class SimpleEntityDeathEvent extends AbstractEntityEvent implements Entit
 
     @Override
     public void setDrops(List<Item> drops) {
-        throw new IllegalStateException("Not implemented");
-        // TODO do we want this?
+        this.drops = new ArrayList<>(drops);
     }
 }

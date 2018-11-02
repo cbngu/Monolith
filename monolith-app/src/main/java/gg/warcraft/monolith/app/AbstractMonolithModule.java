@@ -50,6 +50,7 @@ import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityCommandService;
 import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
+import gg.warcraft.monolith.api.entity.service.EntityRepository;
 import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusRepository;
@@ -137,6 +138,7 @@ import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerQueryService;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityCommandService;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityProfileRepository;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityQueryService;
+import gg.warcraft.monolith.app.entity.service.DefaultEntityRepository;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusCommandService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
@@ -337,6 +339,9 @@ public class AbstractMonolithModule extends PrivateModule {
 
         bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
         expose(EntityQueryService.class);
+
+        bind(EntityRepository.class).to(DefaultEntityRepository.class);
+        expose(EntityRepository.class);
 
         bind(EntityProfileRepository.class).to(DefaultEntityProfileRepository.class);
         expose(EntityProfileRepository.class);

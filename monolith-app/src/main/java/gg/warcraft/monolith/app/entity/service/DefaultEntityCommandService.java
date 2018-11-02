@@ -6,6 +6,7 @@ import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.EntityProfile;
 import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
+import gg.warcraft.monolith.api.entity.service.EntityRepository;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.entity.team.service.TeamCommandService;
@@ -23,13 +24,13 @@ public class DefaultEntityCommandService extends AbstractEntityCommandService {
     private final TeamCommandService teamCommandService;
 
     @Inject
-    public DefaultEntityCommandService(EntityProfileRepository entityProfileRepository,
+    public DefaultEntityCommandService(EntityProfileRepository entityProfileRepository, EntityRepository entityRepository,
                                        TeamCommandService teamCommandService, EntityQueryService entityQueryService,
                                        EntityServerAdapter entityServerAdapter, WorldQueryService worldQueryService,
                                        EventService eventService, BlockUtils blockUtils, BlockTypeUtils blockTypeUtils,
                                        TimeUtils timeUtils) {
-        super(entityQueryService, entityServerAdapter, worldQueryService, eventService, blockUtils, blockTypeUtils,
-                timeUtils);
+        super(entityQueryService, entityServerAdapter, entityRepository, entityProfileRepository, worldQueryService,
+                eventService, blockUtils, blockTypeUtils, timeUtils);
         this.entityProfileRepository = entityProfileRepository;
         this.teamCommandService = teamCommandService;
     }

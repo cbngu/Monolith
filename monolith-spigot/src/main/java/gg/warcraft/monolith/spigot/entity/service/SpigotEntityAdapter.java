@@ -157,6 +157,7 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     public void removeEntity(UUID entityId) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
+            System.out.println("DEBUG marking " + entityId + " for removal");
             entity.remove();
         }
     }

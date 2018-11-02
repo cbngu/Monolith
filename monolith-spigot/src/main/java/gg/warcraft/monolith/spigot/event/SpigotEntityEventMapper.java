@@ -42,6 +42,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
@@ -262,11 +263,10 @@ public class SpigotEntityEventMapper implements Listener {
         EntityDeathEvent entityDeathEvent = new SimpleEntityDeathEvent(entityId, entityType, drops);
         eventService.publish(entityDeathEvent);
 
-//        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
-//                .map(itemMapper::map)
-//                .collect(Collectors.toList());
-        // TODO wrap up implementation, give EntityPreDeathEvent alternativeDrops like block event?
+        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
+                .map(itemMapper::map)
+                .collect(Collectors.toList());
         event.getDrops().clear();
-//        event.getDrops().addAll(spigotDrops);
+        event.getDrops().addAll(spigotDrops);
     }
 }
