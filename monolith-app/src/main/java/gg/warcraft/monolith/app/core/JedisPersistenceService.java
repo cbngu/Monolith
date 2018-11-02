@@ -50,7 +50,8 @@ public class JedisPersistenceService implements PersistenceService {
     public String get(String key) {
         String result = persistenceCache.get(key);
         if (result == null) {
-            return retryWithResult(jedis -> jedis.get(key));
+            result = retryWithResult(jedis -> jedis.get(key));
+            persistenceCache.save(key, result);
         }
         return result;
     }
