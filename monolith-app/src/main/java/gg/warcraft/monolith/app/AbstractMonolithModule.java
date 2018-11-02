@@ -26,6 +26,7 @@ import gg.warcraft.monolith.api.config.service.ConfigurationQueryService;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.JsonMapper;
+import gg.warcraft.monolith.api.core.PersistenceCache;
 import gg.warcraft.monolith.api.core.PersistenceService;
 import gg.warcraft.monolith.api.core.YamlMapper;
 import gg.warcraft.monolith.api.effect.Effect;
@@ -109,6 +110,7 @@ import gg.warcraft.monolith.app.config.service.DefaultConfigurationRepository;
 import gg.warcraft.monolith.app.config.service.GitHubConfigurationCommandService;
 import gg.warcraft.monolith.app.config.service.LocalConfigurationCommandService;
 import gg.warcraft.monolith.app.core.GuavaEventService;
+import gg.warcraft.monolith.app.core.InMemoryPersistenceCache;
 import gg.warcraft.monolith.app.core.JedisPersistenceService;
 import gg.warcraft.monolith.app.effect.DynamicEffect;
 import gg.warcraft.monolith.app.effect.PeriodicDynamicEffect;
@@ -450,6 +452,9 @@ public class AbstractMonolithModule extends PrivateModule {
     }
 
     private void configurePersistence() {
+        bind(PersistenceCache.class).to(InMemoryPersistenceCache.class);
+        expose(PersistenceCache.class);
+
         switch (persistenceService) {
             case "REDIS":
                 JedisPoolConfig jedisConfiguration = new JedisPoolConfig();

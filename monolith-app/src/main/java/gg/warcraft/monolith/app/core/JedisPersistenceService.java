@@ -2,6 +2,7 @@ package gg.warcraft.monolith.app.core;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import gg.warcraft.monolith.api.core.PersistenceCache;
 import gg.warcraft.monolith.api.core.PersistenceService;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -21,10 +22,12 @@ import java.util.function.Function;
 @Singleton
 public class JedisPersistenceService implements PersistenceService {
     private final JedisPool pool;
+    private final PersistenceCache persistenceCache;
 
     @Inject
-    public JedisPersistenceService(JedisPool pool) {
+    public JedisPersistenceService(JedisPool pool, PersistenceCache persistenceCache) {
         this.pool = pool;
+        this.persistenceCache = persistenceCache;
     }
 
     private void retry(Consumer<Jedis> action) {
@@ -45,17 +48,23 @@ public class JedisPersistenceService implements PersistenceService {
 
     @Override
     public String get(String key) {
-        return retryWithResult(jedis -> jedis.get(key));
+        String result = persistenceCache.get(key);
+        if (result == null) {
+            return retryWithResult(jedis -> jedis.get(key));
+        }
+        return result;
     }
 
     @Override
     public void set(String key, String value) {
         retry(jedis -> jedis.set(key, value));
+        persistenceCache.save(key, value);
     }
 
     @Override
     public void delete(String key) {
         retry(jedis -> jedis.del(key));
+        persistenceCache.delete(key);
     }
 
     @Override
