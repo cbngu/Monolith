@@ -12,6 +12,8 @@ public class GuavaEventService implements EventService {
     private final EventBus bus;
 
     public GuavaEventService() {
+        // regardless of this being an async bus the newDirectExecutorService publishes events on the calling
+        // thread and as such will behave as a synchronous bus in a strictly synchronous application.
         this.bus = new AsyncEventBus(MoreExecutors.newDirectExecutorService());
     }
 
