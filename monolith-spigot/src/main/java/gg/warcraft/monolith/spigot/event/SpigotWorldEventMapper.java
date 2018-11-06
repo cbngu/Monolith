@@ -2,6 +2,11 @@ package gg.warcraft.monolith.spigot.event;
 
 import com.google.inject.Inject;
 import gg.warcraft.monolith.api.core.EventService;
+import gg.warcraft.monolith.api.entity.EntityType;
+import gg.warcraft.monolith.api.entity.event.EntityDespawnEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreDespawnEvent;
+import gg.warcraft.monolith.api.entity.event.EntityPreRespawnEvent;
+import gg.warcraft.monolith.api.entity.event.EntityRespawnEvent;
 import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockFace;
@@ -14,10 +19,17 @@ import gg.warcraft.monolith.api.world.block.event.BlockPreInteractEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPrePlaceEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockPreTriggerEvent;
 import gg.warcraft.monolith.api.world.block.event.BlockTriggerEvent;
+import gg.warcraft.monolith.api.world.chunk.event.ChunkLoadedEvent;
+import gg.warcraft.monolith.api.world.chunk.event.ChunkPreUnloadEvent;
+import gg.warcraft.monolith.api.world.chunk.event.ChunkUnloadedEvent;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
 import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.api.world.location.LocationFactory;
 import gg.warcraft.monolith.api.world.service.WorldCommandService;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityDespawnEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreDespawnEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityPreRespawnEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityRespawnEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockBreakEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockInteractEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockPlaceEvent;
@@ -26,20 +38,30 @@ import gg.warcraft.monolith.app.world.block.event.SimpleBlockPreInteractEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockPrePlaceEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockPreTriggerEvent;
 import gg.warcraft.monolith.app.world.block.event.SimpleBlockTriggerEvent;
+import gg.warcraft.monolith.app.world.chunk.events.SimpleChunkLoadedEvent;
+import gg.warcraft.monolith.app.world.chunk.events.SimpleChunkPreUnloadEvent;
+import gg.warcraft.monolith.app.world.chunk.events.SimpleChunkUnloadedEvent;
+import gg.warcraft.monolith.spigot.entity.SpigotEntityTypeMapper;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.block.SpigotBlockFaceMapper;
 import gg.warcraft.monolith.spigot.world.block.SpigotBlockMapper;
+import org.bukkit.Chunk;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class SpigotWorldEventMapper implements Listener {
@@ -47,6 +69,7 @@ public class SpigotWorldEventMapper implements Listener {
     private final SpigotBlockMapper blockMapper;
     private final SpigotBlockFaceMapper blockFaceMapper;
     private final SpigotItemMapper itemMapper;
+    private final SpigotEntityTypeMapper entityTypeMapper;
     private final WorldCommandService worldCommandService;
     private final LocationFactory locationFactory;
 
@@ -55,11 +78,13 @@ public class SpigotWorldEventMapper implements Listener {
     @Inject
     public SpigotWorldEventMapper(EventService eventService, SpigotBlockMapper blockMapper,
                                   SpigotBlockFaceMapper blockFaceMapper, SpigotItemMapper itemMapper,
+                                  SpigotEntityTypeMapper entityTypeMapper,
                                   WorldCommandService worldCommandService, LocationFactory locationFactory) {
         this.eventService = eventService;
         this.blockMapper = blockMapper;
         this.blockFaceMapper = blockFaceMapper;
         this.itemMapper = itemMapper;
+        this.entityTypeMapper = entityTypeMapper;
         this.worldCommandService = worldCommandService;
         this.locationFactory = locationFactory;
         this.alternativeDropsByEvent = new HashMap<>();
@@ -217,6 +242,76 @@ public class SpigotWorldEventMapper implements Listener {
             case PHYSICAL:
                 onBlockTriggerEvent(event);
                 break;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onChunkLoadEvent(ChunkLoadEvent event) {
+        Chunk chunk = event.getChunk();
+        ChunkLoadedEvent chunkLoadedEvent = new SimpleChunkLoadedEvent(chunk.getX(), chunk.getZ());
+        eventService.publish(chunkLoadedEvent);
+
+        Set<Entity> allowedRespawns = new HashSet<>();
+        for (Entity entity : chunk.getEntities()) {
+            UUID entityId = entity.getUniqueId();
+            EntityType entityType = entityTypeMapper.map(entity.getType());
+            EntityPreRespawnEvent preRespawnEvent = new SimpleEntityPreRespawnEvent(entityId, entityType, false);
+            eventService.publish(preRespawnEvent);
+            if (!preRespawnEvent.isCancelled() || preRespawnEvent.isExplicitlyAllowed()) {
+                allowedRespawns.add(entity);
+            } else {
+                entity.remove();
+            }
+        }
+
+        for (Entity entity : allowedRespawns) {
+            UUID entityId = entity.getUniqueId();
+            EntityType entityType = entityTypeMapper.map(entity.getType());
+            EntityRespawnEvent respawnEvent = new SimpleEntityRespawnEvent(entityId, entityType);
+            eventService.publish(respawnEvent);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onChunkUnloadEvent(ChunkUnloadEvent event) {
+        Chunk chunk = event.getChunk();
+        ChunkPreUnloadEvent preUnloadEvent = new SimpleChunkPreUnloadEvent(chunk.getX(), chunk.getZ(), event.isCancelled());
+        eventService.publish(preUnloadEvent);
+        if (preUnloadEvent.isExplicitlyAllowed()) {
+            event.setCancelled(false);
+            return;
+        } else if (preUnloadEvent.isCancelled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        boolean cancelled = false;
+        for (Entity entity : chunk.getEntities()) {
+            UUID entityId = entity.getUniqueId();
+            EntityType entityType = entityTypeMapper.map(entity.getType());
+            EntityPreDespawnEvent preDespawnEvent = new SimpleEntityPreDespawnEvent(entityId, entityType, false);
+            eventService.publish(preDespawnEvent);
+            if (preDespawnEvent.isCancelled() && !preDespawnEvent.isExplicitlyAllowed()) {
+                cancelled = true;
+                break;
+            }
+        }
+        if (cancelled) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onChunkUnloadEventMonitor(ChunkUnloadEvent event) {
+        Chunk chunk = event.getChunk();
+        ChunkUnloadedEvent unloadedEvent = new SimpleChunkUnloadedEvent(chunk.getX(), chunk.getZ());
+        eventService.publish(unloadedEvent);
+
+        for (Entity entity : chunk.getEntities()) {
+            UUID entityId = entity.getUniqueId();
+            EntityType entityType = entityTypeMapper.map(entity.getType());
+            EntityDespawnEvent despawnEvent = new SimpleEntityDespawnEvent(entityId, entityType);
+            eventService.publish(despawnEvent);
         }
     }
 }
