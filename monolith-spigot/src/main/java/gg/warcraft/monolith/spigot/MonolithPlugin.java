@@ -6,6 +6,7 @@ import com.google.inject.Module;
 import gg.warcraft.monolith.api.Monolith;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.TaskService;
+import gg.warcraft.monolith.api.core.event.ServerShutdownEvent;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
@@ -16,6 +17,7 @@ import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.PlayerCommandSender;
 import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
 import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
+import gg.warcraft.monolith.app.core.event.SimpleServerShutdownEvent;
 import gg.warcraft.monolith.app.entity.attribute.handler.AttributesInitializationHandler;
 import gg.warcraft.monolith.app.entity.handler.EntityProfileInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializationHandler;
@@ -183,6 +185,12 @@ public class MonolithPlugin extends JavaPlugin {
         blockBackupQueryService.getAllBlockBackups().stream()
                 .map(BlockBackup::getId)
                 .forEach(blockBackupCommandService::restoreBlockBackup);
+    }
+
+    @Override
+    public void onDisable() {
+        ServerShutdownEvent shutdownEvent = new SimpleServerShutdownEvent();
+        eventService.publish(shutdownEvent);
     }
 
     @Override
