@@ -15,5 +15,5 @@ public interface Slab extends Block {
     boolean isBottom();
 
     @Override
-    Block withLocation(BlockLocation location);
+    Slab withLocation(BlockLocation location);
 }
