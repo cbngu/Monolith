@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.world.Direction;
 import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
+import gg.warcraft.monolith.api.world.block.Hinge;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
 import gg.warcraft.monolith.app.world.block.ChestBlock;
+import gg.warcraft.monolith.app.world.block.DoorBlock;
 import gg.warcraft.monolith.app.world.block.GateBlock;
 import gg.warcraft.monolith.app.world.block.LeverBlock;
 import gg.warcraft.monolith.app.world.block.PistonBlock;
@@ -21,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.material.Chest;
 import org.bukkit.material.Directional;
+import org.bukkit.material.Door;
 import org.bukkit.material.Gate;
 import org.bukkit.material.Lever;
 import org.bukkit.material.PistonBaseMaterial;
@@ -57,7 +60,7 @@ public class SpigotBlockMapper {
 
         BlockType type = blockTypeMapper.map(block.getType(), block.getData());
         BlockLocation location = locationMapper.map(block);
-        Block mappedBlock = null;
+        Block mappedBlock;
         switch (block.getType()) {
             case CHEST:
                 Chest chest = (Chest) block.getState().getData();
@@ -131,6 +134,18 @@ public class SpigotBlockMapper {
                 PistonBaseMaterial pistonBase = (PistonBaseMaterial) block.getState().getData();
                 Direction pistonFacing = directionMapper.map(pistonBase.getFacing());
                 mappedBlock = new PistonBlock(type, location, pistonFacing, pistonBase.isPowered(), pistonBase.isSticky());
+                break;
+            case DARK_OAK_DOOR:
+            case ACACIA_DOOR:
+            case BIRCH_DOOR:
+            case JUNGLE_DOOR:
+            case SPRUCE_DOOR:
+            case WOODEN_DOOR:
+            case IRON_DOOR_BLOCK:
+                Door door = (Door) block.getState().getData();
+                Direction doorFacing = directionMapper.map(door.getFacing());
+                Hinge hinge = door.getHinge() ? Hinge.RIGHT : Hinge.LEFT;
+                mappedBlock = new DoorBlock(type, location, doorFacing, hinge, door.isTopHalf(), door.isOpen());
                 break;
             default:
                 org.bukkit.material.MaterialData blockData = block.getState().getData();
