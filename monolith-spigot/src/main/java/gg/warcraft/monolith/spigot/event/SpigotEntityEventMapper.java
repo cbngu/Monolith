@@ -140,20 +140,25 @@ public class SpigotEntityEventMapper implements Listener {
         eventService.publish(entityInteractEvent);
     }
 
+    private UUID getAttackerId(Entity damager) {
+        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
+            Arrow arrow = (Arrow) damager;
+            ProjectileSource arrowSource = arrow.getShooter();
+            if (arrowSource instanceof LivingEntity) {
+                return ((LivingEntity) arrowSource).getUniqueId();
+            }
+        }
+        return damager.getUniqueId();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     void onEntityPreAttackEvent(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         UUID entityId = entity.getUniqueId();
         EntityType entityType = entityTypeMapper.map(entity.getType());
 
         Entity damager = event.getDamager();
-        UUID attackerId = event.getDamager().getUniqueId();
-        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
-            Arrow arrow = (Arrow) damager;
-            ProjectileSource arrowSource = arrow.getShooter();
-            if (arrowSource instanceof LivingEntity) {
-                attackerId = ((LivingEntity) arrowSource).getUniqueId();
-            }
-        }
+        UUID attackerId = getAttackerId(damager);
 
         CombatSource combatSource = combatFactory.createCombatSource(damager.getName(), attackerId);
         CombatValue damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
@@ -169,20 +174,14 @@ public class SpigotEntityEventMapper implements Listener {
         event.setCancelled(isCancelled);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     void onEntityAttackEvent(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         UUID entityId = entity.getUniqueId();
         EntityType entityType = entityTypeMapper.map(entity.getType());
 
         Entity damager = event.getDamager();
-        UUID attackerId = event.getDamager().getUniqueId();
-        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
-            Arrow arrow = (Arrow) damager;
-            ProjectileSource arrowSource = arrow.getShooter();
-            if (arrowSource instanceof LivingEntity) {
-                attackerId = ((LivingEntity) arrowSource).getUniqueId();
-            }
-        }
+        UUID attackerId = getAttackerId(damager);
 
         CombatValue damage = combatValues.get(event);
         EntityAttackEvent entityAttackEvent = new SimpleEntityAttackEvent(entityId, entityType, attackerId, damage);
