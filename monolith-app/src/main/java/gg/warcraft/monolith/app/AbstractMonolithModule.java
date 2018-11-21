@@ -70,6 +70,7 @@ import gg.warcraft.monolith.api.menu.MenuBuilderFactory;
 import gg.warcraft.monolith.api.menu.service.MenuCommandService;
 import gg.warcraft.monolith.api.menu.service.MenuQueryService;
 import gg.warcraft.monolith.api.menu.service.MenuRepository;
+import gg.warcraft.monolith.api.util.ColorCodeUtils;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
@@ -156,6 +157,7 @@ import gg.warcraft.monolith.app.menu.SkullButtonBuilder;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuCommandService;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuQueryService;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuRepository;
+import gg.warcraft.monolith.app.util.DefaultColorCodeUtils;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
@@ -482,6 +484,9 @@ public class AbstractMonolithModule extends PrivateModule {
 
         bind(TimeUtils.class).to(DefaultTimeUtils.class);
         expose(TimeUtils.class);
+
+        bind(ColorCodeUtils.class).to(DefaultColorCodeUtils.class);
+        expose(ColorCodeUtils.class);
     }
 
     private void configureWorld() {
