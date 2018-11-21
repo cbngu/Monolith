@@ -25,6 +25,10 @@ public class SpigotItemMapper {
     }
 
     public ItemStack mapSkull(Skull skull) {
+        if (skull == null) {
+            return null;
+        }
+
         ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, skull.getStackSize(), (short) skull.getDamage(),
                 (byte) SkullType.PLAYER.ordinal());
         SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
@@ -39,6 +43,10 @@ public class SpigotItemMapper {
     }
 
     public ItemStack map(Item item) {
+        if (item == null) {
+            return null;
+        }
+
         if (item instanceof Skull) {
             return mapSkull((Skull) item);
         }
