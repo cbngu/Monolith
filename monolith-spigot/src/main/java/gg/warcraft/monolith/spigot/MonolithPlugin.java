@@ -25,6 +25,7 @@ import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler
 import gg.warcraft.monolith.app.entity.player.hiding.handler.PlayerHidingHandler;
 import gg.warcraft.monolith.app.entity.status.handler.StatusEffectHandler;
 import gg.warcraft.monolith.app.entity.team.handler.TeamInitializationHandler;
+import gg.warcraft.monolith.app.world.portal.handler.PortalEntryTaskHandler;
 import gg.warcraft.monolith.spigot.entity.handler.EntityRemovalHandler;
 import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotInventoryEventMapper;
@@ -90,6 +91,9 @@ public class MonolithPlugin extends JavaPlugin {
 
         PlayerHidingHandler playerHidingHandler = injector.getInstance(PlayerHidingHandler.class);
         eventService.subscribe(playerHidingHandler);
+
+        PortalEntryTaskHandler portalEntryTaskHandler = injector.getInstance(PortalEntryTaskHandler.class);
+        taskService.runTask(portalEntryTaskHandler, timeUtils.createDurationInMillis(250), timeUtils.createDurationInMillis(250));
     }
 
     void initializeSpigotEventMappers() {
