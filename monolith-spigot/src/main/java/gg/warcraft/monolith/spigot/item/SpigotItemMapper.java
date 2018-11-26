@@ -6,6 +6,7 @@ import gg.warcraft.monolith.api.item.ItemType;
 import gg.warcraft.monolith.api.item.Skull;
 import gg.warcraft.monolith.app.item.SimpleItem;
 import gg.warcraft.monolith.spigot.world.MaterialData;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.inventory.ItemFlag;
@@ -71,7 +72,11 @@ public class SpigotItemMapper {
 
         byte data = item.getData() != null ? item.getData().getData() : 0;
         ItemType type = itemTypeMapper.map(item.getType(), data);
-        if (item.hasItemMeta()) {
+        if (!item.hasItemMeta()) {
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(meta);
+        }
+        if (item.hasItemMeta()) { // still need this check as AIR will never have an item meta
             ItemMeta meta = item.getItemMeta();
             List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
             return new SimpleItem(type, meta.getDisplayName(), item.getAmount(), item.getDurability(), lore);
