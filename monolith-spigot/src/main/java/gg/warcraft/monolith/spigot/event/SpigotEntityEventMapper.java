@@ -205,8 +205,7 @@ public class SpigotEntityEventMapper implements Listener {
 
     private UUID getAttackerId(Entity damager) {
         if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
-            Arrow arrow = (Arrow) damager;
-            ProjectileSource arrowSource = arrow.getShooter();
+            ProjectileSource arrowSource = ((Arrow) damager).getShooter();
             if (arrowSource instanceof LivingEntity) {
                 return ((LivingEntity) arrowSource).getUniqueId();
             }
