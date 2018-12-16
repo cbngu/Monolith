@@ -5,8 +5,10 @@ import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.EquipmentSlot;
 import gg.warcraft.monolith.api.entity.player.Currency;
 import gg.warcraft.monolith.api.entity.player.PlayerProfile;
+import gg.warcraft.monolith.api.entity.player.Statistic;
 import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyGainedEvent;
 import gg.warcraft.monolith.api.entity.player.event.PlayerCurrencyLostEvent;
+import gg.warcraft.monolith.api.entity.player.event.PlayerStatisticChangedEvent;
 import gg.warcraft.monolith.api.entity.player.service.PlayerCommandService;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
@@ -16,6 +18,7 @@ import gg.warcraft.monolith.api.item.Item;
 import gg.warcraft.monolith.api.util.ColorCode;
 import gg.warcraft.monolith.app.entity.player.event.SimplePlayerCurrencyGainedEvent;
 import gg.warcraft.monolith.app.entity.player.event.SimplePlayerCurrencyLostEvent;
+import gg.warcraft.monolith.app.entity.player.event.SimplePlayerStatisticChangedEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -135,6 +138,54 @@ public class DefaultPlayerCommandService implements PlayerCommandService {
         playerProfileRepository.save(newProfile);
 
         // TODO do we want to publish PlayerCurrencyLostEvent here?
+    }
+
+    @Override
+    public void increaseStatistics(UUID playerId, int amount, Statistic... statistics) {
+        PlayerProfile profile = playerProfileRepository.get(playerId);
+        Map<String, Integer> newStatistics = profile.getStatistics();
+
+        for (Statistic statistic : statistics) {
+            String statisticName = statistic.getName();
+            int currentValue = newStatistics.getOrDefault(statisticName, 0);
+            int newCurrentValue = currentValue + amount;
+            newStatistics.put(statisticName, newCurrentValue);
+        }
+
+        PlayerProfile newProfile = profile.getCopyer()
+                .withStatistics(newStatistics)
+                .copy();
+        playerProfileRepository.save(newProfile);
+
+        for (Statistic statistic : statistics) {
+            int newCurrentValue = newStatistics.getOrDefault(statistic.getName(), 0);
+            PlayerStatisticChangedEvent event =
+                    new SimplePlayerStatisticChangedEvent(playerId, statistic, amount, newCurrentValue);
+            eventService.publish(event);
+        }
+    }
+
+    @Override
+    public void resetStatistics(UUID playerId, Statistic... statistics) {
+        PlayerProfile profile = playerProfileRepository.get(playerId);
+        Map<String, Integer> oldStatistics = profile.getStatistics();
+        Map<String, Integer> newStatistics = profile.getStatistics();
+
+        for (Statistic statistic : statistics) {
+            newStatistics.remove(statistic.getName());
+        }
+
+        PlayerProfile newProfile = profile.getCopyer()
+                .withStatistics(newStatistics)
+                .copy();
+        playerProfileRepository.save(newProfile);
+
+        for (Statistic statistic : statistics) {
+            int oldValue = oldStatistics.getOrDefault(statistic.getName(), 0);
+            PlayerStatisticChangedEvent event =
+                    new SimplePlayerStatisticChangedEvent(playerId, statistic, -oldValue, 0);
+            eventService.publish(event);
+        }
     }
 
     @Override

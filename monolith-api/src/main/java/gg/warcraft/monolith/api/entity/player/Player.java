@@ -41,6 +41,12 @@ public interface Player extends Entity {
      */
     int getLifetimeCurrency(String currency);
 
+    /**
+     * @param statistic The statistic. Can not be null or empty.
+     * @return The value of the given statistic this player currently has.
+     */
+    int getStatistic(String statistic);
+
     GameMode getGameMode();
 
     /**

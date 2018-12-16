@@ -11,6 +11,7 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     private final long timeFirstConnected;
     private final Map<String, Integer> currencies;
     private final Map<String, Integer> lifetimeCurrencies;
+    private final Map<String, Integer> statistics;
     private final Map<String, String> data;
 
     private long timeConnected;
@@ -19,7 +20,8 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
 
     public SimplePlayerProfileCopyer(UUID playerId, long timeConnected, long timeFirstConnected, long timeLastSeen,
                                      long timePlayed, Map<String, Integer> currencies,
-                                     Map<String, Integer> lifetimeCurrencies, Map<String, String> data) {
+                                     Map<String, Integer> lifetimeCurrencies, Map<String, Integer> statistics,
+                                     Map<String, String> data) {
         this.playerId = playerId;
         this.timeConnected = timeConnected;
         this.timeFirstConnected = timeFirstConnected;
@@ -27,6 +29,7 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
         this.timePlayed = timePlayed;
         this.currencies = currencies;
         this.lifetimeCurrencies = lifetimeCurrencies;
+        this.statistics = statistics;
         this.data = data;
     }
 
@@ -63,6 +66,13 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     }
 
     @Override
+    public PlayerProfileCopyer withStatistics(Map<String, Integer> statistics) {
+        this.statistics.clear();
+        this.statistics.putAll(statistics);
+        return this;
+    }
+
+    @Override
     public PlayerProfileCopyer withData(Map<String, String> data) {
         this.data.clear();
         this.data.putAll(data);
@@ -72,6 +82,6 @@ public class SimplePlayerProfileCopyer implements PlayerProfileCopyer {
     @Override
     public PlayerProfile copy() {
         return new SimplePlayerProfile(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, lifetimeCurrencies, data);
+                currencies, lifetimeCurrencies, statistics, data);
     }
 }

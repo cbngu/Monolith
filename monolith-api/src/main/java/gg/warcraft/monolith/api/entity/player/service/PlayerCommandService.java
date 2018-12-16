@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.entity.player.service;
 
 import gg.warcraft.monolith.api.entity.EquipmentSlot;
 import gg.warcraft.monolith.api.entity.player.Currency;
+import gg.warcraft.monolith.api.entity.player.Statistic;
 import gg.warcraft.monolith.api.entity.team.Team;
 import gg.warcraft.monolith.api.item.Item;
 
@@ -72,6 +73,26 @@ public interface PlayerCommandService {
      * @param amount   The amount of currency to revoke.
      */
     void revokeCurrency(UUID playerId, Currency currency, int amount);
+
+    /**
+     * Adds a given amount to the player's statistics. Try to consolidate as many statistics per call as each call
+     * results in only one round trip to the persistence store.
+     *
+     * @param playerId   The id of the player. Can not be null.
+     * @param statistics The statistics to increase. Can not be null.
+     * @param amount     The amount to increase the statistic by.
+     */
+    void increaseStatistics(UUID playerId, int amount, Statistic... statistics);
+
+    /**
+     * Resets the given statistics to 0. Try to consolidate as many statistics per call as each call results in only one
+     * round trip to the persistence store.
+     *
+     * @param playerId   The id of the player. Can not be null.
+     * @param statistics The statistics to reset. Can not be null.
+     */
+    void resetStatistics(UUID playerId, Statistic... statistics);
+
 
     /**
      * @param playerId The id of the player to update. Can not be null.
