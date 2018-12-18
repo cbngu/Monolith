@@ -41,14 +41,10 @@ public class AttributesInitializationHandler {
     @Subscribe
     public void onPlayerConnectEvent(PlayerConnectEvent event) {
         UUID playerId = event.getPlayerId();
-        Attributes attributes = attributeRepository.getAttributes(playerId);
-        if (attributes == null) {
-            Attributes newAttributes = new LazyAttributes(attributeCommandService, entityServerAdapter,
-                    playerId, new HashMap<>());
-            attributeRepository.save(newAttributes);
-
-            attributeCommandService.addAttributeModifier(playerId, GenericAttribute.MAX_HEALTH, baseHealth);
-        }
+        Attributes attributes = new LazyAttributes(attributeCommandService, entityServerAdapter, playerId,
+                new HashMap<>());
+        attributeRepository.save(attributes);
+        attributeCommandService.addAttributeModifier(playerId, GenericAttribute.MAX_HEALTH, baseHealth);
     }
 
     @Subscribe
@@ -59,9 +55,9 @@ public class AttributesInitializationHandler {
     @Subscribe
     public void onEntitySpawnEvent(EntitySpawnEvent event) {
         if (event.getEntityType() != EntityType.PLAYER) {
-            Attributes newAttributes = new LazyAttributes(attributeCommandService, entityServerAdapter,
+            Attributes attributes = new LazyAttributes(attributeCommandService, entityServerAdapter,
                     event.getEntityId(), new HashMap<>());
-            attributeRepository.save(newAttributes);
+            attributeRepository.save(attributes);
         }
     }
 

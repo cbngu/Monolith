@@ -26,6 +26,7 @@ import gg.warcraft.monolith.api.config.service.ConfigurationQueryService;
 import gg.warcraft.monolith.api.config.service.ConfigurationRepository;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.JsonMapper;
+import gg.warcraft.monolith.api.core.PersistenceCache;
 import gg.warcraft.monolith.api.core.PersistenceService;
 import gg.warcraft.monolith.api.core.YamlMapper;
 import gg.warcraft.monolith.api.effect.Effect;
@@ -50,6 +51,7 @@ import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
 import gg.warcraft.monolith.api.entity.service.EntityCommandService;
 import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
+import gg.warcraft.monolith.api.entity.service.EntityRepository;
 import gg.warcraft.monolith.api.entity.status.service.StatusCommandService;
 import gg.warcraft.monolith.api.entity.status.service.StatusQueryService;
 import gg.warcraft.monolith.api.entity.status.service.StatusRepository;
@@ -68,6 +70,7 @@ import gg.warcraft.monolith.api.menu.MenuBuilderFactory;
 import gg.warcraft.monolith.api.menu.service.MenuCommandService;
 import gg.warcraft.monolith.api.menu.service.MenuQueryService;
 import gg.warcraft.monolith.api.menu.service.MenuRepository;
+import gg.warcraft.monolith.api.util.ColorCodeUtils;
 import gg.warcraft.monolith.api.util.MathUtils;
 import gg.warcraft.monolith.api.util.StringUtils;
 import gg.warcraft.monolith.api.util.TimeUtils;
@@ -108,6 +111,7 @@ import gg.warcraft.monolith.app.config.service.DefaultConfigurationRepository;
 import gg.warcraft.monolith.app.config.service.GitHubConfigurationCommandService;
 import gg.warcraft.monolith.app.config.service.LocalConfigurationCommandService;
 import gg.warcraft.monolith.app.core.GuavaEventService;
+import gg.warcraft.monolith.app.core.InMemoryPersistenceCache;
 import gg.warcraft.monolith.app.core.JedisPersistenceService;
 import gg.warcraft.monolith.app.effect.DynamicEffect;
 import gg.warcraft.monolith.app.effect.PeriodicDynamicEffect;
@@ -137,6 +141,7 @@ import gg.warcraft.monolith.app.entity.player.service.DefaultPlayerQueryService;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityCommandService;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityProfileRepository;
 import gg.warcraft.monolith.app.entity.service.DefaultEntityQueryService;
+import gg.warcraft.monolith.app.entity.service.DefaultEntityRepository;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusCommandService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusQueryService;
 import gg.warcraft.monolith.app.entity.status.service.DefaultStatusRepository;
@@ -152,6 +157,7 @@ import gg.warcraft.monolith.app.menu.SkullButtonBuilder;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuCommandService;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuQueryService;
 import gg.warcraft.monolith.app.menu.service.DefaultMenuRepository;
+import gg.warcraft.monolith.app.util.DefaultColorCodeUtils;
 import gg.warcraft.monolith.app.util.DefaultMathUtils;
 import gg.warcraft.monolith.app.util.DefaultStringUtils;
 import gg.warcraft.monolith.app.util.DefaultTimeUtils;
@@ -338,6 +344,9 @@ public class AbstractMonolithModule extends PrivateModule {
         bind(EntityQueryService.class).to(DefaultEntityQueryService.class);
         expose(EntityQueryService.class);
 
+        bind(EntityRepository.class).to(DefaultEntityRepository.class);
+        expose(EntityRepository.class);
+
         bind(EntityProfileRepository.class).to(DefaultEntityProfileRepository.class);
         expose(EntityProfileRepository.class);
 
@@ -445,6 +454,9 @@ public class AbstractMonolithModule extends PrivateModule {
     }
 
     private void configurePersistence() {
+        bind(PersistenceCache.class).to(InMemoryPersistenceCache.class);
+        expose(PersistenceCache.class);
+
         switch (persistenceService) {
             case "REDIS":
                 JedisPoolConfig jedisConfiguration = new JedisPoolConfig();
@@ -472,6 +484,9 @@ public class AbstractMonolithModule extends PrivateModule {
 
         bind(TimeUtils.class).to(DefaultTimeUtils.class);
         expose(TimeUtils.class);
+
+        bind(ColorCodeUtils.class).to(DefaultColorCodeUtils.class);
+        expose(ColorCodeUtils.class);
     }
 
     private void configureWorld() {

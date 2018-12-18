@@ -11,7 +11,9 @@ import gg.warcraft.monolith.api.entity.event.EntityDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityHealthChangedEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
 import gg.warcraft.monolith.api.entity.service.EntityCommandService;
+import gg.warcraft.monolith.api.entity.service.EntityProfileRepository;
 import gg.warcraft.monolith.api.entity.service.EntityQueryService;
+import gg.warcraft.monolith.api.entity.service.EntityRepository;
 import gg.warcraft.monolith.api.entity.service.EntityServerAdapter;
 import gg.warcraft.monolith.api.util.Duration;
 import gg.warcraft.monolith.api.util.TimeUtils;
@@ -37,6 +39,8 @@ import java.util.UUID;
 public abstract class AbstractEntityCommandService implements EntityCommandService {
     private final EntityQueryService entityQueryService;
     private final EntityServerAdapter entityServerAdapter;
+    private final EntityRepository entityRepository;
+    private final EntityProfileRepository entityProfileRepository;
     private final WorldQueryService worldQueryService;
     private final EventService eventService;
     private final BlockUtils blockUtils;
@@ -48,10 +52,13 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
     final Map<Float, Float> leapStrength;
 
     public AbstractEntityCommandService(EntityQueryService entityQueryService, EntityServerAdapter entityServerAdapter,
+                                        EntityRepository entityRepository, EntityProfileRepository entityProfileRepository,
                                         WorldQueryService worldQueryService, EventService eventService,
                                         BlockUtils blockUtils, BlockTypeUtils blockTypeUtils, TimeUtils timeUtils) {
         this.entityQueryService = entityQueryService;
         this.entityServerAdapter = entityServerAdapter;
+        this.entityRepository = entityRepository;
+        this.entityProfileRepository = entityProfileRepository;
         this.worldQueryService = worldQueryService;
         this.eventService = eventService;
         this.blockUtils = blockUtils;
@@ -84,7 +91,13 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
 
     @Override
     public void removeEntity(UUID entityId) {
-        entityServerAdapter.removeEntity(entityId);
+        Entity entity = entityQueryService.getEntity(entityId);
+        if (entity != null) {
+            entityServerAdapter.removeEntity(entityId);
+            entityProfileRepository.delete(entityId);
+        } else {
+            entityRepository.markForRemoval(entityId);
+        }
     }
 
     @Override
@@ -117,6 +130,9 @@ public abstract class AbstractEntityCommandService implements EntityCommandServi
         eventService.publish(entityDamageEvent);
 
         Entity newEntity = entityQueryService.getEntity(entityId);
+        if (newEntity.getAttributes() == null) {
+            return; // FIXME not all entities on server have attributes, could this be due to migration?
+        }
         float newHealth = newEntity.getHealth();
         if (newHealth != previousHealth) { // FIXME should this in the event mappers instead? atm it will only trigger of Monolith health changes
             float maxHealth = newEntity.getAttributes().getValue(GenericAttribute.MAX_HEALTH);

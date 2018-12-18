@@ -42,6 +42,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
@@ -139,56 +140,6 @@ public class SpigotEntityEventMapper implements Listener {
         eventService.publish(entityInteractEvent);
     }
 
-    void onEntityPreAttackEvent(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
-        UUID entityId = entity.getUniqueId();
-        EntityType entityType = entityTypeMapper.map(entity.getType());
-
-        Entity damager = event.getDamager();
-        UUID attackerId = event.getDamager().getUniqueId();
-        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
-            Arrow arrow = (Arrow) damager;
-            ProjectileSource arrowSource = arrow.getShooter();
-            if (arrowSource instanceof LivingEntity) {
-                attackerId = ((LivingEntity) arrowSource).getUniqueId();
-            }
-        }
-
-        CombatSource combatSource = combatFactory.createCombatSource(damager.getName(), attackerId);
-        CombatValue damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
-
-        EntityPreAttackEvent entityPreAttackEvent = new SimpleEntityPreAttackEvent(entityId, entityType, attackerId,
-                damage, event.isCancelled());
-        eventService.publish(entityPreAttackEvent);
-
-        combatValues.put(event, entityPreAttackEvent.getDamage());
-        event.setDamage(entityPreAttackEvent.getDamage().getModifiedValue());
-
-        boolean isCancelled = entityPreAttackEvent.isCancelled() && !entityPreAttackEvent.isExplicitlyAllowed();
-        event.setCancelled(isCancelled);
-    }
-
-    void onEntityAttackEvent(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
-        UUID entityId = entity.getUniqueId();
-        EntityType entityType = entityTypeMapper.map(entity.getType());
-
-        Entity damager = event.getDamager();
-        UUID attackerId = event.getDamager().getUniqueId();
-        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
-            Arrow arrow = (Arrow) damager;
-            ProjectileSource arrowSource = arrow.getShooter();
-            if (arrowSource instanceof LivingEntity) {
-                attackerId = ((LivingEntity) arrowSource).getUniqueId();
-            }
-        }
-
-        CombatValue damage = combatValues.get(event);
-        EntityAttackEvent entityAttackEvent = new SimpleEntityAttackEvent(entityId, entityType, attackerId, damage);
-        eventService.publish(entityAttackEvent);
-    }
-
-    // TODO rework this into multiple events: EntityDamageEvent, Entity(pre)FatalDamageEvent, and EntityDeathEvent
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityPreDamageEvent(org.bukkit.event.entity.EntityDamageEvent event) {
         if (!(event.getEntity() instanceof LivingEntity)) {
@@ -252,6 +203,51 @@ public class SpigotEntityEventMapper implements Listener {
         eventService.publish(entityDamageEvent);
     }
 
+    private UUID getAttackerId(Entity damager) {
+        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
+            ProjectileSource arrowSource = ((Arrow) damager).getShooter();
+            if (arrowSource instanceof LivingEntity) {
+                return ((LivingEntity) arrowSource).getUniqueId();
+            }
+        }
+        return damager.getUniqueId();
+    }
+
+    private void onEntityPreAttackEvent(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+
+        Entity damager = event.getDamager();
+        UUID attackerId = getAttackerId(damager);
+
+        CombatSource combatSource = combatFactory.createCombatSource(damager.getName(), attackerId);
+        CombatValue damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
+
+        EntityPreAttackEvent entityPreAttackEvent = new SimpleEntityPreAttackEvent(entityId, entityType, attackerId,
+                damage, event.isCancelled());
+        eventService.publish(entityPreAttackEvent);
+
+        combatValues.put(event, entityPreAttackEvent.getDamage());
+        event.setDamage(entityPreAttackEvent.getDamage().getModifiedValue());
+
+        boolean isCancelled = entityPreAttackEvent.isCancelled() && !entityPreAttackEvent.isExplicitlyAllowed();
+        event.setCancelled(isCancelled);
+    }
+
+    private void onEntityAttackEvent(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+
+        Entity damager = event.getDamager();
+        UUID attackerId = getAttackerId(damager);
+
+        CombatValue damage = combatValues.get(event);
+        EntityAttackEvent entityAttackEvent = new SimpleEntityAttackEvent(entityId, entityType, attackerId, damage);
+        eventService.publish(entityAttackEvent);
+    }
+
     @EventHandler
     public void onEntityDeathEvent(org.bukkit.event.entity.EntityDeathEvent event) {
         UUID entityId = event.getEntity().getUniqueId();
@@ -262,11 +258,10 @@ public class SpigotEntityEventMapper implements Listener {
         EntityDeathEvent entityDeathEvent = new SimpleEntityDeathEvent(entityId, entityType, drops);
         eventService.publish(entityDeathEvent);
 
-//        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
-//                .map(itemMapper::map)
-//                .collect(Collectors.toList());
-        // TODO wrap up implementation, give EntityPreDeathEvent alternativeDrops like block event?
+        List<ItemStack> spigotDrops = entityDeathEvent.getDrops().stream()
+                .map(itemMapper::map)
+                .collect(Collectors.toList());
         event.getDrops().clear();
-//        event.getDrops().addAll(spigotDrops);
+        event.getDrops().addAll(spigotDrops);
     }
 }

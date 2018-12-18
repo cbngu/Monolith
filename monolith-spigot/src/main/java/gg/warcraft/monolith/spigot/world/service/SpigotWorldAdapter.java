@@ -10,12 +10,15 @@ import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.BlockTypeUtils;
 import gg.warcraft.monolith.api.world.block.DirectionalBlock;
+import gg.warcraft.monolith.api.world.block.Door;
 import gg.warcraft.monolith.api.world.block.Gate;
+import gg.warcraft.monolith.api.world.block.Hinge;
 import gg.warcraft.monolith.api.world.block.Sign;
 import gg.warcraft.monolith.api.world.block.Slab;
 import gg.warcraft.monolith.api.world.block.Trapdoor;
 import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.api.world.service.WorldServerAdapter;
+import gg.warcraft.monolith.app.world.block.DoorBlock;
 import gg.warcraft.monolith.app.world.block.LeverBlock;
 import gg.warcraft.monolith.app.world.block.PistonBlock;
 import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
@@ -254,6 +257,21 @@ public class SpigotWorldAdapter implements WorldServerAdapter {
                 spigotPiston.setFacingDirection(spigotFacingDirection);
                 spigotPiston.setPowered(piston.isPowered());
                 spigotMaterialData = spigotPiston;
+                break;
+            case DARK_OAK_DOOR:
+            case ACACIA_DOOR:
+            case BIRCH_DOOR:
+            case IRON_DOOR:
+            case JUNGLE_DOOR:
+            case OAK_DOOR:
+            case SPRUCE_DOOR:
+                Door door = (DoorBlock) block;
+                org.bukkit.material.Door spigotDoor = new org.bukkit.material.Door(typeId, typeData);
+                spigotDoor.setFacingDirection(spigotFacingDirection);
+                spigotDoor.setTopHalf(door.isTopHalf());
+                spigotDoor.setHinge(door.getHinge() == Hinge.RIGHT);
+                spigotDoor.setOpen(door.isOpen());
+                spigotMaterialData = spigotDoor;
                 break;
         }
 

@@ -132,15 +132,6 @@ public class DefaultBlockBuildCommandService implements BlockBuildCommandService
                 "All bottom level wall mounted signs in the build repository need to have the build type and model " +
                 "specified on the first sign line as type:model.");
 
-        // FIXME REMOVE, ONE TIME CODE
-        if (lines[0].contains(".")) {
-            String old = lines[0];
-            lines[0] = lines[0].replace(".", "_");
-            worldCommandService.setSignLines(sign, lines);
-            System.out.println("BUILD REPO updated " + old + " to " + lines[0]);
-        }
-        // FIXME REMOVE, ONE TIME CODE
-
         String[] typeAndModel = lines[0].split(":");
         String type = typeAndModel[0];
         String model = typeAndModel[1];

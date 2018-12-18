@@ -36,7 +36,7 @@ public class EntityProfileInitializationHandler {
     @Subscribe
     public void onEntityDeathEvent(EntityDeathEvent event) {
         EntityType entityType = event.getEntityType();
-        if (entityType != EntityType.PLAYER && entityType != EntityType.ARMOR_STAND) {
+        if (entityType != EntityType.PLAYER) {
             entityProfileRepository.delete(event.getEntityId());
         }
     }

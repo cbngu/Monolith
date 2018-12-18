@@ -1,7 +1,6 @@
 package gg.warcraft.monolith.app.world.block;
 
 import com.google.common.base.MoreObjects;
-import gg.warcraft.monolith.api.world.block.Block;
 import gg.warcraft.monolith.api.world.block.BlockType;
 import gg.warcraft.monolith.api.world.block.Slab;
 import gg.warcraft.monolith.api.world.location.BlockLocation;
@@ -29,7 +28,7 @@ public class SlabBlock extends SimpleBlock implements Slab {
     }
 
     @Override
-    public Block withLocation(BlockLocation location) {
+    public Slab withLocation(BlockLocation location) {
         return new SlabBlock(getType(), location, isTop(), isBottom());
     }
 

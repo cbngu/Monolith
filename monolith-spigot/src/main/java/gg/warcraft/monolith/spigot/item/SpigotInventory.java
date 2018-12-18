@@ -33,7 +33,7 @@ public class SpigotInventory implements Inventory {
 
     @Override
     public int getSpace() {
-        return (int) Arrays.stream(inventory.getContents())
+        return (int) Arrays.stream(inventory.getStorageContents())
                 .filter(Objects::isNull)
                 .count();
     }

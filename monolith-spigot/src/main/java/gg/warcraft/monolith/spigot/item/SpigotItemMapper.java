@@ -6,8 +6,10 @@ import gg.warcraft.monolith.api.item.ItemType;
 import gg.warcraft.monolith.api.item.Skull;
 import gg.warcraft.monolith.app.item.SimpleItem;
 import gg.warcraft.monolith.spigot.world.MaterialData;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -24,6 +26,10 @@ public class SpigotItemMapper {
     }
 
     public ItemStack mapSkull(Skull skull) {
+        if (skull == null) {
+            return null;
+        }
+
         ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, skull.getStackSize(), (short) skull.getDamage(),
                 (byte) SkullType.PLAYER.ordinal());
         SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
@@ -32,11 +38,16 @@ public class SpigotItemMapper {
         }
         itemMeta.setLore(skull.getLore());
         itemMeta.setOwner(skull.getPlayerName());
+        itemMeta.addItemFlags(ItemFlag.values());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
 
     public ItemStack map(Item item) {
+        if (item == null) {
+            return null;
+        }
+
         if (item instanceof Skull) {
             return mapSkull((Skull) item);
         }
@@ -49,6 +60,7 @@ public class SpigotItemMapper {
             itemMeta.setDisplayName(item.getName());
         }
         itemMeta.setLore(item.getLore());
+        itemMeta.addItemFlags(ItemFlag.values());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
@@ -60,7 +72,11 @@ public class SpigotItemMapper {
 
         byte data = item.getData() != null ? item.getData().getData() : 0;
         ItemType type = itemTypeMapper.map(item.getType(), data);
-        if (item.hasItemMeta()) {
+        if (!item.hasItemMeta()) {
+            ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
+            item.setItemMeta(meta);
+        }
+        if (item.hasItemMeta()) { // still need this check as AIR will never have an item meta
             ItemMeta meta = item.getItemMeta();
             List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
             return new SimpleItem(type, meta.getDisplayName(), item.getAmount(), item.getDurability(), lore);

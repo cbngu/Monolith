@@ -149,6 +149,9 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     public UUID spawnEntity(EntityType type, Location spawnLocation) {
         org.bukkit.entity.EntityType spigotEntityType = entityTypeMapper.map(type);
         org.bukkit.Location spigotSpawnLocation = locationMapper.map(spawnLocation);
+        if (!spigotSpawnLocation.getChunk().isLoaded()) {
+            spigotSpawnLocation.getChunk().load();
+        }
         Entity entity = spigotSpawnLocation.getWorld().spawnEntity(spigotSpawnLocation, spigotEntityType);
         return entity.getUniqueId();
     }
@@ -157,6 +160,7 @@ public class SpigotEntityAdapter implements EntityServerAdapter {
     public void removeEntity(UUID entityId) {
         Entity entity = server.getEntity(entityId);
         if (entity != null) {
+            System.out.println("DEBUG marking " + entityId + " for removal");
             entity.remove();
         }
     }

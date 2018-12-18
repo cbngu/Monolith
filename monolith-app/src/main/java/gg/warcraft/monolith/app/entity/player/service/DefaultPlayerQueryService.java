@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import gg.warcraft.monolith.api.entity.EntityFactory;
 import gg.warcraft.monolith.api.entity.attribute.service.AttributeQueryService;
 import gg.warcraft.monolith.api.entity.player.Player;
+import gg.warcraft.monolith.api.entity.player.PlayerServerData;
 import gg.warcraft.monolith.api.entity.player.service.PlayerProfileRepository;
 import gg.warcraft.monolith.api.entity.player.service.PlayerQueryService;
 import gg.warcraft.monolith.api.entity.player.service.PlayerServerAdapter;
@@ -33,11 +34,16 @@ public class DefaultPlayerQueryService implements PlayerQueryService {
 
     @Override
     public Player getPlayer(UUID playerId) {
-        return entityFactory.createPlayer(
-                () -> playerProfileRepository.get(playerId),
-                () -> playerServerAdapter.getPlayerServerData(playerId),
-                () -> attributeQueryService.getAttributes(playerId),
-                () -> statusQueryService.getStatus(playerId));
+        PlayerServerData serverData = playerServerAdapter.getPlayerServerData(playerId);
+        if (serverData != null) {
+            return entityFactory.createPlayer(
+                    () -> playerProfileRepository.get(playerId),
+                    () -> serverData,
+                    () -> attributeQueryService.getAttributes(playerId),
+                    () -> statusQueryService.getStatus(playerId));
+        }
+
+        return null;
     }
 
     @Override

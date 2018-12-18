@@ -6,6 +6,7 @@ import com.google.inject.Module;
 import gg.warcraft.monolith.api.Monolith;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.core.TaskService;
+import gg.warcraft.monolith.api.core.event.ServerShutdownEvent;
 import gg.warcraft.monolith.api.util.TimeUtils;
 import gg.warcraft.monolith.api.world.WorldType;
 import gg.warcraft.monolith.api.world.block.backup.BlockBackup;
@@ -16,6 +17,7 @@ import gg.warcraft.monolith.app.command.ConsoleCommandSender;
 import gg.warcraft.monolith.app.command.PlayerCommandSender;
 import gg.warcraft.monolith.app.command.event.SimpleCommandExecutedEvent;
 import gg.warcraft.monolith.app.command.handler.CommandExecutedHandler;
+import gg.warcraft.monolith.app.core.event.SimpleServerShutdownEvent;
 import gg.warcraft.monolith.app.entity.attribute.handler.AttributesInitializationHandler;
 import gg.warcraft.monolith.app.entity.handler.EntityProfileInitializationHandler;
 import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileInitializationHandler;
@@ -23,6 +25,8 @@ import gg.warcraft.monolith.app.entity.player.handler.PlayerProfileUpdateHandler
 import gg.warcraft.monolith.app.entity.player.hiding.handler.PlayerHidingHandler;
 import gg.warcraft.monolith.app.entity.status.handler.StatusEffectHandler;
 import gg.warcraft.monolith.app.entity.team.handler.TeamInitializationHandler;
+import gg.warcraft.monolith.app.world.portal.handler.PortalEntryTaskHandler;
+import gg.warcraft.monolith.spigot.entity.handler.EntityRemovalHandler;
 import gg.warcraft.monolith.spigot.event.SpigotEntityEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotInventoryEventMapper;
 import gg.warcraft.monolith.spigot.event.SpigotPlayerEventMapper;
@@ -78,12 +82,18 @@ public class MonolithPlugin extends JavaPlugin {
                 injector.getInstance(PlayerProfileInitializationHandler.class);
         eventService.subscribe(playerProfileInitializationHandler);
 
-        PlayerProfileUpdateHandler playerProfileUpdateHandler = injector.getInstance(PlayerProfileUpdateHandler.class);
         TimeUtils timeUtils = injector.getInstance(TimeUtils.class);
+        EntityRemovalHandler entityRemovalHandler = injector.getInstance(EntityRemovalHandler.class);
+        taskService.runTask(entityRemovalHandler, timeUtils.createDurationInSeconds(10), timeUtils.createDurationInSeconds(10));
+
+        PlayerProfileUpdateHandler playerProfileUpdateHandler = injector.getInstance(PlayerProfileUpdateHandler.class);
         taskService.runTask(playerProfileUpdateHandler, timeUtils.oneTick(), timeUtils.createDurationInSeconds(1));
 
         PlayerHidingHandler playerHidingHandler = injector.getInstance(PlayerHidingHandler.class);
         eventService.subscribe(playerHidingHandler);
+
+        PortalEntryTaskHandler portalEntryTaskHandler = injector.getInstance(PortalEntryTaskHandler.class);
+        taskService.runTask(portalEntryTaskHandler, timeUtils.createDurationInMillis(250), timeUtils.createDurationInMillis(250));
     }
 
     void initializeSpigotEventMappers() {
@@ -179,6 +189,12 @@ public class MonolithPlugin extends JavaPlugin {
         blockBackupQueryService.getAllBlockBackups().stream()
                 .map(BlockBackup::getId)
                 .forEach(blockBackupCommandService::restoreBlockBackup);
+    }
+
+    @Override
+    public void onDisable() {
+        ServerShutdownEvent shutdownEvent = new SimpleServerShutdownEvent();
+        eventService.publish(shutdownEvent);
     }
 
     @Override
