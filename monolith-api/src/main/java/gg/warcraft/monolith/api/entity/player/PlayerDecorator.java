@@ -112,6 +112,11 @@ public interface PlayerDecorator extends Player {
     }
 
     @Override
+    default int getStatistic(String statistic) {
+        return getPlayer().getStatistic(statistic);
+    }
+
+    @Override
     default String getData(String key) {
         return getPlayer().getData(key);
     }
