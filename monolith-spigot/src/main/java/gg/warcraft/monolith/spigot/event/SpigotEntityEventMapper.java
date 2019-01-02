@@ -140,55 +140,6 @@ public class SpigotEntityEventMapper implements Listener {
         eventService.publish(entityInteractEvent);
     }
 
-    private UUID getAttackerId(Entity damager) {
-        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
-            Arrow arrow = (Arrow) damager;
-            ProjectileSource arrowSource = arrow.getShooter();
-            if (arrowSource instanceof LivingEntity) {
-                return ((LivingEntity) arrowSource).getUniqueId();
-            }
-        }
-        return damager.getUniqueId();
-    }
-
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    void onEntityPreAttackEvent(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
-        UUID entityId = entity.getUniqueId();
-        EntityType entityType = entityTypeMapper.map(entity.getType());
-
-        Entity damager = event.getDamager();
-        UUID attackerId = getAttackerId(damager);
-
-        CombatSource combatSource = combatFactory.createCombatSource(damager.getName(), attackerId);
-        CombatValue damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
-
-        EntityPreAttackEvent entityPreAttackEvent = new SimpleEntityPreAttackEvent(entityId, entityType, attackerId,
-                damage, event.isCancelled());
-        eventService.publish(entityPreAttackEvent);
-
-        combatValues.put(event, entityPreAttackEvent.getDamage());
-        event.setDamage(entityPreAttackEvent.getDamage().getModifiedValue());
-
-        boolean isCancelled = entityPreAttackEvent.isCancelled() && !entityPreAttackEvent.isExplicitlyAllowed();
-        event.setCancelled(isCancelled);
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void onEntityAttackEvent(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
-        UUID entityId = entity.getUniqueId();
-        EntityType entityType = entityTypeMapper.map(entity.getType());
-
-        Entity damager = event.getDamager();
-        UUID attackerId = getAttackerId(damager);
-
-        CombatValue damage = combatValues.get(event);
-        EntityAttackEvent entityAttackEvent = new SimpleEntityAttackEvent(entityId, entityType, attackerId, damage);
-        eventService.publish(entityAttackEvent);
-    }
-
-    // TODO rework this into multiple events: EntityDamageEvent, Entity(pre)FatalDamageEvent, and EntityDeathEvent
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityPreDamageEvent(org.bukkit.event.entity.EntityDamageEvent event) {
         if (!(event.getEntity() instanceof LivingEntity)) {
@@ -250,6 +201,51 @@ public class SpigotEntityEventMapper implements Listener {
         }
         EntityDamageEvent entityDamageEvent = new SimpleEntityDamageEvent(entityId, entityType, damage);
         eventService.publish(entityDamageEvent);
+    }
+
+    private UUID getAttackerId(Entity damager) {
+        if (damager.getType() == org.bukkit.entity.EntityType.ARROW) {
+            ProjectileSource arrowSource = ((Arrow) damager).getShooter();
+            if (arrowSource instanceof LivingEntity) {
+                return ((LivingEntity) arrowSource).getUniqueId();
+            }
+        }
+        return damager.getUniqueId();
+    }
+
+    private void onEntityPreAttackEvent(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+
+        Entity damager = event.getDamager();
+        UUID attackerId = getAttackerId(damager);
+
+        CombatSource combatSource = combatFactory.createCombatSource(damager.getName(), attackerId);
+        CombatValue damage = combatFactory.createCombatValue((float) event.getDamage(), new ArrayList<>(), combatSource);
+
+        EntityPreAttackEvent entityPreAttackEvent = new SimpleEntityPreAttackEvent(entityId, entityType, attackerId,
+                damage, event.isCancelled());
+        eventService.publish(entityPreAttackEvent);
+
+        combatValues.put(event, entityPreAttackEvent.getDamage());
+        event.setDamage(entityPreAttackEvent.getDamage().getModifiedValue());
+
+        boolean isCancelled = entityPreAttackEvent.isCancelled() && !entityPreAttackEvent.isExplicitlyAllowed();
+        event.setCancelled(isCancelled);
+    }
+
+    private void onEntityAttackEvent(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityId = entity.getUniqueId();
+        EntityType entityType = entityTypeMapper.map(entity.getType());
+
+        Entity damager = event.getDamager();
+        UUID attackerId = getAttackerId(damager);
+
+        CombatValue damage = combatValues.get(event);
+        EntityAttackEvent entityAttackEvent = new SimpleEntityAttackEvent(entityId, entityType, attackerId, damage);
+        eventService.publish(entityAttackEvent);
     }
 
     @EventHandler

@@ -61,6 +61,11 @@ public class LazyPlayer extends LazyEntity implements Player {
     }
 
     @Override
+    public int getStatistic(String statistic) {
+        return profile.get().getStatistics().getOrDefault(statistic, 0);
+    }
+
+    @Override
     public GameMode getGameMode() {
         return serverData.get().getGameMode();
     }
