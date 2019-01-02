@@ -19,6 +19,9 @@ import org.joml.Vector3f;
 
 import java.util.UUID;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+
 public class SpigotEntityData implements EntityServerData {
     private final SpigotEntityTypeMapper entityTypeMapper;
     private final SpigotLocationMapper locationMapper;
@@ -36,33 +39,44 @@ public class SpigotEntityData implements EntityServerData {
 
     @Override
     public UUID getEntityId() {
-        return entity.getUniqueId();
+        UUID entityId = entity.getUniqueId();
+        return checkNotNull(entityId);
     }
 
     @Override
     public EntityType getType() {
-        return entityTypeMapper.map(entity.getType());
+        EntityType type = entityTypeMapper.map(entity.getType());
+        return checkNotNull(type);
     }
 
     @Override
     public String getName() {
-        return entity.getName();
+        String name = entity.getName();
+        checkState(name != null);
+        checkState(!name.isEmpty());
+        return name;
     }
 
     @Override
     public OrientedLocation getLocation() {
-        return locationMapper.map(entity);
+        OrientedLocation location = locationMapper.map(entity);
+        return checkNotNull(location);
     }
 
     @Override
     public OrientedLocation getEyeLocation() {
-        return locationMapper.mapEye(entity);
+        OrientedLocation eyeLocation = locationMapper.mapEye(entity);
+        return checkNotNull(eyeLocation);
     }
 
     @Override
     public Vector3f getVelocity() {
         Vector velocity = entity.getVelocity();
-        return new Vector3f((float) velocity.getX(), (float) velocity.getY(), (float) velocity.getZ());
+        checkState(velocity != null);
+        return new Vector3f(
+                (float) velocity.getX(),
+                (float) velocity.getY(),
+                (float) velocity.getZ());
     }
 
     @Override
@@ -72,6 +86,8 @@ public class SpigotEntityData implements EntityServerData {
 
     @Override
     public Equipment getEquipment() {
+        // TODO how do we want to check this state, is null legal?
+
         Item helmet = itemMapper.map(entity.getEquipment().getHelmet());
         Item chest = itemMapper.map(entity.getEquipment().getChestplate());
         Item legs = itemMapper.map(entity.getEquipment().getLeggings());

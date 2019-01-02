@@ -13,6 +13,8 @@ import gg.warcraft.monolith.spigot.item.SpigotItemMapper;
 import gg.warcraft.monolith.spigot.world.location.SpigotLocationMapper;
 import org.bukkit.entity.Player;
 
+import static com.google.common.base.Preconditions.checkState;
+
 public class SpigotPlayerData extends SpigotEntityData implements PlayerServerData {
     private final SpigotItemMapper itemMapper;
     private final SpigotGameModeMapper gameModeMapper;
@@ -34,7 +36,9 @@ public class SpigotPlayerData extends SpigotEntityData implements PlayerServerDa
 
     @Override
     public GameMode getGameMode() {
-        return gameModeMapper.map(player.getGameMode());
+        GameMode gameMode = gameModeMapper.map(player.getGameMode());
+        checkState(gameMode != null);
+        return gameMode;
     }
 
     @Override

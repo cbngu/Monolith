@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerProfile {
-    private final UUID playerId;
     private final long timeConnected;
     private final long timeFirstConnected;
     private final long timeLastSeen;
@@ -21,18 +23,30 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
                                long timePlayed, Map<String, Integer> currencies,
                                Map<String, Integer> lifetimeCurrencies, Map<String, String> data) {
         super(playerId, data);
-        this.playerId = playerId;
         this.timeConnected = timeConnected;
         this.timeFirstConnected = timeFirstConnected;
         this.timeLastSeen = timeLastSeen;
         this.timePlayed = timePlayed;
-        this.currencies = currencies;
-        this.lifetimeCurrencies = lifetimeCurrencies;
+        this.currencies = checkNotNull(currencies);
+        this.lifetimeCurrencies = checkNotNull(lifetimeCurrencies);
+
+        checkArgument(timeConnected >= 0);
+        checkArgument(timeFirstConnected >= 0);
+        checkArgument(timeLastSeen >= 0);
+        checkArgument(timePlayed >= 0);
+        checkArgument(!currencies.containsKey(null));
+        checkArgument(!currencies.containsKey(""));
+        checkArgument(!currencies.containsValue(null));
+        checkArgument(!lifetimeCurrencies.containsKey(null));
+        checkArgument(!lifetimeCurrencies.containsKey(""));
+        checkArgument(!lifetimeCurrencies.containsValue(null));
+        currencies.forEach((key, value) -> checkArgument(value >= 0));
+        lifetimeCurrencies.forEach((key, value) -> checkArgument(value >= 0));
     }
 
     @Override
     public UUID getPlayerId() {
-        return playerId;
+        return getEntityId();
     }
 
     @Override
@@ -67,7 +81,7 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
 
     @Override
     public PlayerProfileCopyer getCopyer() {
-        return new SimplePlayerProfileCopyer(playerId, timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
+        return new SimplePlayerProfileCopyer(getEntityId(), timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
                 currencies, lifetimeCurrencies, getData());
     }
 }
