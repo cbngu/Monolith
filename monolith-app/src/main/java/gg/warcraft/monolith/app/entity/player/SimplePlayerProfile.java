@@ -18,10 +18,12 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
     private final long timePlayed;
     private final Map<String, Integer> currencies;
     private final Map<String, Integer> lifetimeCurrencies;
+    private final Map<String, Integer> statistics;
 
     public SimplePlayerProfile(UUID playerId, long timeConnected, long timeFirstConnected, long timeLastSeen,
                                long timePlayed, Map<String, Integer> currencies,
-                               Map<String, Integer> lifetimeCurrencies, Map<String, String> data) {
+                               Map<String, Integer> lifetimeCurrencies, Map<String, Integer> statistics,
+                               Map<String, String> data) {
         super(playerId, data);
         this.timeConnected = timeConnected;
         this.timeFirstConnected = timeFirstConnected;
@@ -29,6 +31,7 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
         this.timePlayed = timePlayed;
         this.currencies = checkNotNull(currencies);
         this.lifetimeCurrencies = checkNotNull(lifetimeCurrencies);
+        this.statistics = statistics;
 
         checkArgument(timeConnected >= 0);
         checkArgument(timeFirstConnected >= 0);
@@ -40,6 +43,9 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
         checkArgument(!lifetimeCurrencies.containsKey(null));
         checkArgument(!lifetimeCurrencies.containsKey(""));
         checkArgument(!lifetimeCurrencies.containsValue(null));
+        checkArgument(!statistics.containsKey(null));
+        checkArgument(!statistics.containsKey(""));
+        checkArgument(!statistics.containsValue(null));
         currencies.forEach((key, value) -> checkArgument(value >= 0));
         lifetimeCurrencies.forEach((key, value) -> checkArgument(value >= 0));
     }
@@ -80,8 +86,13 @@ public class SimplePlayerProfile extends SimpleEntityProfile implements PlayerPr
     }
 
     @Override
+    public Map<String, Integer> getStatistics() {
+        return statistics;
+    }
+
+    @Override
     public PlayerProfileCopyer getCopyer() {
         return new SimplePlayerProfileCopyer(getEntityId(), timeConnected, timeFirstConnected, timeLastSeen, timePlayed,
-                currencies, lifetimeCurrencies, getData());
+                currencies, lifetimeCurrencies, statistics, getData());
     }
 }
