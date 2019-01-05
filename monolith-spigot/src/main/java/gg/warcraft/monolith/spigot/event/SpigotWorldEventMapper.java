@@ -195,16 +195,14 @@ public class SpigotWorldEventMapper implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerPreInteractEvent(PlayerInteractEvent event) {
-        if (event.getHand() != EquipmentSlot.HAND) {
-            return;
-        }
-
         switch (event.getAction()) {
             case LEFT_CLICK_BLOCK:
             case RIGHT_CLICK_BLOCK:
             case LEFT_CLICK_AIR:
             case RIGHT_CLICK_AIR:
-                onBlockPreInteractEvent(event);
+                if (event.getHand() == EquipmentSlot.HAND) {
+                    onBlockPreInteractEvent(event);
+                }
                 break;
             case PHYSICAL:
                 onBlockPreTriggerEvent(event);
@@ -232,16 +230,14 @@ public class SpigotWorldEventMapper implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
-        if (event.getHand() != EquipmentSlot.HAND) {
-            return;
-        }
-
         switch (event.getAction()) {
             case LEFT_CLICK_BLOCK:
             case RIGHT_CLICK_BLOCK:
             case LEFT_CLICK_AIR:
             case RIGHT_CLICK_AIR:
-                onBlockInteractEvent(event);
+                if (event.getHand() == EquipmentSlot.HAND) {
+                    onBlockInteractEvent(event);
+                }
                 break;
             case PHYSICAL:
                 onBlockTriggerEvent(event);
