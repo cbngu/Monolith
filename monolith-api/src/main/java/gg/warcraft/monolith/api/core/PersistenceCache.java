@@ -7,4 +7,6 @@ public interface PersistenceCache {
     void save(String key, String value);
 
     void delete(String key);
+
+    void clear();
 }
