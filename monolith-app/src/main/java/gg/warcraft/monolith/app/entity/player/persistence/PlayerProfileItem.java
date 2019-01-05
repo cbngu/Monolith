@@ -3,6 +3,7 @@ package gg.warcraft.monolith.app.entity.player.persistence;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -59,18 +60,30 @@ public class PlayerProfileItem {
     }
 
     public Map<String, Integer> getCurrencies() {
+        if (currencies == null) {
+            return new HashMap<>();
+        }
         return currencies;
     }
 
     public Map<String, Integer> getLifetimeCurrencies() {
+        if (lifetimeCurrencies == null) {
+            return new HashMap<>();
+        }
         return lifetimeCurrencies;
     }
 
     public Map<String, Integer> getStatistics() {
+        if (statistics == null) {
+            return new HashMap<>();
+        }
         return statistics;
     }
 
     public Map<String, String> getData() {
+        if (data == null) {
+            return new HashMap<>();
+        }
         return data;
     }
 }
