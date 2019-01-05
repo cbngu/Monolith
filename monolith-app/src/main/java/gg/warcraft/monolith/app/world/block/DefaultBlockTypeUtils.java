@@ -32,8 +32,7 @@ public class DefaultBlockTypeUtils implements BlockTypeUtils {
 
     @Override
     public BlockType getType(int id, int data) {
-        int adjustedData = data & 0x3;
-        BlockType type = types.get(id + ":" + adjustedData);
+        BlockType type = types.get(id + ":" + data);
         if (type == null) {
             return types.get(id + ":0");
         }
