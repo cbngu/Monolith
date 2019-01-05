@@ -5,11 +5,14 @@ import com.google.inject.Singleton;
 import gg.warcraft.monolith.api.combat.CombatFactory;
 import gg.warcraft.monolith.api.combat.CombatSource;
 import gg.warcraft.monolith.api.combat.value.CombatValue;
+import gg.warcraft.monolith.api.combat.value.CombatValueModifier;
+import gg.warcraft.monolith.api.combat.value.CombatValueModifierType;
 import gg.warcraft.monolith.api.core.EventService;
 import gg.warcraft.monolith.api.entity.EntityType;
 import gg.warcraft.monolith.api.entity.event.EntityAttackEvent;
 import gg.warcraft.monolith.api.entity.event.EntityDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityDeathEvent;
+import gg.warcraft.monolith.api.entity.event.EntityFatalDamageEvent;
 import gg.warcraft.monolith.api.entity.event.EntityInteractEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreAttackEvent;
 import gg.warcraft.monolith.api.entity.event.EntityPreDamageEvent;
@@ -22,6 +25,7 @@ import gg.warcraft.monolith.api.world.location.Location;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityAttackEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityDeathEvent;
+import gg.warcraft.monolith.app.entity.event.SimpleEntityFatalDamageEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityInteractEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreAttackEvent;
 import gg.warcraft.monolith.app.entity.event.SimpleEntityPreDamageEvent;
@@ -165,12 +169,19 @@ public class SpigotEntityEventMapper implements Listener {
         EntityPreDamageEvent entityPreDamageEvent = new SimpleEntityPreDamageEvent(entityId, entityType, damage, event.isCancelled());
         eventService.publish(entityPreDamageEvent);
 
-        if (event.getDamage() > entity.getHealth()) {
+        if (damage.getModifiedValue() >= entity.getHealth()) {
             EntityPreFatalDamageEvent entityPreFatalDamageEvent =
-                    new SimpleEntityPreFatalDamageEvent(entityId, entityType, event.isCancelled());
+                    new SimpleEntityPreFatalDamageEvent(entityId, entityType, damage, event.isCancelled());
             eventService.publish(entityPreFatalDamageEvent);
             if (entityPreFatalDamageEvent.isCancelled() && !entityPreFatalDamageEvent.isExplicitlyAllowed()) {
-                event.setDamage(entity.getHealth() - 1);
+                float adjustedDamage = (float) entity.getHealth() - 1;
+                List<CombatValueModifier> newModifiers = damage.getModifiers();
+                newModifiers.add(combatFactory.createCombatValueModifier(CombatValueModifierType.OVERRIDE,
+                        adjustedDamage, damage.getSource()));
+                CombatValue clippedDamage =
+                        combatFactory.createCombatValue(damage.getBaseValue(), newModifiers, damage.getSource());
+                combatValues.put(event, clippedDamage);
+                event.setDamage(adjustedDamage);
             }
         }
     }
@@ -201,6 +212,12 @@ public class SpigotEntityEventMapper implements Listener {
         }
         EntityDamageEvent entityDamageEvent = new SimpleEntityDamageEvent(entityId, entityType, damage);
         eventService.publish(entityDamageEvent);
+
+        if (damage.getModifiedValue() >= entity.getHealth()) {
+            EntityFatalDamageEvent entityFatalDamageEvent =
+                    new SimpleEntityFatalDamageEvent(entityId, entityType, damage);
+            eventService.publish(entityFatalDamageEvent);
+        }
     }
 
     private UUID getAttackerId(Entity damager) {
