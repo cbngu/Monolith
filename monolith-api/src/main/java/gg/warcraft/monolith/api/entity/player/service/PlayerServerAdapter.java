@@ -35,6 +35,12 @@ public interface PlayerServerAdapter {
     void setEquipment(UUID playerId, EquipmentSlot slot, Item item);
 
     /**
+     * @param playerId The id of the player. Can not be null.
+     * @param progress The new progress of the player's experience bar. Must be between 0.0 and 1.0.
+     */
+    void setExperienceProgress(UUID playerId, float progress);
+
+    /**
      * @param playerId            The id of the player. Can not be null.
      * @param item                The item to add to the inventory. Can not be null.
      * @param dropOnFullInventory Whether or not to drop items that could not be added to the inventory.
