@@ -67,6 +67,9 @@ fabric.properties
 
 ==============================
 # Gradle
+
+.gradle
+
 /build/
 */build/
 
