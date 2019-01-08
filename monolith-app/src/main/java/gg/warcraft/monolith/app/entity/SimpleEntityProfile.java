@@ -6,13 +6,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class SimpleEntityProfile implements EntityProfile {
     private final UUID entityId;
     private final Map<String, String> data;
 
     public SimpleEntityProfile(UUID entityId, Map<String, String> data) {
-        this.entityId = entityId;
-        this.data = data;
+        this.entityId = checkNotNull(entityId);
+        this.data = checkNotNull(data);
+
+        checkArgument(!data.containsKey(null));
+        checkArgument(!data.containsKey(""));
+        checkArgument(!data.containsValue(null));
+        checkArgument(!data.containsValue(""));
     }
 
     @Override

@@ -38,8 +38,8 @@ public class DefaultBlockSpoofingCommandService implements BlockSpoofingCommandS
 
     @Override
     public void unspoofBlock(BlockLocation location, UUID... playerIds) {
+        Block realBlock = worldQueryService.getBlockAt(location);
         Arrays.stream(playerIds).forEach(playerId -> {
-            Block realBlock = worldQueryService.getBlockAt(location);
             worldServerAdapter.spoofBlock(realBlock, playerId);
             blockSpoofingRepository.delete(location, playerId);
         });

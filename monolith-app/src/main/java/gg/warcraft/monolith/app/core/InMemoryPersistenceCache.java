@@ -28,4 +28,9 @@ public class InMemoryPersistenceCache implements PersistenceCache {
     public void delete(String key) {
         cache.remove(key);
     }
+
+    @Override
+    public void clear() {
+        cache.clear();
+    }
 }

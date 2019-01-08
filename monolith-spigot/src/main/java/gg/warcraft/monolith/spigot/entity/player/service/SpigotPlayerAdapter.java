@@ -87,6 +87,17 @@ public class SpigotPlayerAdapter implements PlayerServerAdapter {
     }
 
     @Override
+    public void setExperienceProgress(UUID playerId, float progress) {
+        Player player = server.getPlayer(playerId);
+        if (player == null) {
+            return;
+        }
+
+        float clippedProgress = Math.min(1, Math.max(0, progress));
+        player.setExp(clippedProgress);
+    }
+
+    @Override
     public boolean giveItem(UUID playerId, Item item, boolean dropOnFullInventory) {
         Player player = server.getPlayer(playerId);
         if (player == null) {

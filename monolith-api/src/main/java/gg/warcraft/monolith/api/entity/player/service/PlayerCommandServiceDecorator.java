@@ -2,6 +2,7 @@ package gg.warcraft.monolith.api.entity.player.service;
 
 import gg.warcraft.monolith.api.entity.EquipmentSlot;
 import gg.warcraft.monolith.api.entity.player.Currency;
+import gg.warcraft.monolith.api.entity.player.Statistic;
 import gg.warcraft.monolith.api.item.Item;
 
 import java.util.UUID;
@@ -33,6 +34,16 @@ public interface PlayerCommandServiceDecorator extends PlayerCommandService {
     @Override
     default void revokeCurrency(UUID playerId, Currency currency, int amount) {
         getPlayerCommandService().revokeCurrency(playerId, currency, amount);
+    }
+
+    @Override
+    default void increaseStatistics(UUID playerId, int amount, Statistic... statistics) {
+        getPlayerCommandService().increaseStatistics(playerId, amount, statistics);
+    }
+
+    @Override
+    default void resetStatistics(UUID playerId, Statistic... statistics) {
+        getPlayerCommandService().resetStatistics(playerId, statistics);
     }
 
     @Override
